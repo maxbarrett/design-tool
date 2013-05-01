@@ -1,0 +1,21 @@
+input[type="search"]:focus { outline:none; }
+
+header { background:url('/img/header-background.png') 0 0 repeat; overflow:hidden; }
+header .brand { float:left; width:162px; height:35px; display:block; text-indent:-9999px; background:url('/img/logo.png') no-repeat; margin:6px 80px 0 10px; padding:0; }
+header nav { float:left; }
+header a { color:#bfbfbf; text-decoration:none; font-size:14px; border-top:4px solid transparent; display:block; float:left; padding:18px 0 18px 0; margin-right:20px; font-weight:bold; }
+header a.active { border-top-color:#58b9df; color:#f2f2f2; }
+
+header .upload { background:url('/img/upload.png') no-repeat 100% 50%; padding-right:50px; float:right; }
+header .upload.active { border-top-color:transparent; }
+header #header-search { margin-top:14px; float:right; }
+header #header-search input[type="search"] { border:1px solid #424951; height:27px; padding:2px 5px; width:160px;}
+header #header-search input[type="submit"] { border:none; background:url('/img/search-button.png') #fff no-repeat 50% 50%; text-indent:-9999px; height:31px; width:31px; margin-left:-5px; }
+
+.projects-list ul { padding:0; }
+.project-thumb { float:left; list-style:none; margin-right:60px; }
+.project-thumb:nth-of-type(5) { margin-right:0; }
+.project-thumb a { text-decoration:none; }
+.project-thumb .project-title { font-size:12px; color:#505050; font-weight:normal; }
+
+.project { clear:both; }
