@@ -12,11 +12,11 @@ App.ProjectController = Ember.ObjectController.extend({
 });
 
 
-// Sort the projects by date, newest first
-App.projectsController = Ember.ArrayController.create({
-  content: App.Project.FIXTURES,
-  sortProperties: ['publishedAt'],
-  sortAscending: false
-});
-// Grab the first one
-console.log(App.projectsController.get('firstObject'));
+// // Sort the projects by date, newest first
+// App.projectsController = Ember.ArrayController.create({
+//   content: App.Project.FIXTURES,
+//   sortProperties: ['publishedAt'],
+//   sortAscending: false
+// });
+// // Grab the first one
+// console.log(App.projectsController.get('firstObject'));
