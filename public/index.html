@@ -32,6 +32,7 @@
 </script>
 
 <script type="text/x-handlebars" id="projects">
+  {{#linkTo 'projects.new'}}<button>Add a project</button>{{/linkTo}}
 	<div class="row projects-list">
 		<h2>April</h2>
 		<ul>
@@ -49,7 +50,7 @@
 	{{outlet}}
 </script>
 
-<script type="text/x-handlebars" id="project">
+<!-- <script type="text/x-handlebars" id="project">
 	<div class="row project">		
 		<h1>{{title}}</h1>
 		<h2>by {{author}}</h2>
@@ -64,7 +65,34 @@
 		<img {{bindAttr src="image"}} >
 
 	</div>
+</script> -->
+
+
+<script type="text/x-handlebars" data-template-name="new">
+  <form {{action save on="submit"}}>
+    {{partial "project_fields"}}
+    <button type="submit">Save project</button>
+  </form>
 </script>
+
+
+<script type="text/x-handlebars" data-template-name="project">
+  <form {{action save on="submit"}}>
+    {{view Ember.TextField valueBinding="title" id="title" placeholder="Title"}}<br />
+    {{view Ember.TextField valueBinding="author" id="author" placeholder="Author"}}<br />
+	{{view Ember.TextField valueBinding="category" id="category" placeholder="Category"}}<br />
+	{{view Ember.TextField valueBinding="image" id="image" placeholder="Image uri"}}<br />
+    <button type="submit">Update project</button>
+	<button {{action destroyRecord}}>delete post</button>
+  </form>
+</script>
+
+<script type="text/x-handlebars" data-template-name="_project_fields">
+  {{view Ember.TextField valueBinding="title" id="title" placeholder="Title"}}<br />
+  {{view Ember.TextArea valueBinding="author" id="author" placeholder="Author"}}<br />
+</script>
+
+
 
 <script type="text/x-handlebars" id="project/_edit">
 	<p>{{view Ember.TextField valueBinding='title'}}</p>

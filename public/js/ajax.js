@@ -21,7 +21,7 @@ jQuery.ajax({
 	  "image": "http://lorempixel.com/200/200/"
     },
     success: function (data, textStatus, jqXHR) {
-        console.log("Post resposne:");
+        console.log("Post response:");
         console.dir(data);
         console.log(textStatus);
         console.dir(jqXHR);

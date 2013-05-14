@@ -93,12 +93,12 @@ app.post('/api/projects', function (req, res){
 	console.log("POST: ");
 	console.log(req.body);
 	project = new ProjectModel({
-		id: req.body.id,
-		title: req.body.title,
-		publishedAt: req.body.publishedAt,
-		category: req.body.category,
-		author: req.body.author,
-		image: req.body.image
+		id: req.body.project.id,
+		title: req.body.project.title,
+		publishedAt: req.body.project.publishedAt,
+		category: req.body.project.category,
+		author: req.body.project.author,
+		image: req.body.project.image
 	});
 
 	project.save(function (err) {
@@ -109,7 +109,7 @@ app.post('/api/projects', function (req, res){
 		}
 	});
 	
-	return res.send(project);
+//	return res.send(project);
 });
 
 
@@ -129,13 +129,13 @@ app.get('/api/projects/:id', function (req, res){
 
 // UPDATE a Single Project by ID
 app.put('/api/projects/:id', function (req, res){
-	return ProjectModel.findOne( {id : req.params.id}, function (err, project) {
+console.log(req.params._id)
+	return ProjectModel.findOne( {id : req.params._id}, function (err, project) {
 		
 		var thisProject = req.body.project;
 		
-		console.log(project)
-
 		project.title = thisProject.title;
+		// Do we need this if it defaults to 'now'?
 		project.publishedAt = thisProject.publishedAt;
 		project.category = thisProject.category;
 		project.author = thisProject.author;
@@ -150,7 +150,8 @@ app.put('/api/projects/:id', function (req, res){
 			}
 			
 			console.log(project);
-			return res.send(project);
+			// Return something to the client, surely?!
+			// return res.send(project);
 		});
 		
 	});

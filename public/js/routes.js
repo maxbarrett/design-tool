@@ -1,10 +1,19 @@
 App.Router.map(function() {
 	this.resource('projects', function() {
+		this.route('new');
 		this.resource('project', { path: ':project_id' });
 	});
 
 	this.resource('upload');
 });
+
+
+App.ProjectsNewRoute = Ember.Route.extend({
+  setupController: function(controller) {
+    controller.newRecord();
+  }
+});
+
 
 
 // Projects route: find all projects
