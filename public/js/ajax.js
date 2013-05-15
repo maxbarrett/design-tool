@@ -29,7 +29,7 @@ jQuery.ajax({
 });
 
 
-
+// http://lorempixel.com/210/200/
 
 // DELETE
 jQuery.ajax({
