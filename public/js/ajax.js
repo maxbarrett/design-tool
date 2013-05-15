@@ -42,3 +42,14 @@ jQuery.ajax({
         console.dir(jqXHR); 
     }
 });
+
+
+
+
+
+// {{#if isEditing}}
+// 	{{partial 'project/edit'}}
+// 	<button {{action 'doneEditing'}}>Done</button>
+// {{else}}
+// 	<button {{action 'edit'}}>Edit</button>
+// {{/if}}

@@ -34,7 +34,7 @@
 <script type="text/x-handlebars" id="projects">
   {{#linkTo 'projects.new'}}<button>Add a project</button>{{/linkTo}}
 	<div class="row projects-list">
-		<h2>April</h2>
+		<h2>Projects</h2>
 		<ul>
 		{{#each model}}
 			<li class="project-thumb">
@@ -50,55 +50,44 @@
 	{{outlet}}
 </script>
 
-<!-- <script type="text/x-handlebars" id="project">
-	<div class="row project">		
-		<h1>{{title}}</h1>
-		<h2>by {{author}}</h2>
-		{{#if isEditing}}
-			{{partial 'project/edit'}}
-			<button {{action 'doneEditing'}}>Done</button>
-		{{else}}
-			<button {{action 'edit'}}>Edit</button>
-		{{/if}}
+<script type="text/x-handlebars" id="project">
+	<div class="row project">
+		<form {{action save on="submit"}}>	
+			<h1>{{title}}</h1>
+			<h2>by {{author}}</h2>
+			<p>{{category}}</p>
+			{{#if isEditing}}
+				{{partial 'project_fields'}}
+				<button {{action 'doneEditing'}}>Done</button>
+			{{else}}
+				<button {{action 'edit'}}>Edit</button>
+			{{/if}}
 		
-		<p>{{date publishedAt}}</p>
-		<img {{bindAttr src="image"}} >
-
+			<p>{{date publishedAt}}</p>
+			<img {{bindAttr src="image"}} >
+		    <!-- <button type="submit">Save project</button>-->
+			<button {{action destroyRecord}}>Delete project</button>
+		</form>	
 	</div>
-</script> -->
+</script>
 
 
-<script type="text/x-handlebars" data-template-name="new">
+<script type="text/x-handlebars" id="projects/new">
   <form {{action save on="submit"}}>
+	<h2>New</h2>
     {{partial "project_fields"}}
-    <button type="submit">Save project</button>
+   <button type="submit">Save project</button>
   </form>
 </script>
 
-
-<script type="text/x-handlebars" data-template-name="project">
-  <form {{action save on="submit"}}>
-    {{view Ember.TextField valueBinding="title" id="title" placeholder="Title"}}<br />
-    {{view Ember.TextField valueBinding="author" id="author" placeholder="Author"}}<br />
-	{{view Ember.TextField valueBinding="category" id="category" placeholder="Category"}}<br />
-	{{view Ember.TextField valueBinding="image" id="image" placeholder="Image uri"}}<br />
-    <button type="submit">Update project</button>
-	<button {{action destroyRecord}}>delete post</button>
-  </form>
-</script>
 
 <script type="text/x-handlebars" data-template-name="_project_fields">
-  {{view Ember.TextField valueBinding="title" id="title" placeholder="Title"}}<br />
-  {{view Ember.TextArea valueBinding="author" id="author" placeholder="Author"}}<br />
+	{{view Ember.TextField valueBinding="title" id="title" placeholder="Title"}}<br />
+	{{view Ember.TextField valueBinding="author" id="author" placeholder="Author"}}<br />
+	{{view Ember.TextField valueBinding="category" id="category" placeholder="Category"}}<br />
+	{{view Ember.TextField valueBinding="image" id="image" placeholder="Image uri"}}
 </script>
 
-
-
-<script type="text/x-handlebars" id="project/_edit">
-	<p>{{view Ember.TextField valueBinding='title'}}</p>
-	<p>{{view Ember.TextField valueBinding='author'}}</p>
-	<p>{{view Ember.TextField valueBinding='publishedAt'}}</p>
-</script>
 
 <script type="text/x-handlebars" id="upload">
 	<div class="upload">

@@ -9,9 +9,13 @@ App.Router.map(function() {
 
 
 App.ProjectsNewRoute = Ember.Route.extend({
-  setupController: function(controller) {
-    controller.newRecord();
-  }
+	setupController: function(controller) {
+		controller.newRecord();
+	}
+	// redirect: function() {
+	// 	this.transitionTo('new');
+	// }
+	
 });
 
 
