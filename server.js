@@ -66,7 +66,7 @@ var ProjectModel = mongoose.model('Project', ProjectSchema);
 // });
 
 
-// var findDocument = ProjectModel.find({ 'author': 'Ed Vidicombe' });
+// var findDocument = ProjectModel.find({ 'title': '' });
 // findDocument.remove();
 
 
@@ -109,7 +109,7 @@ app.post('/api/projects', function (req, res){
 		}
 	});
 	
-//	return res.send(project);
+	return res.send( {id : project._id} );
 });
 
 

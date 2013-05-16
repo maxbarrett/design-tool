@@ -23,7 +23,8 @@
 					<input type="search">
 					<input type="submit" value="Search">
 				</form>
-				{{#linkTo 'upload' classNames="upload"}}Upload{{/linkTo}}
+				{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
+				<!-- {{#linkTo 'upload' classNames="upload"}}Upload{{/linkTo}} -->
 			</div>
 		</div>
 	</header>
@@ -32,7 +33,6 @@
 </script>
 
 <script type="text/x-handlebars" id="projects">
-  {{#linkTo 'projects.new'}}<button>Add a project</button>{{/linkTo}}
 	<div class="row projects-list">
 		<h2>Projects</h2>
 		<ul>
@@ -51,41 +51,60 @@
 </script>
 
 <script type="text/x-handlebars" id="project">
-	<div class="row project">
-		<form {{action save on="submit"}}>	
-			<h1>{{title}}</h1>
-			<h2>by {{author}}</h2>
-			<p>{{category}}</p>
-			{{#if isEditing}}
-				{{partial 'project_fields'}}
-				<button {{action 'doneEditing'}}>Done</button>
-			{{else}}
-				<button {{action 'edit'}}>Edit</button>
-			{{/if}}
+	<div id="overlay" class="dark">
+		<div class="project">
+			<form {{action save on="submit"}}>	
+				<h1>{{title}}</h1>
+				<h2>by {{author}}</h2>
+				<p>{{category}}</p>
+				<p>{{date publishedAt}}</p>
+				
+				{{#if isEditing}}
+					{{partial 'project_fields'}}
+					<button {{action 'doneEditing'}}>Done</button>
+				{{else}}
+					<button {{action 'edit'}}>Edit</button>
+				{{/if}}
 		
-			<p>{{date publishedAt}}</p>
-			<img {{bindAttr src="image"}} >
-		    <!-- <button type="submit">Save project</button>-->
-			<button {{action destroyRecord}}>Delete project</button>
-		</form>	
+				<img {{bindAttr src="image"}} >
+			    <!-- <button type="submit">Save project</button>--><br/>
+				<button class="delete" {{action destroyRecord}}>Delete project</button>
+			</form>	
+			<footer>
+				{{#linkTo 'projects' classNames="back"}}Back{{/linkTo}}
+				
+				<ul class="img-nav">
+					<li><a href="#">Previous</a></li>
+					<li><a href="#">Next</a></li>
+				</ul>
+				
+			</footer>
+			
+		</div>
 	</div>
 </script>
 
 
 <script type="text/x-handlebars" id="projects/new">
-  <form {{action save on="submit"}}>
-	<h2>New</h2>
-    {{partial "project_fields"}}
-   <button type="submit">Save project</button>
-  </form>
+	<div id="overlay">
+		<div class="new-project-form">
+			{{#linkTo 'projects' classNames="close"}}Close{{/linkTo}}
+			<form {{action save on="submit"}} id="new">
+				<h2>Create a new project</h2>
+				{{partial "project_fields"}}
+				<button type="submit">Save project</button>
+			</form>
+		</div>
+	</div>
 </script>
 
 
 <script type="text/x-handlebars" data-template-name="_project_fields">
-	{{view Ember.TextField valueBinding="title" id="title" placeholder="Title"}}<br />
-	{{view Ember.TextField valueBinding="author" id="author" placeholder="Author"}}<br />
-	{{view Ember.TextField valueBinding="category" id="category" placeholder="Category"}}<br />
-	{{view Ember.TextField valueBinding="image" id="image" placeholder="Image uri"}}
+
+	{{view App.TextField valueBinding="title" id="title" placeholder="Title" data-valideater="required" required="required"}}<br />
+	{{view App.TextField valueBinding="author" id="author" placeholder="Author" data-valideater="required"}}<br />
+	{{view App.TextField valueBinding="category" id="category" placeholder="Category" data-valideater="required"}}<br />
+	{{view App.TextField valueBinding="image" id="image" placeholder="Image uri"}}<br/>
 </script>
 
 
@@ -103,10 +122,26 @@
 <script src="js/libs/ember-data.js"></script>
 <script src="js/libs/showdown.js"></script>
 <script src="js/libs/moment.js"></script>
+<script src="js/plugins/jquery.valideater.js"></script>
 <script src="js/app.js"></script>
 <script src="js/routes.js"></script>
 <script src="js/models.js"></script>
 <script src="js/controllers.js"></script>
+
+<script>
+$( document ).ready(function() {
+  	// iterate through each form
+	$('form').each(function () {
+		var form = $(this);
+		if ($('[data-valideater]', form).length) {
+
+			// valideat each one
+			form.valideater();
+			// if(window.console) console.log('Initialising Valideater ... for ' + form.attr('id'));
+		}
+	});
+});
+</script>
 
 </body>
 </html>

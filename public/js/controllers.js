@@ -5,14 +5,13 @@ App.ProjectController = Ember.ObjectController.extend({
     this.set('isEditing', true);
   },
 
-// DONE EDITING CREATES AN EMPTY PROJECT ******
   doneEditing: function (){
     this.set('isEditing', false);
 	// update the publish date now that we have finished editing
 	// this.set('publishedAt', new Date());
     this.get('store').commit();
+	this.get('target.router').transitionTo('projects.index');
   },
-
 
   save: function() {
       this.get('store').commit();
@@ -33,7 +32,6 @@ App.ProjectsNewController = Ember.ObjectController.extend({
 	save: function() {
 		this.get('store').commit();
 		this.get('target.router').transitionTo('projects.index');
-	// THIS RELOAD CREATES AN EMPTY PROJECT ON EDIT ********
 	//	location.reload();
 	},
 
