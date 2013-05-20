@@ -4,6 +4,7 @@ App.Project = DS.Model.extend({
 	category: DS.attr('string'),
 	author: DS.attr('string'),
 	image: DS.attr('string')
+
 });
 
 

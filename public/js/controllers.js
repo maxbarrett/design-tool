@@ -8,7 +8,7 @@ App.ProjectController = Ember.ObjectController.extend({
   doneEditing: function (){
     this.set('isEditing', false);
 	// update the publish date now that we have finished editing
-	// this.set('publishedAt', new Date());
+	this.set('publishedAt', new Date());
     this.get('store').commit();
 	this.get('target.router').transitionTo('projects.index');
   },
@@ -31,12 +31,13 @@ App.ProjectController = Ember.ObjectController.extend({
 App.ProjectsNewController = Ember.ObjectController.extend({
 	save: function() {
 		this.get('store').commit();
+		console.log('save')
 		this.get('target.router').transitionTo('projects.index');
-	//	location.reload();
 	},
 
 	newRecord: function() {
 		this.set('content', App.Project.createRecord({title: ''}));
+		console.log('new record')
 	}
 });
 

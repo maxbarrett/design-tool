@@ -12,10 +12,6 @@ App.ProjectsNewRoute = Ember.Route.extend({
 	setupController: function(controller) {
 		controller.newRecord();
 	}
-	// redirect: function() {
-	// 	this.transitionTo('new');
-	// }
-	
 });
 
 

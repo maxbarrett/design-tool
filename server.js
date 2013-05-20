@@ -92,10 +92,10 @@ app.post('/api/projects', function (req, res){
 	var project;
 	console.log("POST: ");
 	console.log(req.body);
+	
 	project = new ProjectModel({
-		id: req.body.project.id,
 		title: req.body.project.title,
-		publishedAt: req.body.project.publishedAt,
+		// publishedAt: req.body.project.publishedAt,
 		category: req.body.project.category,
 		author: req.body.project.author,
 		image: req.body.project.image
@@ -108,8 +108,8 @@ app.post('/api/projects', function (req, res){
 			return console.log(err);
 		}
 	});
-	
-	return res.send( {id : project._id} );
+
+	return res.send( {'project' : project} );
 });
 
 
@@ -136,7 +136,7 @@ console.log(req.params._id)
 		
 		project.title = thisProject.title;
 		// Do we need this if it defaults to 'now'?
-		project.publishedAt = thisProject.publishedAt;
+		// project.publishedAt = thisProject.publishedAt;
 		project.category = thisProject.category;
 		project.author = thisProject.author;
 		project.image = thisProject.image;
@@ -150,8 +150,7 @@ console.log(req.params._id)
 			}
 			
 			console.log(project);
-			// Return something to the client, surely?!
-			// return res.send(project);
+			return res.send({'project' : project});
 		});
 		
 	});
