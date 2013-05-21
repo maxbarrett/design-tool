@@ -1,5 +1,6 @@
 var application_root = __dirname,
     express = require("express"),
+	fs = require('fs'),
     path = require("path"),
     mongoose = require('mongoose');
 
@@ -8,11 +9,14 @@ var app = express();
 
 // Express Config
 app.configure(function () {
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(path.join(application_root, "public")));
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+	app.use(express.bodyParser({
+		uploadDir:'./public/uploads',
+		keepExtensions: true
+	}));
+	app.use(express.methodOverride());
+	app.use(app.router);
+	app.use(express.static(path.join(application_root, "public")));
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 
@@ -20,6 +24,7 @@ app.configure(function () {
 mongoose.connect('mongodb://192.168.33.10:27017/test', function(err){
   if (err) {
     console.log('Could not connect to mongo');
+	console.log(err);
   } else {
 	console.log('Connected to mongodb://192.168.33.10:27017/test successfully!');
 }
@@ -89,6 +94,9 @@ app.get('/api/projects', function (req, res){
 
 // CREATE a single Project
 app.post('/api/projects', function (req, res){
+	
+	console.log(req.files);
+	
 	var project;
 	console.log("POST: ");
 	console.log(req.body);
@@ -111,6 +119,36 @@ app.post('/api/projects', function (req, res){
 
 	return res.send( {'project' : project} );
 });
+
+
+
+app.get('/api/fileUpload', function (req, res) {
+  res.send('API is running! WOO');
+});
+
+
+app.post('/api/fileUpload', function(req, res) {
+    console.log(req.body);
+    console.log(req.files);
+    res.send('File uploaded successfully!');
+
+
+    // var uploadedFile = req.files.uploadingFile;
+    // var tmpPath = uploadedFile.path;
+    // var targetPath = './public/uploads/' + uploadedFile.name;
+    //  
+    // fs.rename(tmpPath, targetPath, function(err) {
+    // 	if (err) throw err;
+    // 	    fs.unlink(tmpPath, function() {
+    // 	        if (err) throw err;
+    // 	            res.send('File Uploaded to ' + targetPath + ' - ' + uploadedFile.size + ' bytes');
+    // 	        });
+    // });
+
+
+});
+
+
 
 
 // READ a Single Project by ID
@@ -170,8 +208,6 @@ app.delete('/api/projects/:id', function (req, res){
 		});
 	});
 });
-
-
 
 
 // Launch server
