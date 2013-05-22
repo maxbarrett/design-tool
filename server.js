@@ -121,18 +121,24 @@ app.post('/api/projects', function (req, res){
 });
 
 
-
 // app.get('/api/fileUpload', function (req, res) {
 //   res.send('API is running! WOO');
 // });
 
-
+// Create an endpoint for uploading images test
 app.post('/api/fileUpload', function(req, res) {
 
-    var uploadedFile = req.files.uploadingFile;
-    var tmpPath = uploadedFile.path;
-    var targetPath = 'public/uploads/' + uploadedFile.name;
- 
+	// Grab the array of files uploaded
+	var uploadedFile = req.files.uploadingFile;
+//  var tmpPath = uploadedFile.path;
+//  var targetPath = 'public/uploads/' + uploadedFile.name;
+
+// for each of the uploaded files
+for (var i in uploadedFile) {
+
+	var tmpPath = uploadedFile[i].path;
+	var targetPath = 'public/uploads/' + uploadedFile[i].name;
+
 	fs.rename(tmpPath, targetPath, function(err) {
 		if (err) {
 			console.log(err);
@@ -141,12 +147,12 @@ app.post('/api/fileUpload', function(req, res) {
 				if (err) {
 					console.log(err)
 				} else {
-					res.send('File Uploaded to ' + targetPath + ' - ' + uploadedFile.size + ' bytes');
+					res.send('File Uploaded to ' + targetPath + ' - ' + uploadedFile[i].size + ' bytes');
 				}
 			});
 		}
 	});
-
+} // end of for each file
 
 });
 
