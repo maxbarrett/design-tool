@@ -122,28 +122,30 @@ app.post('/api/projects', function (req, res){
 
 
 
-app.get('/api/fileUpload', function (req, res) {
-  res.send('API is running! WOO');
-});
+// app.get('/api/fileUpload', function (req, res) {
+//   res.send('API is running! WOO');
+// });
 
 
 app.post('/api/fileUpload', function(req, res) {
-    console.log(req.body);
-    console.log(req.files);
-    res.send('File uploaded successfully!');
 
-
-    // var uploadedFile = req.files.uploadingFile;
-    // var tmpPath = uploadedFile.path;
-    // var targetPath = './public/uploads/' + uploadedFile.name;
-    //  
-    // fs.rename(tmpPath, targetPath, function(err) {
-    // 	if (err) throw err;
-    // 	    fs.unlink(tmpPath, function() {
-    // 	        if (err) throw err;
-    // 	            res.send('File Uploaded to ' + targetPath + ' - ' + uploadedFile.size + ' bytes');
-    // 	        });
-    // });
+    var uploadedFile = req.files.uploadingFile;
+    var tmpPath = uploadedFile.path;
+    var targetPath = 'public/uploads/' + uploadedFile.name;
+ 
+	fs.rename(tmpPath, targetPath, function(err) {
+		if (err) {
+			console.log(err);
+		} else {
+			fs.unlink(tmpPath, function() {
+				if (err) {
+					console.log(err)
+				} else {
+					res.send('File Uploaded to ' + targetPath + ' - ' + uploadedFile.size + ' bytes');
+				}
+			});
+		}
+	});
 
 
 });
