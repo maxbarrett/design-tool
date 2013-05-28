@@ -20,6 +20,17 @@ app.configure(function () {
 });
 
 
+// Authenticator
+auth = express.basicAuth('user', 'password');
+
+// Homepage route
+app.get('/', auth, function(req, res) {
+	// console.log(auth);
+ 	res.sendfile('public/index.html');
+});
+
+
+
 // Mongo Database
 mongoose.connect('mongodb://192.168.33.10:27017/test', function(err){
   if (err) {
@@ -34,18 +45,30 @@ mongoose.connect('mongodb://192.168.33.10:27017/test', function(err){
 // Define Schema
 var Schema   = mongoose.Schema;
 
-// Create a new Schema
+
+// Create Project Schema
 var ProjectSchema = new Schema({
 	id: 			Number, 
 	title: 			String,
 	publishedAt: 	{ type: Date, default: Date.now },
     category: 		String,
 	author: 		String,
-	image: 			String
+	images: 		Array
 });
 
-// Create new record type
+// Create project record type
 var ProjectModel = mongoose.model('Project', ProjectSchema);
+
+
+
+// // Create Image Schema
+// var ImageSchema = new Schema({
+// 	id: 			Number, 
+// 	imageUrl: 		String
+// });
+// 
+// // Create Image record type
+// var ImageModel = mongoose.model('Image', ImageSchema);
 
 
 // // Populate new record
@@ -70,9 +93,9 @@ var ProjectModel = mongoose.model('Project', ProjectSchema);
 //   console.log(doc);
 // });
 
-
 // var findDocument = ProjectModel.find({ 'title': '' });
 // findDocument.remove();
+
 
 
 // Setup the RESTful web service endpoint
@@ -92,10 +115,11 @@ app.get('/api/projects', function (req, res){
   });
 });
 
+
 // CREATE a single Project
 app.post('/api/projects', function (req, res){
 	
-	console.log(req.files);
+	// console.log(req.files);
 	
 	var project;
 	console.log("POST: ");
@@ -106,7 +130,7 @@ app.post('/api/projects', function (req, res){
 		// publishedAt: req.body.project.publishedAt,
 		category: req.body.project.category,
 		author: req.body.project.author,
-		image: req.body.project.image
+		images: req.body.project.images
 	});
 
 	project.save(function (err) {
@@ -119,44 +143,6 @@ app.post('/api/projects', function (req, res){
 
 	return res.send( {'project' : project} );
 });
-
-
-// app.get('/api/fileUpload', function (req, res) {
-//   res.send('API is running! WOO');
-// });
-
-// Create an endpoint for uploading images test
-app.post('/api/fileUpload', function(req, res) {
-
-	// Grab the array of files uploaded
-	var uploadedFile = req.files.uploadingFile;
-//  var tmpPath = uploadedFile.path;
-//  var targetPath = 'public/uploads/' + uploadedFile.name;
-
-// for each of the uploaded files
-for (var i in uploadedFile) {
-
-	var tmpPath = uploadedFile[i].path;
-	var targetPath = 'public/uploads/' + uploadedFile[i].name;
-
-	fs.rename(tmpPath, targetPath, function(err) {
-		if (err) {
-			console.log(err);
-		} else {
-			fs.unlink(tmpPath, function() {
-				if (err) {
-					console.log(err)
-				} else {
-					res.send('File Uploaded to ' + targetPath + ' - ' + uploadedFile[i].size + ' bytes');
-				}
-			});
-		}
-	});
-} // end of for each file
-
-});
-
-
 
 
 // READ a Single Project by ID
@@ -218,14 +204,54 @@ app.delete('/api/projects/:id', function (req, res){
 });
 
 
+
+
+// TEST =========================================================
+
+// app.get('/api/fileUpload', function (req, res) {
+//   res.send('API is running! WOO');
+// });
+
+// Create an endpoint for uploading images test
+app.post('/api/fileUpload', function(req, res) {
+
+	// Grab the array of files uploaded
+	var uploadedFile = req.files.uploadingFile;
+	//  var tmpPath = uploadedFile.path;
+	//  var targetPath = 'public/uploads/' + uploadedFile.name;
+
+	// for each of the uploaded files
+	for (var i in uploadedFile) {
+
+		var tmpPath = uploadedFile[i].path;
+		var targetPath = 'public/uploads/' + uploadedFile[i].name;
+
+		fs.rename(tmpPath, targetPath, function(err) {
+			if (err) {
+				console.log(err);
+			} else {
+				fs.unlink(tmpPath, function() {
+					if (err) {
+						console.log(err)
+					} else {
+						res.send('File Uploaded to ' + targetPath + ' - ' + uploadedFile[i].size + ' bytes');
+					}
+				});
+			}
+		});
+	} // end of for each file
+
+});
+
+// TEST =========================================================
+
+
+
+
+
 // Launch server
 app.listen(3000);
 console.log('listening on port 3000');
-
-
-
-
-
 
 
 

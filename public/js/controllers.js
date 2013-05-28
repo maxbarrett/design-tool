@@ -8,7 +8,7 @@ App.ProjectController = Ember.ObjectController.extend({
   doneEditing: function (){
     this.set('isEditing', false);
 	// update the publish date now that we have finished editing
-	this.set('publishedAt', new Date());
+	// this.set('publishedAt', new Date());
     this.get('store').commit();
 	this.get('target.router').transitionTo('projects.index');
   },
@@ -28,6 +28,7 @@ App.ProjectController = Ember.ObjectController.extend({
 
 });
 
+
 App.ProjectsNewController = Ember.ObjectController.extend({
 	save: function() {
 		this.get('store').commit();
@@ -41,6 +42,24 @@ App.ProjectsNewController = Ember.ObjectController.extend({
 	}
 });
 
+
+App.UploadController = Ember.ObjectController.extend({
+    files: null,
+
+    fileSelectionChanged: function(evt) {
+        var inputFiles = evt.target.files;
+        var files = [];
+        for (var i = 0, f; f = inputFiles[i]; i++) {
+            files.pushObject({
+                name: escape(f.name),
+                type: f.type || 'n/a', 
+                size: f.size,
+                date: f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a'
+            });
+        }
+        this.set('files', files);
+    }
+});
 
 // // Sort the projects by date, newest first
 // App.projectsController = Ember.ArrayController.create({

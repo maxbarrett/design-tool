@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<script type="text/x-handlebars">
+<script type="text/x-handlebars" data-template-name="application">
 	<header>
 		<div class="row">
 			<div class="sixcol">
@@ -24,7 +24,7 @@
 					<input type="submit" value="Search">
 				</form>
 				{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
-				<!-- {{#linkTo 'upload' classNames="upload"}}Upload{{/linkTo}} -->
+				{{#linkTo 'upload' classNames="upload"}}Upload{{/linkTo}}
 			</div>
 		</div>
 	</header>
@@ -32,14 +32,17 @@
     {{outlet}}
 </script>
 
-<script type="text/x-handlebars" id="projects">
+<script type="text/x-handlebars" data-template-name="projects">
 	<div class="row projects-list">
 		<h2>Projects</h2>
 		<ul>
 		{{#each model}}
 			<li class="project-thumb">
 				{{#linkTo 'project' this}}
-					<img {{bindAttr src="image"}}>
+					{{#each image in images}}
+					<img {{bindAttr src="image.imageUrl"}}>
+					{{/each}}
+					{{id}}
 					<h3 class="project-title">{{title}}</h3>
 				{{/linkTo}}
 			</li>
@@ -50,7 +53,7 @@
 	{{outlet}}
 </script>
 
-<script type="text/x-handlebars" id="project">
+<script type="text/x-handlebars" data-template-name="project">
 	<div id="overlay" class="dark">
 		<div class="project">
 			<form {{action save on="submit"}}>	
@@ -60,13 +63,22 @@
 				<p>{{date publishedAt}}</p>
 				
 				{{#if isEditing}}
-					{{partial 'project_fields'}}
+					{{partial 'projectFields'}}
 					<button {{action 'doneEditing'}}>Done</button>
 				{{else}}
 					<button {{action 'edit'}}>Edit</button>
 				{{/if}}
 		
-				<img {{bindAttr src="image"}} >
+				<ul>
+					{{#each image in images}}
+					<li>
+						<img {{bindAttr src="image.imageUrl"}}>
+					</li>
+					{{else}}
+					<li>No images</li>
+					{{/each}}
+				</ul>
+				
 			    <!-- <button type="submit">Save project</button>--><br/>
 				<button class="delete" {{action destroyRecord}}>Delete project</button>
 			</form>	
@@ -85,13 +97,13 @@
 </script>
 
 
-<script type="text/x-handlebars" id="projects/new">
+<script type="text/x-handlebars" data-template-name="projects/new">
 	<div id="overlay">
 		<div class="new-project-form">
 			{{#linkTo 'projects' classNames="close"}}Close{{/linkTo}}
 			<form {{action save on="submit"}} id="new">
 				<h2>Create a new project</h2>
-				{{partial "project_fields"}}
+				{{partial "projectFields"}}
 				<button type="submit">Save project</button>
 			</form>
 		</div>
@@ -99,20 +111,25 @@
 </script>
 
 
-<script type="text/x-handlebars" data-template-name="_project_fields">
+<script type="text/x-handlebars" data-template-name="_projectFields">
 
 	{{view App.TextField valueBinding="title" id="title" placeholder="Title" data-valideater="required" required="required"}}<br />
-	{{view App.TextField valueBinding="author" id="author" placeholder="Author" data-valideater="required"}}<br />
-	{{view App.TextField valueBinding="category" id="category" placeholder="Category" data-valideater="required"}}<br />
-	{{view App.TextField valueBinding="image" id="image" name="image" placeholder="Image uri"}}<br/>
-
+	{{view App.TextField valueBinding="author" id="author" placeholder="Author"}}<br />
+	{{view App.TextField valueBinding="category" id="category" placeholder="Category"}}<br />
+	
+	
+	
+	<!-- {{view App.FileField valueBinding="image" id="image" name="image" }}<br/> -->
+	<!-- {{view App.TextField valueBinding="images" id="images" name="images" }}<br/> -->
 </script>
 
-<script type="text/x-handlebars" id="upload">
+
+
+<script type="text/x-handlebars" data-template-name="upload">
 	<div class="upload">
 		<h1>Upload file here</h1>
-		<form method="post" action="api/fileUpload" enctype="multipart/form-data">
-		<input type="file" name="uploadingFile" multiple="multiple"/>
+		<form method="post" action="api/fileUpload" enctype="multipart/form-data" id="testUpload">
+		<input type="file" name="uploadingFile" multiple="multiple" id="filez">
 		<input type="submit">
 		</form>
 	</div>
@@ -130,20 +147,35 @@
 <script src="js/app.js"></script>
 <script src="js/routes.js"></script>
 <script src="js/models.js"></script>
+<script src="js/views.js"></script>
 <script src="js/controllers.js"></script>
 
 <script>
 $( document ).ready(function() {
   	// iterate through each form
-	$('form').each(function () {
-		var form = $(this);
-		if ($('[data-valideater]', form).length) {
-
-			// valideat each one
-			form.valideater();
-			// if(window.console) console.log('Initialising Valideater ... for ' + form.attr('id'));
-		}
+	// $('form').each(function () {
+	// 	var form = $(this);
+	// 	if ($('[data-valideater]', form).length) {
+	// 
+	// 		// valideat each one
+	// 		form.valideater();
+	// 		// if(window.console) console.log('Initialising Valideater ... for ' + form.attr('id'));
+	// 	}
+	// });
+	
+	
+	$('#testUpload').submit( function(){
+		$.ajax({type:'POST', 
+				url: 'api/fileUpload', 
+				data: $, 
+				success: function(response) {
+					console.log('hi')
+	        		$('#testUpload').append.html(response);
+	    		}
+		});
+	    return false;
 	});
+	
 });
 </script>
 

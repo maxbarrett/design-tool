@@ -15,7 +15,6 @@ App.ProjectsNewRoute = Ember.Route.extend({
 });
 
 
-
 // Projects route: find all projects
 App.ProjectsRoute = Ember.Route.extend({
 	model: function() {
