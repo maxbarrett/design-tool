@@ -1,8 +1,9 @@
 App.Router.map(function() {
 	this.resource('projects', function() {
 		this.route('new');
-		this.resource('project', { path: ':project_id' });
 	});
+	
+	this.resource('project', { path: ':project_id' });
 
 	this.resource('upload');
 });

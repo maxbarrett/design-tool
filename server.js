@@ -48,27 +48,27 @@ var Schema   = mongoose.Schema;
 
 // Create Project Schema
 var ProjectSchema = new Schema({
-	id: 			Number, 
+	// id: 			Number, 
 	title: 			String,
 	publishedAt: 	{ type: Date, default: Date.now },
     category: 		String,
 	author: 		String,
-	images: 		Array
+	images: 		[{ type: Schema.Types.ObjectId, ref: 'Image' }]
 });
 
 // Create project record type
 var ProjectModel = mongoose.model('Project', ProjectSchema);
 
 
+// Create Image Schema
+var ImageSchema = new Schema({
+	_creator: { type: String, ref: 'Project' },
+	// id: 			Number, 
+	imageUrl: 		String
+});
 
-// // Create Image Schema
-// var ImageSchema = new Schema({
-// 	id: 			Number, 
-// 	imageUrl: 		String
-// });
-// 
-// // Create Image record type
-// var ImageModel = mongoose.model('Image', ImageSchema);
+// Create Image record type
+var ImageModel = mongoose.model('Image', ImageSchema);
 
 
 // // Populate new record
@@ -88,15 +88,16 @@ var ProjectModel = mongoose.model('Project', ProjectSchema);
 //   }
 // });
 // 
-// // Find all records
-// ProjectModel.find(function(err,doc){
+
+// Delete all projects
+// var tt = ProjectModel.find(function(err,doc){
 //   console.log(doc);
 // });
+// tt.remove();
 
+// Delete specific projects
 // var findDocument = ProjectModel.find({ 'title': '' });
 // findDocument.remove();
-
-
 
 // Setup the RESTful web service endpoint
 app.get('/api', function (req, res) {
@@ -106,20 +107,21 @@ app.get('/api', function (req, res) {
 
 // READ a List of Projects
 app.get('/api/projects', function (req, res){
-  return ProjectModel.find(function (err, projects) {
-    if (!err) {
-      return res.send( {'projects' : projects} );
-    } else {
-      return console.log(err);
-    }
-  });
+	return ProjectModel.find(function (err, projects) {
+		if (!err) {
+			return res.send( {'projects' : projects} );
+		} else {
+			return console.log(err);
+		}
+	});
 });
+
 
 
 // CREATE a single Project
 app.post('/api/projects', function (req, res){
 	
-	// console.log(req.files);
+	console.log(req.files);
 	
 	var project;
 	console.log("POST: ");
@@ -129,14 +131,35 @@ app.post('/api/projects', function (req, res){
 		title: req.body.project.title,
 		// publishedAt: req.body.project.publishedAt,
 		category: req.body.project.category,
-		author: req.body.project.author,
-		images: req.body.project.images
+		author: req.body.project.author
+		// images: req.body.project.images
 	});
+	
+	
 
 	project.save(function (err) {
 		if (!err) {
+			
+			var newImages = new ImageModel({
+				_creator: project._id,
+				imageUrl: req.body.project.images
+			});
+			
+			newImages.save(function (err) {
+				if (!err) {
+					console.log('Saved image');
+				} else {
+					console.log('Error saving image:');
+					console.log(err);
+				}
+			});
+			
+			project.images.push(newImages);
+			project.save();
+			
 			return console.log("created");
 		} else {
+			console.log('Error saving project');
 			return console.log(err);
 		}
 	});
@@ -145,33 +168,46 @@ app.post('/api/projects', function (req, res){
 });
 
 
+
 // READ a Single Project by ID
 app.get('/api/projects/:id', function (req, res){
-	return ProjectModel.findOne( {id : req.params.id}, function (err, project) {
+	return ProjectModel.findById(req.params.id, function (err, project) {
 		if (!err) {
-			console.log('No error reading a project')
-			return res.send({'project':project});
+			
+			console.log('No error reading a project');
+			
+			if (project.images.length) {
+				ImageModel.find({ _creator: req.params.id }, function (err, docs) {
+					return res.send({   'project': project,
+										images: docs
+									});
+				});	
+			} else {
+				return res.send({'project':project});
+			}
+			
 		} else {
-			console.log('Error reading a project')
+			console.log('Error reading a project');
 			return console.log(err);
 		}
 	});
 });
 
-
 // UPDATE a Single Project by ID
 app.put('/api/projects/:id', function (req, res){
-console.log(req.params._id)
-	return ProjectModel.findOne( {id : req.params._id}, function (err, project) {
+
+	return ProjectModel.findById(req.params.id, function (err, project) {
 		
 		var thisProject = req.body.project;
+		// project.title = (thisProject.title !== undefined) ? thisProject.title : project.title;
+		// project.category = (thisProject.category !== undefined) ? thisProject.category : project.category;
+		// project.author = (thisProject.author !== undefined) ? thisProject.author : project.author;
+		// project.images = (thisProject.images !== undefined) ? thisProject.images : project.images;
 		
 		project.title = thisProject.title;
-		// Do we need this if it defaults to 'now'?
-		// project.publishedAt = thisProject.publishedAt;
 		project.category = thisProject.category;
 		project.author = thisProject.author;
-		project.image = thisProject.image;
+		project.images = thisProject.images;
 		
 		return project.save(function (err) {
 			if (!err) {
@@ -188,11 +224,77 @@ console.log(req.params._id)
 	});
 });
 
-
 // DELETE a Single Project by ID
 app.delete('/api/projects/:id', function (req, res){
 	return ProjectModel.findById(req.params.id, function (err, project) {
 		return project.remove(function (err) {
+			if (!err) {
+				console.log("removed project");
+				return res.send('');
+			} else {
+				console.log(err);
+			}
+		});
+	});
+});
+
+
+
+// READ a List of Images
+app.get('/api/images', function (req, res){
+	var images;
+	return ImageModel.find(function (err, images) {
+		if (!err) {
+			return res.send( {'images' : images} );
+		} else {
+			return console.log(err);
+		}
+	});
+});
+
+// CREATE an image
+app.post('/api/images', function (req, res){
+	var image;
+	console.log("POST: ");
+	console.log(req.body);
+	
+	image = new ImageModel({
+		imageUrl: req.body.image.imageUrl
+	});
+	
+	image.save(function (err) {
+		if (!err) {
+			return console.log("created");
+		} else {
+			return console.log(err);
+		}
+	});
+
+	return res.send( {'image' : image} );
+});
+
+// READ a Single Image by ID
+app.get('/api/images/:id', function (req, res){
+	var image;
+	console.log(req.params.id)
+	return ImageModel.findById(req.params.id, function (err, image) {
+		if (!err) {
+			console.log('No error reading image')
+			return res.send({'image':image});
+		} else {
+			console.log('Error reading image')
+			return console.log(err);
+		}
+	});
+});
+
+// DELETE a Single Image by ID
+app.delete('/api/images/:id', function (req, res){
+	console.log(req.params.id)
+	var image;
+	
+	return ImageModel.findById(req.params.id, function (err, image) {
+		return image.remove(function (err) {
 			if (!err) {
 				console.log("removed");
 				return res.send('');
@@ -206,6 +308,9 @@ app.delete('/api/projects/:id', function (req, res){
 
 
 
+
+
+
 // TEST =========================================================
 
 // app.get('/api/fileUpload', function (req, res) {
@@ -215,17 +320,16 @@ app.delete('/api/projects/:id', function (req, res){
 // Create an endpoint for uploading images test
 app.post('/api/fileUpload', function(req, res) {
 
-	// Grab the array of files uploaded
-	var uploadedFile = req.files.uploadingFile;
-	//  var tmpPath = uploadedFile.path;
-	//  var targetPath = 'public/uploads/' + uploadedFile.name;
+	// reusable renaming function
+	var renamingFunc = function(theFile) {	
 
-	// for each of the uploaded files
-	for (var i in uploadedFile) {
-
-		var tmpPath = uploadedFile[i].path;
-		var targetPath = 'public/uploads/' + uploadedFile[i].name;
-
+		var concatFileName = theFile.name.replace(/ /g, '+');
+		var dotPosition = concatFileName.lastIndexOf('.');
+		var date = new Date().getTime();
+		var newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
+		var tmpPath = theFile.path;
+		var targetPath = 'public/uploads/' + newFileName;
+		
 		fs.rename(tmpPath, targetPath, function(err) {
 			if (err) {
 				console.log(err);
@@ -234,12 +338,25 @@ app.post('/api/fileUpload', function(req, res) {
 					if (err) {
 						console.log(err)
 					} else {
-						res.send('File Uploaded to ' + targetPath + ' - ' + uploadedFile[i].size + ' bytes');
+						res.send('File Uploaded to ' + targetPath + ' - ' + theFile.size + ' bytes');
 					}
 				});
 			}
-		});
-	} // end of for each file
+		});	
+	}
+	
+	// Grab the file(s) uploaded
+	var uploadedFile = req.files.uploadingFile;
+
+	// if > 1 file
+	if ( uploadedFile.length ) {	
+		for (var i in uploadedFile) {		
+			renamingFunc(uploadedFile[i])
+		}
+	// otherwise 1 file
+	} else {
+		renamingFunc(uploadedFile)
+	}
 
 });
 
