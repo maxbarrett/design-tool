@@ -40,9 +40,8 @@
 			<li class="project-thumb">
 				{{#linkTo 'project' this}}
 					{{#each image in images}}
-					<img {{bindAttr src="image.id"}}>
+					<img {{bindAttr src="image.uri"}}>
 					{{/each}}
-					{{id}}
 					<h3 class="project-title">{{title}}</h3>
 				{{/linkTo}}
 			</li>
@@ -72,7 +71,8 @@
 				<ul>
 					{{#each image in images}}
 					<li>
-						<img {{bindAttr src="image.id"}}>
+					
+						<img {{bindAttr src="image.uri"}}>
 					</li>
 					{{else}}
 					<li>No images</li>
@@ -116,12 +116,16 @@
 	{{view App.TextField valueBinding="title" id="title" placeholder="Title" data-valideater="required" required="required"}}<br />
 	{{view App.TextField valueBinding="author" id="author" placeholder="Author"}}<br />
 	{{view App.TextField valueBinding="category" id="category" placeholder="Category"}}<br />
+
+	{{view App.FileField valueBinding="image" id="image" name="image" }}<br/>
 	
-	
-	
-	<!-- {{view App.FileField valueBinding="image" id="image" name="image" }}<br/> -->
 	<!-- {{view App.TextField valueBinding="images" id="images" name="images" }}<br/> -->
 </script>
+
+
+
+
+
 
 
 
@@ -134,6 +138,8 @@
 		</form>
 	</div>
 </script>
+
+
 
 
 

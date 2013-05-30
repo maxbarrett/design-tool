@@ -19783,18 +19783,18 @@ EmberHandlebars.registerHelper('unless', function(context, options) {
   Ember objects. For example:
 
   ```handlebars
-  <img {{bindAttr src="imageUrl" alt="imageTitle"}}>
+  <img {{bindAttr src="uri" alt="imageTitle"}}>
   ```
 
   The above handlebars template will fill the `<img>`'s `src` attribute will
-  the value of the property referenced with `"imageUrl"` and its `alt`
+  the value of the property referenced with `"uri"` and its `alt`
   attribute with the value of the property referenced with `"imageTitle"`.
 
   If the rendering context of this template is the following object:
 
   ```javascript
   {
-    imageUrl: 'http://lolcats.info/haz-a-funny',
+    uri: 'http://lolcats.info/haz-a-funny',
     imageTitle: 'A humorous image of a cat'
   }
   ```
@@ -19810,7 +19810,7 @@ EmberHandlebars.registerHelper('unless', function(context, options) {
   of `src="/failwhale.gif"` will take precedence:
 
   ```handlebars
-  <img src="/failwhale.gif" {{bindAttr src="imageUrl" alt="imageTitle"}}>
+  <img src="/failwhale.gif" {{bindAttr src="uri" alt="imageTitle"}}>
   ```
 
   ### `bindAttr` and the `class` attribute

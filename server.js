@@ -53,6 +53,7 @@ var ProjectSchema = new Schema({
 	publishedAt: 	{ type: Date, default: Date.now },
     category: 		String,
 	author: 		String,
+	images: 		Array,
 	image_ids: 		[{ type: Schema.Types.ObjectId, ref: 'Image' }]
 });
 
@@ -63,7 +64,7 @@ var ProjectModel = mongoose.model('Project', ProjectSchema);
 // Create Image Schema
 var ImageSchema = new Schema({
 	project_id:  	{ type: String, ref: 'Project' },
-	imageUrl: 		String
+	uri: 		String
 });
 
 // Create Image record type
@@ -88,8 +89,14 @@ var ImageModel = mongoose.model('Image', ImageSchema);
 // });
 // 
 
-// Delete all projects
+// // Delete all projects
 // var tt = ProjectModel.find(function(err,doc){
+//   console.log(doc);
+// });
+// tt.remove();
+// 
+// // Delete all images
+// var tt = ImageModel.find(function(err,doc){
 //   console.log(doc);
 // });
 // tt.remove();
@@ -129,8 +136,8 @@ app.post('/api/projects', function (req, res){
 		title: req.body.project.title,
 		// publishedAt: req.body.project.publishedAt,
 		category: req.body.project.category,
-		author: req.body.project.author
-		// images: req.body.project.images
+		author: req.body.project.author,
+		images: req.body.project.images
 	});
 
 	project.save(function (err) {
@@ -138,7 +145,7 @@ app.post('/api/projects', function (req, res){
 			
 			var newImages = new ImageModel({
 				project_id: project._id,
-				imageUrl: req.body.project.image_ids
+				uri: req.body.project.images
 			});
 			
 			newImages.save(function (err) {
@@ -255,7 +262,7 @@ app.post('/api/images', function (req, res){
 	console.log(req.body);
 	
 	image = new ImageModel({
-		imageUrl: req.body.image_ids.imageUrl
+		uri: req.body.image_ids.uri
 	});
 	
 	image.save(function (err) {

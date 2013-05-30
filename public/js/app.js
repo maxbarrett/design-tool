@@ -18,6 +18,11 @@ App.Store = DS.Store.extend({
 });
 
 
+// DS.RESTAdapter.configure('App.Image', {
+//     sideloadsAs: 'images'
+// });
+
+
 Ember.Handlebars.registerBoundHelper('date', function(date) {
   return moment(date).fromNow();
 });

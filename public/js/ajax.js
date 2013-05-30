@@ -3,7 +3,7 @@ jQuery.post("/api/projects", {
 	'project' : {	"title": "Project title 1",
 					"category": "Marketing",
 					"author": "Ed Vidicombe",
-					"image_ids": ['http://lorempixel.com/210/200/', 'http://lorempixel.com/200/200/']
+					"images": ['http://lorempixel.com/210/200/']
 	}
 }, function (data, textStatus, jqXHR) {
     console.log("Post resposne:"); console.dir(data); console.log(textStatus); console.dir(jqXHR);
@@ -51,7 +51,7 @@ jQuery.ajax({
 
 // CREATE IMAGE
 jQuery.post("/api/images", {
-	'image' : {	"imageUrl": "http://lorempixel.com/210/200/"
+	'image' : {	"uri": "http://lorempixel.com/210/200/"
 	}
 }, function (data, textStatus, jqXHR) {
     console.log("Post resposne:"); console.dir(data); console.log(textStatus); console.dir(jqXHR);
