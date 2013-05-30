@@ -29,6 +29,13 @@ App.ProjectController = Ember.ObjectController.extend({
 });
 
 
+
+// App.ImageController = Ember.ObjectController.extend({
+// 	return project.get('images');
+// });
+// 
+
+
 App.ProjectsNewController = Ember.ObjectController.extend({
 	save: function() {
 		this.get('store').commit();

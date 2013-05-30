@@ -40,7 +40,7 @@
 			<li class="project-thumb">
 				{{#linkTo 'project' this}}
 					{{#each image in images}}
-					<img {{bindAttr src="image.imageUrl"}}>
+					<img {{bindAttr src="image.id"}}>
 					{{/each}}
 					{{id}}
 					<h3 class="project-title">{{title}}</h3>
@@ -72,7 +72,7 @@
 				<ul>
 					{{#each image in images}}
 					<li>
-						<img {{bindAttr src="image.imageUrl"}}>
+						<img {{bindAttr src="image.id"}}>
 					</li>
 					{{else}}
 					<li>No images</li>

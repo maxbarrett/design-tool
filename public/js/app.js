@@ -13,8 +13,8 @@ App.RESTAdapter = DS.RESTAdapter.extend({
 
 App.Store = DS.Store.extend({
     revision: 12,
-    // adapter: App.RESTAdapter
-	adapter: 'DS.FixtureAdapter'
+    adapter: App.RESTAdapter
+	// adapter: 'DS.FixtureAdapter'
 });
 
 

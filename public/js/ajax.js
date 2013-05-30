@@ -3,7 +3,7 @@ jQuery.post("/api/projects", {
 	'project' : {	"title": "Project title 1",
 					"category": "Marketing",
 					"author": "Ed Vidicombe",
-					"images": ['http://lorempixel.com/210/200/']
+					"image_ids": ['http://lorempixel.com/210/200/', 'http://lorempixel.com/200/200/']
 	}
 }, function (data, textStatus, jqXHR) {
     console.log("Post resposne:"); console.dir(data); console.log(textStatus); console.dir(jqXHR);
@@ -18,9 +18,7 @@ jQuery.ajax({
 		'project' : { "title": "Updated title 1",
 					  "category": "NEW Marketing",
 					  "author": "NEW Ed Vidicombe",
-					  "images": [ "51a5e7ade2ca7e4008000001",
-					        	  "51a6011ae59882e308000001",
-					       		  "51a6012ee59882e308000002"]
+					  "images": ["http://lorempixel.com/210/200/"]
 		}
     },
     success: function (data, textStatus, jqXHR) {

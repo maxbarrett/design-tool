@@ -53,7 +53,7 @@ var ProjectSchema = new Schema({
 	publishedAt: 	{ type: Date, default: Date.now },
     category: 		String,
 	author: 		String,
-	images: 		[{ type: Schema.Types.ObjectId, ref: 'Image' }]
+	image_ids: 		[{ type: Schema.Types.ObjectId, ref: 'Image' }]
 });
 
 // Create project record type
@@ -62,8 +62,7 @@ var ProjectModel = mongoose.model('Project', ProjectSchema);
 
 // Create Image Schema
 var ImageSchema = new Schema({
-	_creator: { type: String, ref: 'Project' },
-	// id: 			Number, 
+	project_id:  	{ type: String, ref: 'Project' },
 	imageUrl: 		String
 });
 
@@ -117,7 +116,6 @@ app.get('/api/projects', function (req, res){
 });
 
 
-
 // CREATE a single Project
 app.post('/api/projects', function (req, res){
 	
@@ -134,15 +132,13 @@ app.post('/api/projects', function (req, res){
 		author: req.body.project.author
 		// images: req.body.project.images
 	});
-	
-	
 
 	project.save(function (err) {
 		if (!err) {
 			
 			var newImages = new ImageModel({
-				_creator: project._id,
-				imageUrl: req.body.project.images
+				project_id: project._id,
+				imageUrl: req.body.project.image_ids
 			});
 			
 			newImages.save(function (err) {
@@ -154,7 +150,7 @@ app.post('/api/projects', function (req, res){
 				}
 			});
 			
-			project.images.push(newImages);
+			project.image_ids.push(newImages);
 			project.save();
 			
 			return console.log("created");
@@ -176,8 +172,8 @@ app.get('/api/projects/:id', function (req, res){
 			
 			console.log('No error reading a project');
 			
-			if (project.images.length) {
-				ImageModel.find({ _creator: req.params.id }, function (err, docs) {
+			if (project.image_ids.length) {
+				ImageModel.find({ project_id: req.params.id }, function (err, docs) {
 					return res.send({   'project': project,
 										images: docs
 									});
@@ -259,7 +255,7 @@ app.post('/api/images', function (req, res){
 	console.log(req.body);
 	
 	image = new ImageModel({
-		imageUrl: req.body.image.imageUrl
+		imageUrl: req.body.image_ids.imageUrl
 	});
 	
 	image.save(function (err) {
