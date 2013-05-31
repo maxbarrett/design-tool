@@ -15,6 +15,7 @@ App.ProjectController = Ember.ObjectController.extend({
 
   save: function() {
       this.get('store').commit();
+	
       this.get('target.router').transitionTo('projects.index');
   },
 
@@ -30,36 +31,49 @@ App.ProjectController = Ember.ObjectController.extend({
 
 
 App.ProjectsNewController = Ember.ObjectController.extend({
+	
+	newRecord: function() {
+		console.log('new record');	
+		this.set('content', App.Project.createRecord({title: ''}));
+		// TODO: create a transaction
+	},
+	
+	bindImgs: function(evt){
+		var files = []
+		var len = evt.target.files.length; 
+		
+		for (var i = 0; i < len; i++) {
+			files.push(evt.target.files[i].name);
+		}
+		console.log(files);
+		// TODO: add files to the transaction
+	},
+	
 	save: function() {
 		this.get('store').commit();
-		console.log('save')
-		this.get('target.router').transitionTo('projects.index');
-	},
-
-	newRecord: function() {
-		this.set('content', App.Project.createRecord({title: ''}));
-		console.log('new record')
-	}
+		console.log('save');
+		this.get('target.router').transitionTo('projects.index');	
+	}	
 });
 
 
-App.UploadController = Ember.ObjectController.extend({
-    files: null,
-
-    fileSelectionChanged: function(evt) {
-        var inputFiles = evt.target.files;
-        var files = [];
-        for (var i = 0, f; f = inputFiles[i]; i++) {
-            files.pushObject({
-                name: escape(f.name),
-                type: f.type || 'n/a', 
-                size: f.size,
-                date: f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a'
-            });
-        }
-        this.set('files', files);
-    }
-});
+// App.UploadController = Ember.ObjectController.extend({
+//     files: null,
+// 
+//     fileSelectionChanged: function(evt) {
+//         var inputFiles = evt.target.files;
+//         var files = [];
+//         for (var i = 0, f; f = inputFiles[i]; i++) {
+//             files.pushObject({
+//                 name: escape(f.name),
+//                 type: f.type || 'n/a', 
+//                 size: f.size,
+//                 date: f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a'
+//             });
+//         }
+//         this.set('files', files);
+//     }
+// });
 
 // // Sort the projects by date, newest first
 // App.projectsController = Ember.ArrayController.create({

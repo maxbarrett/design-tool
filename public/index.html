@@ -101,7 +101,7 @@
 	<div id="overlay">
 		<div class="new-project-form">
 			{{#linkTo 'projects' classNames="close"}}Close{{/linkTo}}
-			<form {{action save on="submit"}} id="new">
+			<form {{action save on="submit"}} id="new" enctype="multipart/form-data">
 				<h2>Create a new project</h2>
 				{{partial "projectFields"}}
 				<button type="submit">Save project</button>
@@ -117,9 +117,9 @@
 	{{view App.TextField valueBinding="author" id="author" placeholder="Author"}}<br />
 	{{view App.TextField valueBinding="category" id="category" placeholder="Category"}}<br />
 
-	{{view App.FileField valueBinding="image" id="image" name="image" }}<br/>
+	{{view App.FileField valueBinding="imagess" id="images" name="uploadingFile" }}<br/>
 	
-	<!-- {{view App.TextField valueBinding="images" id="images" name="images" }}<br/> -->
+	<!-- {{view App.TextField valueBinding="imagess" id="imagess" name="imagess" }}<br/> -->
 </script>
 
 
@@ -129,15 +129,15 @@
 
 
 
-<script type="text/x-handlebars" data-template-name="upload">
+<!-- <script type="text/x-handlebars" data-template-name="upload">
 	<div class="upload">
 		<h1>Upload file here</h1>
 		<form method="post" action="api/fileUpload" enctype="multipart/form-data" id="testUpload">
-		<input type="file" name="uploadingFile" multiple="multiple" id="filez">
+		<input type="file" name="uploadingFile" multiple="multiple">
 		<input type="submit">
 		</form>
 	</div>
-</script>
+</script> -->
 
 
 

@@ -126,6 +126,8 @@ app.post('/api/projects', function (req, res){
 	
 	console.log(req.files);
 	var project;
+	var uploadedFile = req.files.uploadingFile;
+	
 	console.log("POST: ");
 	console.log(req.body);
 	
@@ -155,24 +157,6 @@ app.post('/api/projects', function (req, res){
 	}
 	
 	
-	
-	
-	// // Grab the file(s) uploaded
-	// var uploadedFile = req.files.uploadingFile;
-	// 
-	// // if > 1 file
-	// if ( uploadedFile.length ) {	
-	// 	for (var i in uploadedFile) {		
-	// 		renamingFunc(uploadedFile[i])
-	// 	}
-	// // otherwise 1 file
-	// } else {
-	// 	renamingFunc(uploadedFile)
-	// }
-	
-	
-	
-	
 	project = new ProjectModel({
 		title: req.body.project.title,
 		// publishedAt: req.body.project.publishedAt,
@@ -180,14 +164,18 @@ app.post('/api/projects', function (req, res){
 		author: req.body.project.author
 	});
 
+
 	project.save(function (err) {
 		if (!err) {
-			
-			if (req.body.project.images.length) {
-				for (var i = req.body.project.images.length - 1; i >= 0; i -= 1) {
-			
+			// if > 1 file
+			if (uploadedFile.length) {
+				for (var i = uploadedFile.length - 1; i >= 0; i -= 1) {
+					
+					// Rename and save the images
+					renamingFunc(uploadedFile[i])
+					
 					var newImages = new ImageModel({
-						uri: req.body.project.images[i]
+						uri: uploadedFile[i]
 					});
 
 					// create a new image record
@@ -204,7 +192,12 @@ app.post('/api/projects', function (req, res){
 					project.image_ids.push(newImages);
 			
 				} // for in
-			} // if images
+			// otherwise 1 file
+			} else {
+				
+				renamingFunc(uploadedFile)
+				
+			}// if images
 
 			project.save();
 			

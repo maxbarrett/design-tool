@@ -18,11 +18,6 @@ App.Store = DS.Store.extend({
 });
 
 
-// DS.RESTAdapter.configure('App.Image', {
-//     sideloadsAs: 'images'
-// });
-
-
 Ember.Handlebars.registerBoundHelper('date', function(date) {
   return moment(date).fromNow();
 });
@@ -38,10 +33,10 @@ App.TextField = Ember.TextField.extend({
 App.FileField = Ember.TextField.extend({
     type: 'file',
     multiple : true,
-    attributeBindings: "multiple"//.w(),
-    // change: function(evt) {
-    //     evt.preventDefault();
-    //     evt.stopPropagation();
-    //     this.get('controller').addVideo(evt);
-    // }
+    attributeBindings: "multiple".w(), // .w() ?
+    change: function(evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+        this.get('controller').bindImgs(evt);
+    }
 });
