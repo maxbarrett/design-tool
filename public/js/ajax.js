@@ -3,7 +3,7 @@ jQuery.post("/api/projects", {
 	'project' : {	"title": "Project title 1",
 					"category": "Marketing",
 					"author": "Ed Vidicombe",
-					"images": ['/uploads/image.png']
+					"images": ['http://lorempixel.com/210/200/', 'http://lorempixel.com/200/200/']
 	}
 }, function (data, textStatus, jqXHR) {
     console.log("Post resposne:"); console.dir(data); console.log(textStatus); console.dir(jqXHR);
