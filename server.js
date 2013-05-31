@@ -47,13 +47,11 @@ var Schema   = mongoose.Schema;
 
 
 // Create Project Schema
-var ProjectSchema = new Schema({
-	// id: 			Number, 
+var ProjectSchema = new Schema({ 
 	title: 			String,
 	publishedAt: 	{ type: Date, default: Date.now },
     category: 		String,
 	author: 		String,
-	images: 		Array,
 	image_ids: 		[{ type: Schema.Types.ObjectId, ref: 'Image' }]
 });
 
@@ -63,7 +61,6 @@ var ProjectModel = mongoose.model('Project', ProjectSchema);
 
 // Create Image Schema
 var ImageSchema = new Schema({
-	project_id:  	{ type: String, ref: 'Project' },
 	uri: 		String
 });
 
@@ -88,6 +85,10 @@ var ImageModel = mongoose.model('Image', ImageSchema);
 //   }
 // });
 // 
+// Delete specific projects
+// var findDocument = ProjectModel.find({ 'title': '' });
+// findDocument.remove();
+
 
 // // Delete all projects
 // var tt = ProjectModel.find(function(err,doc){
@@ -101,9 +102,6 @@ var ImageModel = mongoose.model('Image', ImageSchema);
 // });
 // tt.remove();
 
-// Delete specific projects
-// var findDocument = ProjectModel.find({ 'title': '' });
-// findDocument.remove();
 
 // Setup the RESTful web service endpoint
 app.get('/api', function (req, res) {
@@ -126,7 +124,7 @@ app.get('/api/projects', function (req, res){
 // CREATE a single Project
 app.post('/api/projects', function (req, res){
 	
-	console.log(req.files);
+	// console.log(req.files);
 	
 	var project;
 	console.log("POST: ");
@@ -136,18 +134,19 @@ app.post('/api/projects', function (req, res){
 		title: req.body.project.title,
 		// publishedAt: req.body.project.publishedAt,
 		category: req.body.project.category,
-		author: req.body.project.author,
-		images: req.body.project.images
+		author: req.body.project.author
 	});
 
 	project.save(function (err) {
 		if (!err) {
 			
+			console.log(req.body.project.images.length)
+			
 			var newImages = new ImageModel({
-				project_id: project._id,
 				uri: req.body.project.images
 			});
 			
+			// create a new image record
 			newImages.save(function (err) {
 				if (!err) {
 					console.log('Saved image');
@@ -157,6 +156,7 @@ app.post('/api/projects', function (req, res){
 				}
 			});
 			
+			// push the new image _id to the project.image_ids property
 			project.image_ids.push(newImages);
 			project.save();
 			
@@ -176,19 +176,8 @@ app.post('/api/projects', function (req, res){
 app.get('/api/projects/:id', function (req, res){
 	return ProjectModel.findById(req.params.id, function (err, project) {
 		if (!err) {
-			
 			console.log('No error reading a project');
-			
-			if (project.image_ids.length) {
-				ImageModel.find({ project_id: req.params.id }, function (err, docs) {
-					return res.send({   'project': project,
-										images: docs
-									});
-				});	
-			} else {
-				return res.send({'project':project});
-			}
-			
+			return res.send({'project':project});
 		} else {
 			console.log('Error reading a project');
 			return console.log(err);
@@ -241,6 +230,10 @@ app.delete('/api/projects/:id', function (req, res){
 	});
 });
 
+
+/////////////////////////////////////////////////////////
+// REST API FOR IMAGES
+/////////////////////////////////////////////////////////
 
 
 // READ a List of Images
