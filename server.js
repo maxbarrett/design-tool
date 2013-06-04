@@ -1,6 +1,7 @@
 var application_root = __dirname,
     express = require("express"),
 	fs = require('fs'),
+	fs = require('fs-extra'),
     path = require("path"),
     mongoose = require('mongoose');
 
@@ -100,9 +101,9 @@ app.get('/api/projects', function (req, res){
 
 // CREATE a project
 app.post('/api/projects', function (req, res){
-
+	
 	// Grab the file(s) uploaded
-	var uploadedFile = req.files.uploadingFile;
+	var uploadedFile = req.files.uploadingFile;	
 
 	var project = new ProjectModel({
 		title: req.body.title,
@@ -110,10 +111,9 @@ app.post('/api/projects', function (req, res){
 		category: req.body.category,
 		author: req.body.author
 	});
-	
+
 	// reusable function
 	var populateData = function(theFile) {	
-
 		var concatFileName = theFile.name.replace(/ /g, '+');
 		var dotPosition = concatFileName.lastIndexOf('.');
 		var date = new Date().getTime();
@@ -122,6 +122,7 @@ app.post('/api/projects', function (req, res){
 		var targetPath = 'public/uploads/' + newFileName;
 		
 		fs.rename(tmpPath, targetPath, function(err) {
+			
 			if (err) {
 				console.log(err);
 			} else {
@@ -135,11 +136,12 @@ app.post('/api/projects', function (req, res){
 			}
 		});	
 		
-		// create
+		
+		// create image
 		var newImages = new ImageModel({
 			uri: 'uploads/' + newFileName
 		});
-	
+
 		// create a new image record
 		newImages.save(function (err) {
 			if (!err) {
@@ -149,34 +151,52 @@ app.post('/api/projects', function (req, res){
 				console.log(err);
 			}
 		});
-		
+
 		// push the new image _id to the project.image_ids property
 		project.image_ids.push(newImages);
-	}
-	
-	// if > 1 file
-	if (uploadedFile.length ) {	
+
+		// Save the project
+		project.save(function (err) {
+			if (!err) {
+				project.save();
+				return console.log("Project created");
+			} else {
+				console.log('Error saving project');
+				return console.log(err);
+			}
+		});
+		
+	} // populateData
+
+
+	// try/catch here?
+	if (uploadedFile.size === 0) {
+		
+		console.log('No image to upload')
+		res.redirect('/');
+		return;
+		
+	} else if (uploadedFile.length > 1) {
+		
+		console.log('More than 1 image')
 		for (var i in uploadedFile) {		
 			populateData(uploadedFile[i]);
 		}
-	// otherwise 1 file
-	} else {
+		return;
+		
+	} else if (uploadedFile.length === undefined) {
+
+		console.log('Only 1 image')
 		populateData(uploadedFile);
+		return;
+		
+	} else {
+		
+		console.log('No idea then?!')
+		res.redirect('/');
+		return;
 	}
 	
-	// Save the project
-	project.save(function (err) {
-		if (!err) {
-			project.save();
-			return console.log("created");
-		} else {
-			console.log('Error saving project');
-			return console.log(err);
-		}
-	});
-	
-	return res.send({'project' : project});
-
 });
 
 
@@ -229,6 +249,33 @@ app.put('/api/projects/:id', function (req, res){
 // DELETE a Single Project by ID
 app.delete('/api/projects/:id', function (req, res){
 	return ProjectModel.findById(req.params.id, function (err, project) {
+		
+		var len = project.image_ids.length; 
+		
+		if (len) {
+			for (var i = 0; i < len; i++) {			
+				ImageModel.findById(project.image_ids[i ], function (err, image) {
+					return image.remove(function (err) {
+						if (!err) {
+							console.log("removed image");
+				
+							
+							fs.remove('public/' + image.uri, function (err) {
+								if (err) {
+									console.log(err);
+								} else {
+									console.log('successfully deleted image from fs');
+								}
+							});
+
+						} else {
+							console.log(err);
+						}
+					});
+				});
+			}
+		}
+		
 		return project.remove(function (err) {
 			if (!err) {
 				console.log("removed project");
@@ -296,6 +343,7 @@ app.get('/api/images/:id', function (req, res){
 
 // DELETE a Single Image by ID
 app.delete('/api/images/:id', function (req, res){
+	console.log('try to delete image');
 	console.log(req.params.id)
 	var image;
 	
