@@ -15,3 +15,17 @@
 //         this.set('files', files);
 //     }
 // });
+
+
+// App.ProjectNewView = Ember.View.extend({
+// 	
+// 	templateName: 'projects/new',
+// 	submitFileUpload: function(event) {
+// 		event.preventDefault();
+// 		var person = PersonApp.Person.createRecord({ 	username: 'heyo', 
+// 														attachment: this.get('controller').get('logo'), 
+// 														other: this.get('controller').get('other') });
+// 														this.get('controller.target').get('store').commit();
+// 	}
+// 	
+// });

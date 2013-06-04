@@ -15,7 +15,6 @@ App.ProjectController = Ember.ObjectController.extend({
 
   save: function() {
       this.get('store').commit();
-	
       this.get('target.router').transitionTo('projects.index');
   },
 
@@ -26,7 +25,6 @@ App.ProjectController = Ember.ObjectController.extend({
       this.get('target.router').transitionTo('projects.index');
     }
   }
-
 });
 
 
@@ -35,7 +33,10 @@ App.ProjectsNewController = Ember.ObjectController.extend({
 	newRecord: function() {
 		console.log('new record');	
 		this.set('content', App.Project.createRecord({title: ''}));
-		// TODO: create a transaction
+		
+		// TODO: create a transaction		
+		// this.transaction = this.get('store').transaction();
+		// this.set('content', this.transaction.createRecord(App.Project));
 	},
 	
 	bindImgs: function(evt){
@@ -46,6 +47,9 @@ App.ProjectsNewController = Ember.ObjectController.extend({
 			files.push(evt.target.files[i].name);
 		}
 		console.log(files);
+
+		// this.transaction = this.get('store').transaction();
+		// this.transaction.pushObject(files);
 		// TODO: add files to the transaction
 	},
 	
@@ -55,6 +59,12 @@ App.ProjectsNewController = Ember.ObjectController.extend({
 		this.get('target.router').transitionTo('projects.index');	
 	}	
 });
+
+
+
+
+
+
 
 
 // App.UploadController = Ember.ObjectController.extend({

@@ -30,7 +30,6 @@ app.get('/', auth, function(req, res) {
 });
 
 
-
 // Mongo Database
 mongoose.connect('mongodb://192.168.33.10:27017/test', function(err){
   if (err) {
@@ -68,28 +67,6 @@ var ImageSchema = new Schema({
 var ImageModel = mongoose.model('Image', ImageSchema);
 
 
-// // Populate new record
-// var newProject = new ProjectModel({
-//     id: 			99,
-// 	title: 			'Test Name',
-// 	author: 		'Mongo User',
-// 	image: 			'http://lorempixel.com/180/179/'
-// });
-// 
-// // Save that record
-// newProject.save(function(err) {
-//   if (err) {
-//     console.log('Could not save new project');
-//   } else {
-//     console.log('New project saved!');
-//   }
-// });
-// 
-// Delete specific projects
-// var findDocument = ProjectModel.find({ 'title': '' });
-// findDocument.remove();
-
-
 // // Delete all projects
 // var tt = ProjectModel.find(function(err,doc){
 //   console.log(doc);
@@ -121,18 +98,21 @@ app.get('/api/projects', function (req, res){
 });
 
 
-// CREATE a single Project
+// CREATE a project
 app.post('/api/projects', function (req, res){
-	
-	console.log(req.files);
-	var project;
+
+	// Grab the file(s) uploaded
 	var uploadedFile = req.files.uploadingFile;
+
+	var project = new ProjectModel({
+		title: req.body.title,
+		// publishedAt: req.body.project.publishedAt,
+		category: req.body.category,
+		author: req.body.author
+	});
 	
-	console.log("POST: ");
-	console.log(req.body);
-	
-	// reusable rename file function
-	var renamingFunc = function(theFile) {	
+	// reusable function
+	var populateData = function(theFile) {	
 
 		var concatFileName = theFile.name.replace(/ /g, '+');
 		var dotPosition = concatFileName.lastIndexOf('.');
@@ -154,63 +134,50 @@ app.post('/api/projects', function (req, res){
 				});
 			}
 		});	
+		
+		// create
+		var newImages = new ImageModel({
+			uri: 'uploads/' + newFileName
+		});
+	
+		// create a new image record
+		newImages.save(function (err) {
+			if (!err) {
+				console.log('Saved image');
+			} else {
+				console.log('Error saving image:');
+				console.log(err);
+			}
+		});
+		
+		// push the new image _id to the project.image_ids property
+		project.image_ids.push(newImages);
 	}
 	
+	// if > 1 file
+	if (uploadedFile.length ) {	
+		for (var i in uploadedFile) {		
+			populateData(uploadedFile[i]);
+		}
+	// otherwise 1 file
+	} else {
+		populateData(uploadedFile);
+	}
 	
-	project = new ProjectModel({
-		title: req.body.project.title,
-		// publishedAt: req.body.project.publishedAt,
-		category: req.body.project.category,
-		author: req.body.project.author
-	});
-
-
+	// Save the project
 	project.save(function (err) {
 		if (!err) {
-			// if > 1 file
-			if (uploadedFile.length) {
-				for (var i = uploadedFile.length - 1; i >= 0; i -= 1) {
-					
-					// Rename and save the images
-					renamingFunc(uploadedFile[i])
-					
-					var newImages = new ImageModel({
-						uri: uploadedFile[i]
-					});
-
-					// create a new image record
-					newImages.save(function (err) {
-						if (!err) {
-							console.log('Saved image');
-						} else {
-							console.log('Error saving image:');
-							console.log(err);
-						}
-					});
-				
-					// push the new image _id to the project.image_ids property
-					project.image_ids.push(newImages);
-			
-				} // for in
-			// otherwise 1 file
-			} else {
-				
-				renamingFunc(uploadedFile)
-				
-			}// if images
-
 			project.save();
-			
 			return console.log("created");
 		} else {
 			console.log('Error saving project');
 			return console.log(err);
 		}
 	});
+	
+	return res.send({'project' : project});
 
-	return res.send( {'project' : project} );
 });
-
 
 
 // READ a Single Project by ID
@@ -225,6 +192,7 @@ app.get('/api/projects/:id', function (req, res){
 		}
 	});
 });
+
 
 // UPDATE a Single Project by ID
 app.put('/api/projects/:id', function (req, res){
@@ -256,6 +224,7 @@ app.put('/api/projects/:id', function (req, res){
 		
 	});
 });
+
 
 // DELETE a Single Project by ID
 app.delete('/api/projects/:id', function (req, res){
@@ -344,69 +313,7 @@ app.delete('/api/images/:id', function (req, res){
 
 
 
-
-
-
-
-// TEST =========================================================
-
-// app.get('/api/fileUpload', function (req, res) {
-//   res.send('API is running! WOO');
-// });
-
-// Create an endpoint for uploading images test
-app.post('/api/fileUpload', function(req, res) {
-
-	// reusable renaming function
-	var renamingFunc = function(theFile) {	
-
-		var concatFileName = theFile.name.replace(/ /g, '+');
-		var dotPosition = concatFileName.lastIndexOf('.');
-		var date = new Date().getTime();
-		var newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
-		var tmpPath = theFile.path;
-		var targetPath = 'public/uploads/' + newFileName;
-		
-		fs.rename(tmpPath, targetPath, function(err) {
-			if (err) {
-				console.log(err);
-			} else {
-				fs.unlink(tmpPath, function() {
-					if (err) {
-						console.log(err)
-					} else {
-						res.send('File Uploaded to ' + targetPath + ' - ' + theFile.size + ' bytes');
-					}
-				});
-			}
-		});	
-	}
-	
-	// Grab the file(s) uploaded
-	var uploadedFile = req.files.uploadingFile;
-
-	// if > 1 file
-	if ( uploadedFile.length ) {	
-		for (var i in uploadedFile) {		
-			renamingFunc(uploadedFile[i])
-		}
-	// otherwise 1 file
-	} else {
-		renamingFunc(uploadedFile)
-	}
-
-});
-
-// TEST =========================================================
-
-
-
-
-
 // Launch server
 app.listen(3000);
 console.log('listening on port 3000');
-
-
-
 

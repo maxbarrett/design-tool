@@ -29,14 +29,13 @@ App.TextField = Ember.TextField.extend({
 });
 
 
-
 App.FileField = Ember.TextField.extend({
     type: 'file',
+	attributeBindings: ['name'],
     multiple : true,
-    attributeBindings: "multiple".w(), // .w() ?
     change: function(evt) {
-        evt.preventDefault();
-        evt.stopPropagation();
+        //evt.preventDefault();
+        //evt.stopPropagation();
         this.get('controller').bindImgs(evt);
     }
 });
