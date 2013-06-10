@@ -51,11 +51,27 @@ jQuery.ajax({
 
 // CREATE IMAGE
 jQuery.post("/api/images", {
-	'image' : {	"uri": "http://lorempixel.com/210/200/"
+	'image' : {	"uri": "http://lorempixel.com/210/200/",
+	'proj'		: {}
 	}
 }, function (data, textStatus, jqXHR) {
     console.log("Post resposne:"); console.dir(data); console.log(textStatus); console.dir(jqXHR);
 });
+
+
+
+// DELETE IMAGE
+jQuery.ajax({
+    url: "/api/images/IMAGEID", 
+    type: "DELETE",
+    success: function (data, textStatus, jqXHR) { 
+        console.log("Post resposne:"); 
+        console.dir(data); 
+        console.log(textStatus); 
+        console.dir(jqXHR); 
+    }
+});
+
 
 
 

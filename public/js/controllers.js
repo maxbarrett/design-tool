@@ -1,30 +1,37 @@
 App.ProjectController = Ember.ObjectController.extend({
-  isEditing: false,
+	isEditing: false,
 
-  edit: function() {
-    this.set('isEditing', true);
-  },
+	edit: function() {
+		this.set('isEditing', true);
+	},
 
-  doneEditing: function (){
-    this.set('isEditing', false);
-	// update the publish date now that we have finished editing
-	// this.set('publishedAt', new Date());
-    this.get('store').commit();
-	this.get('target.router').transitionTo('projects.index');
-  },
+	doneEditing: function (){
+		this.set('isEditing', false);
+		// update the publish date now that we have finished editing
+		// this.set('publishedAt', new Date());
+		this.get('store').commit();
+		// this.get('target.router').transitionTo('projects.index');
+	},
 
-  save: function() {
-      this.get('store').commit();
-      this.get('target.router').transitionTo('projects.index');
-  },
+	save: function() {
+		this.get('store').commit();
+		this.get('target.router').transitionTo('projects.index');
+	},
 
-  destroyRecord: function() {
-    if (window.confirm("Are you sure you want to delete this project?")) {
-      this.get('content').deleteRecord();
-      this.get('store').commit();
-      this.get('target.router').transitionTo('projects.index');
-    }
-  }
+	destroyRecord: function() {
+		if (window.confirm("Are you sure you want to delete this project?")) {
+			this.get('content').deleteRecord();
+			this.get('store').commit();
+			this.get('target.router').transitionTo('projects.index');
+		}
+	},
+	
+	removeImg: function(){
+		var e = $(this);
+		console.log(e);
+		
+		
+	}
 });
 
 

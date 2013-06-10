@@ -7,7 +7,8 @@ App.Project = DS.Model.extend({
 });
 
 App.Image = DS.Model.extend({
-	uri:  DS.attr('string')
+	uri:  DS.attr('string'),
+	proj: DS.attr('string')
 });
 
 

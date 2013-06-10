@@ -61,7 +61,8 @@ var ProjectModel = mongoose.model('Project', ProjectSchema);
 
 // Create Image Schema
 var ImageSchema = new Schema({
-	uri: 		String
+	uri: 		String,
+	proj: 		{ type: Schema.Types.ObjectId, ref: 'Project' }
 });
 
 // Create Image record type
@@ -104,7 +105,6 @@ app.post('/api/projects', function (req, res){
 	
 	// Grab the file(s) uploaded
 	var uploadedFile = req.files.uploadingFile;	
-
 	var project = new ProjectModel({
 		title: req.body.title,
 		// publishedAt: req.body.project.publishedAt,
@@ -130,7 +130,8 @@ app.post('/api/projects', function (req, res){
 					if (err) {
 						console.log(err)
 					} else {
-						res.send('File Uploaded to ' + targetPath + ' - ' + theFile.size + ' bytes');
+						// res.send('File Uploaded to ' + targetPath + ' - ' + theFile.size + ' bytes');
+						console.log('File Uploaded to ' + targetPath + ' - ' + theFile.size + ' bytes')
 					}
 				});
 			}
@@ -139,7 +140,8 @@ app.post('/api/projects', function (req, res){
 		
 		// create image
 		var newImages = new ImageModel({
-			uri: 'uploads/' + newFileName
+			uri: 'uploads/' + newFileName,
+			proj: project._id
 		});
 
 		// create a new image record
@@ -154,8 +156,12 @@ app.post('/api/projects', function (req, res){
 
 		// push the new image _id to the project.image_ids property
 		project.image_ids.push(newImages);
+		
+	} // populateData
 
-		// Save the project
+
+	// Save the project
+	var saveProj = function() { 
 		project.save(function (err) {
 			if (!err) {
 				project.save();
@@ -165,36 +171,33 @@ app.post('/api/projects', function (req, res){
 				return console.log(err);
 			}
 		});
-		
-	} // populateData
-
+	}
 
 	// try/catch here?
 	if (uploadedFile.size === 0) {
 		
 		console.log('No image to upload')
 		res.redirect('/');
-		return;
 		
 	} else if (uploadedFile.length > 1) {
 		
-		console.log('More than 1 image')
+		console.log('More than 1 image');
 		for (var i in uploadedFile) {		
 			populateData(uploadedFile[i]);
 		}
-		return;
+		saveProj();
+		res.redirect('/');
 		
 	} else if (uploadedFile.length === undefined) {
 
-		console.log('Only 1 image')
+		console.log('Only 1 image');
 		populateData(uploadedFile);
-		return;
+		saveProj();
+		res.redirect('/');
 		
 	} else {
-		
-		console.log('No idea then?!')
+		console.log('No idea then?!');
 		res.redirect('/');
-		return;
 	}
 	
 });
@@ -224,7 +227,7 @@ app.put('/api/projects/:id', function (req, res){
 		// project.category = (thisProject.category !== undefined) ? thisProject.category : project.category;
 		// project.author = (thisProject.author !== undefined) ? thisProject.author : project.author;
 		// project.images = (thisProject.images !== undefined) ? thisProject.images : project.images;
-		
+		console.log(thisProject);
 		project.title = thisProject.title;
 		project.category = thisProject.category;
 		project.author = thisProject.author;
@@ -254,17 +257,14 @@ app.delete('/api/projects/:id', function (req, res){
 		
 		if (len) {
 			for (var i = 0; i < len; i++) {			
-				ImageModel.findById(project.image_ids[i ], function (err, image) {
+				ImageModel.findById(project.image_ids[i], function (err, image) {
 					return image.remove(function (err) {
 						if (!err) {
-							console.log("removed image");
-				
-							
 							fs.remove('public/' + image.uri, function (err) {
 								if (err) {
 									console.log(err);
 								} else {
-									console.log('successfully deleted image from fs');
+									console.log('Successfully deleted image from fs');
 								}
 							});
 
@@ -279,7 +279,7 @@ app.delete('/api/projects/:id', function (req, res){
 		return project.remove(function (err) {
 			if (!err) {
 				console.log("removed project");
-				return res.send('');
+				return res.send({status : 'ok'});
 			} else {
 				console.log(err);
 			}
@@ -343,15 +343,49 @@ app.get('/api/images/:id', function (req, res){
 
 // DELETE a Single Image by ID
 app.delete('/api/images/:id', function (req, res){
-	console.log('try to delete image');
-	console.log(req.params.id)
-	var image;
+	console.log('Trying to delete image');
+	var image; 
 	
 	return ImageModel.findById(req.params.id, function (err, image) {
 		return image.remove(function (err) {
 			if (!err) {
-				console.log("removed");
-				return res.send('');
+				
+				fs.remove('public/' + image.uri, function (err) {
+					if (err) {
+						console.log(err);
+					} else {
+						console.log('Successfully deleted image from fs');
+						
+						ProjectModel.findById(image.proj, function (err, project) {
+							var imgs = project.image_ids;
+							console.log(imgs);
+							
+							var i = imgs.indexOf(req.params.id);
+							if(i !== -1) {
+								imgs.splice(i, 1);
+							}
+							
+							project.image_ids = imgs;
+							
+							return project.save(function (err) {
+								if (!err) {
+									console.log("Project updated (removed image_id from array)");
+								} else {
+									console.log("Error updating project image_ids");
+									console.log(err);
+								}
+
+								console.log(project);
+								return res.send({'project' : project});
+							});
+						
+						});
+						
+						
+					//	return res.send('');
+					}
+				});
+				
 			} else {
 				console.log(err);
 			}

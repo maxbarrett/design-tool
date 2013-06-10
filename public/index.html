@@ -6,19 +6,7 @@
 	<link rel="stylesheet" href="css/scaffolding.css">
 	<link rel="stylesheet" href="css/normalize.css">  
 	<link rel="stylesheet" href="css/style.css">
-	
-	<script src="js/libs/jquery-1.9.1.js"></script>
-	<script src="js/libs/handlebars-1.0.0-rc.4.js"></script>
-	<script src="js/libs/ember2.js"></script>
-	<script src="js/libs/ember-data.js"></script>
-	<script src="js/libs/showdown.js"></script>
-	<script src="js/libs/moment.js"></script>
-	<script src="js/plugins/jquery.valideater.js"></script>
-	<script src="js/app.js"></script>
-	<script src="js/routes.js"></script>
-	<script src="js/models.js"></script>
-	<script src="js/views.js"></script>
-	<script src="js/controllers.js"></script>
+
 </head>
 <body>
 
@@ -66,24 +54,27 @@
 
 <script type="text/x-handlebars" data-template-name="project">
 	<div id="xxxoverlay" class="dark">
+	
 		<div class="project">
 			<form {{action save on="submit"}}>	
-				<h1>{{title}}</h1>
-				<h2>by {{author}}</h2>
-				<p>{{category}}</p>
-				<p>{{date publishedAt}}</p>
+				{{_id}}
 				
 				{{#if isEditing}}
 					{{partial 'projectFields'}}
 					<button {{action 'doneEditing'}}>Done</button>
 				{{else}}
+					<h1>{{title}}</h1>
+					<h2>by {{author}}</h2>
+					<p>{{category}}</p>
+					<p>{{date publishedAt}}</p>
 					<button {{action 'edit'}}>Edit</button>
 				{{/if}}
 		
 				<ul>
 					{{#each image in images}}
 					<li>
-						<img {{bindAttr src="image.uri"}}>
+						<img {{bindAttr src="image.uri" data-img="image.id" data-proj="image.proj"}}>
+						<span {{action 'removeImg' bubbles=false}}>Delete image</span>
 					</li>
 					{{else}}
 					<li>No images</li>
@@ -128,11 +119,11 @@
 
 <script type="text/x-handlebars" data-template-name="_projectFields">
 
-	{{view App.TextField id="title" placeholder="Title" data-valideater="required" required="required"}}<br />
-	{{view App.TextField id="author" placeholder="Author"}}<br />
-	{{view App.TextField id="category" placeholder="Category"}}<br />
+	{{view App.TextField id="title" valueBinding="title" placeholder="Title" data-valideater="required" required="required"}}<br />
+	{{view App.TextField id="author" valueBinding="author" placeholder="Author"}}<br />
+	{{view App.TextField id="category" valueBinding="category" placeholder="Category"}}<br />
+	{{view App.FileField id="uploadingFile" name="uploadingFile" valueBinding="images" }}<br/>
 	
-	<!-- {{view App.FileField id="uploadingFile" name="uploadingFile" }}<br/> -->
 	<!-- {{view App.TextField valueBinding="imagess" id="imagess" name="imagess" }}<br/> -->
 </script>
 
@@ -151,7 +142,18 @@
 	</div>
 </script> -->
 
-
+<script src="js/libs/jquery-1.9.1.js"></script>
+<script src="js/libs/handlebars-1.0.0-rc.4.js"></script>
+<script src="js/libs/ember2.js"></script>
+<script src="js/libs/ember-data.js"></script>
+<script src="js/libs/showdown.js"></script>
+<script src="js/libs/moment.js"></script>
+<script src="js/plugins/jquery.valideater.js"></script>
+<script src="js/app.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/models.js"></script>
+<script src="js/views.js"></script>
+<script src="js/controllers.js"></script>
 
 
 
