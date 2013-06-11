@@ -57,8 +57,6 @@
 	
 		<div class="project">
 			<form {{action save on="submit"}}>	
-				{{_id}}
-				
 				{{#if isEditing}}
 					{{partial 'projectFields'}}
 					<button {{action 'doneEditing'}}>Done</button>
@@ -104,7 +102,7 @@
 		<div class="new-project-form">
 			{{#linkTo 'projects' classNames="close"}}Close{{/linkTo}}
 
-			<form method="post" action="api/projects" enctype="multipart/form-data">
+			<form method="post" action="api/projects" enctype="multipart/form-data" id="add-proj">
 				<input type="text" name="title" placeholder="Title">
 				<input type="text" name="author" placeholder="Author">
 				<input type="text" name="category" placeholder="Category">
@@ -154,7 +152,8 @@ $( document ).ready(function() {
 	// 		form.valideater();
 	// 		// if(window.console) console.log('Initialising Valideater ... for ' + form.attr('id'));
 	// 	}
-	// });	
+	// });
+	
 });
 </script>
 

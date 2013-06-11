@@ -102,49 +102,32 @@ app.get('/api/projects', function (req, res){
 
 // CREATE a project
 app.post('/api/projects', function (req, res){
-	
-	// Grab the file(s) uploaded
 	var uploadedFile = req.files.uploadingFile;	
-	var project = new ProjectModel({
-		title: req.body.title,
-		// publishedAt: req.body.project.publishedAt,
-		category: req.body.category,
-		author: req.body.author
-	});
-
 	// reusable function
 	var populateData = function(theFile) {	
 		var concatFileName = theFile.name.replace(/ /g, '+');
-		var dotPosition = concatFileName.lastIndexOf('.');
-		var date = new Date().getTime();
-		var newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
-		var tmpPath = theFile.path;
-		var targetPath = 'public/uploads/' + newFileName;
+		var	dotPosition = concatFileName.lastIndexOf('.');
+		var	date = new Date().getTime();
+		var	newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
+		var	tmpPath = theFile.path;
+		var	targetPath = 'public/uploads/' + newFileName;
 		
+		// Rename image
 		fs.rename(tmpPath, targetPath, function(err) {
-			
-			if (err) {
-				console.log(err);
+			if(err) {
+				console.log(err)
 			} else {
-				fs.unlink(tmpPath, function() {
-					if (err) {
-						console.log(err)
-					} else {
-						// res.send('File Uploaded to ' + targetPath + ' - ' + theFile.size + ' bytes');
-						console.log('File Uploaded to ' + targetPath + ' - ' + theFile.size + ' bytes')
-					}
-				});
+				console.log('Image renamed');
 			}
 		});	
-		
-		
-		// create image
+
+		// Create image record
 		var newImages = new ImageModel({
 			uri: 'uploads/' + newFileName,
 			proj: project._id
 		});
 
-		// create a new image record
+		// Save image
 		newImages.save(function (err) {
 			if (!err) {
 				console.log('Saved image');
@@ -173,30 +156,30 @@ app.post('/api/projects', function (req, res){
 		});
 	}
 
-	// try/catch here?
-	if (uploadedFile.size === 0) {
+	
+	// if there's 1 or more image files to upload and a project title
+	if (((req.files.uploadingFile.size > 0) || (req.files.uploadingFile.length > 1 )) && (req.body.title !== '')) {
 		
-		console.log('No image to upload')
-		res.redirect('/');
+		var project = new ProjectModel({
+			title: req.body.title,
+			// publishedAt: req.body.project.publishedAt,
+			category: req.body.category,
+			author: req.body.author
+		});
 		
-	} else if (uploadedFile.length > 1) {
-		
-		console.log('More than 1 image');
-		for (var i in uploadedFile) {		
-			populateData(uploadedFile[i]);
+		if (uploadedFile.length === undefined) {
+			console.log('Only 1 image');
+			populateData(uploadedFile);
+		} else if (uploadedFile.length > 1) {
+			console.log('More than 1 image');
+			for (var i in uploadedFile) {		
+				populateData(uploadedFile[i]);
+			}
 		}
 		saveProj();
 		res.redirect('/');
-		
-	} else if (uploadedFile.length === undefined) {
-
-		console.log('Only 1 image');
-		populateData(uploadedFile);
-		saveProj();
-		res.redirect('/');
-		
 	} else {
-		console.log('No idea then?!');
+		console.log('Project not saved : Image and title required');
 		res.redirect('/');
 	}
 	
@@ -266,7 +249,7 @@ app.delete('/api/projects/:id', function (req, res){
 			}
 			project.remove(function (err) {});
 			console.log('Project deleted');
-			res.json(200)
+			res.json(200);
 		}// if proj
 		
 	});
