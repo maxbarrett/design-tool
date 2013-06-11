@@ -276,13 +276,20 @@ app.get('/api/images', function (req, res){
 // CREATE an image
 app.post('/api/images', function (req, res){
 	var image;
+	
+	console.log(req.files);
+	
 	console.log("POST: ");
 	console.log(req.body);
 	
-	image = new ImageModel({
-		uri: req.body.image_ids.uri
-	});
+	// image = new ImageModel({
+	// 	uri: req.body.image_ids.uri
+	// });
 	
+	image = new ImageModel({
+		uri: req.body.image.uri
+	});
+
 	image.save(function (err) {
 		if (!err) {
 			return console.log("created");
@@ -293,6 +300,8 @@ app.post('/api/images', function (req, res){
 
 	return res.send( {'image' : image} );
 });
+
+
 
 
 // READ a Single Image by ID

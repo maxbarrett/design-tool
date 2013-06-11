@@ -56,7 +56,7 @@
 	<div id="xxxoverlay" class="dark">
 	
 		<div class="project">
-			<form {{action save on="submit"}}>	
+			<form {{action save on="submit"}} enctype="multipart/form-data">	
 				{{#if isEditing}}
 					{{partial 'projectFields'}}
 					<button {{action 'doneEditing'}}>Done</button>
@@ -72,7 +72,7 @@
 					{{#each image in images}}
 					<li>
 						<img {{bindAttr src="image.uri" data-img="image.id"}}>
-						{{view App.removeImage contentBinding="this"}}
+						<a href="#" {{action 'deleteImg' image}}>Delete</a>
 					</li>
 					{{else}}
 					<li>No images</li>
@@ -80,7 +80,7 @@
 				</ul>
 				
 			    <!-- <button type="submit">Save project</button>--><br/>
-				<button class="delete" {{action destroyRecord}}>Delete project</button>
+				<button class="delete" {{action 'destroyRecord'}}>Delete project</button>
 			</form>	
 			<footer>
 				{{#linkTo 'projects' classNames="back"}}Back{{/linkTo}}
@@ -120,7 +120,7 @@
 	{{view App.TextField id="title" valueBinding="title" placeholder="Title" data-valideater="required" required="required"}}<br />
 	{{view App.TextField id="author" valueBinding="author" placeholder="Author"}}<br />
 	{{view App.TextField id="category" valueBinding="category" placeholder="Category"}}<br />
-	{{view App.FileField id="uploadingFile" name="uploadingFile" valueBinding="images" }}<br/>
+	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br/>
 	
 	<!-- {{view App.TextField valueBinding="imagess" id="imagess" name="imagess" }}<br/> -->
 </script>
