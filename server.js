@@ -227,7 +227,6 @@ app.put('/api/projects/:id', function (req, res){
 		// project.category = (thisProject.category !== undefined) ? thisProject.category : project.category;
 		// project.author = (thisProject.author !== undefined) ? thisProject.author : project.author;
 		// project.images = (thisProject.images !== undefined) ? thisProject.images : project.images;
-		console.log(thisProject);
 		project.title = thisProject.title;
 		project.category = thisProject.category;
 		project.author = thisProject.author;
@@ -251,39 +250,25 @@ app.put('/api/projects/:id', function (req, res){
 
 // DELETE a Single Project by ID
 app.delete('/api/projects/:id', function (req, res){
-	return ProjectModel.findById(req.params.id, function (err, project) {
-		
-		var len = project.image_ids.length; 
-		
-		if (len) {
-			for (var i = 0; i < len; i++) {			
-				ImageModel.findById(project.image_ids[i], function (err, image) {
-					return image.remove(function (err) {
-						if (!err) {
-							fs.remove('public/' + image.uri, function (err) {
-								if (err) {
-									console.log(err);
-								} else {
-									console.log('Successfully deleted image from fs');
-								}
-							});
+	ProjectModel.findById(req.params.id, function (err, project) {
 
-						} else {
-							console.log(err);
-						}
+		if (project) {
+			var len = project.image_ids.length; 
+			if (len) {
+				for (var i = 0; i < len; i++) {			
+					ImageModel.findById(project.image_ids[i], function (err, image) {
+						if (image) {
+							image.remove(function (err) {});
+							fs.remove('public/' + image.uri, function (err) {});
+						} else { console.log('No image'); }
 					});
-				});
+				}
 			}
-		}
+			project.remove(function (err) {});
+			console.log('Project deleted');
+			res.json(200)
+		}// if proj
 		
-		return project.remove(function (err) {
-			if (!err) {
-				console.log("removed project");
-				return res.send({status : 'ok'});
-			} else {
-				console.log(err);
-			}
-		});
 	});
 });
 
@@ -291,7 +276,6 @@ app.delete('/api/projects/:id', function (req, res){
 /////////////////////////////////////////////////////////
 // REST API FOR IMAGES
 /////////////////////////////////////////////////////////
-
 
 // READ a List of Images
 app.get('/api/images', function (req, res){
@@ -304,6 +288,7 @@ app.get('/api/images', function (req, res){
 		}
 	});
 });
+
 
 // CREATE an image
 app.post('/api/images', function (req, res){
@@ -326,6 +311,7 @@ app.post('/api/images', function (req, res){
 	return res.send( {'image' : image} );
 });
 
+
 // READ a Single Image by ID
 app.get('/api/images/:id', function (req, res){
 	var image;
@@ -341,58 +327,36 @@ app.get('/api/images/:id', function (req, res){
 	});
 });
 
+
 // DELETE a Single Image by ID
 app.delete('/api/images/:id', function (req, res){
-	console.log('Trying to delete image');
-	var image; 
 	
-	return ImageModel.findById(req.params.id, function (err, image) {
-		return image.remove(function (err) {
-			if (!err) {
+	ImageModel.findById(req.params.id, function (err, image) {
+		
+		if (image) {
+			image.remove(function (err) {});
+			fs.remove('public/' + image.uri, function (err) {});
+			
+			ProjectModel.findById(image.proj, function (err, project) {
+				// remove ref in file
+				var imgs = project.image_ids;
+				var i = imgs.indexOf(req.params.id);
+				if (i !== -1) {
+					imgs.splice(i, 1);
+				}
+				project.image_ids = imgs;
+			
+				// Save project
+				project.save(function (err) {});
 				
-				fs.remove('public/' + image.uri, function (err) {
-					if (err) {
-						console.log(err);
-					} else {
-						console.log('Successfully deleted image from fs');
-						
-						ProjectModel.findById(image.proj, function (err, project) {
-							var imgs = project.image_ids;
-							console.log(imgs);
-							
-							var i = imgs.indexOf(req.params.id);
-							if(i !== -1) {
-								imgs.splice(i, 1);
-							}
-							
-							project.image_ids = imgs;
-							
-							return project.save(function (err) {
-								if (!err) {
-									console.log("Project updated (removed image_id from array)");
-								} else {
-									console.log("Error updating project image_ids");
-									console.log(err);
-								}
-
-								console.log(project);
-								return res.send({'project' : project});
-							});
-						
-						});
-						
-						
-					//	return res.send('');
-					}
-				});
-				
-			} else {
-				console.log(err);
-			}
-		});
+				return res.send({'status' : 'ok'});
+			});
+		} else {
+			console.log('no image');
+		}
+	
 	});
 });
-
 
 
 // Launch server

@@ -73,8 +73,8 @@
 				<ul>
 					{{#each image in images}}
 					<li>
-						<img {{bindAttr src="image.uri" data-img="image.id" data-proj="image.proj"}}>
-						<span {{action 'removeImg' bubbles=false}}>Delete image</span>
+						<img {{bindAttr src="image.uri" data-img="image.id"}}>
+						{{view App.removeImage contentBinding="this"}}
 					</li>
 					{{else}}
 					<li>No images</li>
@@ -127,20 +127,6 @@
 	<!-- {{view App.TextField valueBinding="imagess" id="imagess" name="imagess" }}<br/> -->
 </script>
 
-
-
-<!-- <script type="text/x-handlebars" data-template-name="upload">
-	<div class="upload">
-		<h1>Upload file here</h1>
-		<form method="post" action="api/projects" enctype="multipart/form-data">
-			<input type="text" name="title" placeholder="Title">
-			<input type="text" name="author" placeholder="Author">
-			<input type="text" name="category" placeholder="Category">
-			<input type="file" name="uploadingFile" multiple="multiple">
-			<input type="submit">
-		</form>
-	</div>
-</script> -->
 
 <script src="js/libs/jquery-1.9.1.js"></script>
 <script src="js/libs/handlebars-1.0.0-rc.4.js"></script>

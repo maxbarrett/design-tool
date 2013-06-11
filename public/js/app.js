@@ -34,8 +34,8 @@ App.FileField = Ember.TextField.extend({
 	attributeBindings: ['name'],
     multiple : true,
     change: function(evt) {
-        //evt.preventDefault();
-        //evt.stopPropagation();
+        evt.preventDefault();
+        evt.stopPropagation();
         this.get('controller').bindImgs(evt);
     }
 });
