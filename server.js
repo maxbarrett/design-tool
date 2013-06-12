@@ -276,25 +276,37 @@ app.get('/api/images', function (req, res){
 
 // CREATE an image
 app.post('/api/images', function (req, res){
-	var image;
-	
+
 	console.log("POST: ");
 	console.log(req.body);
+
+	var image;
+	var filename = req.body.image.uri;
+	var base64Data = req.body.image.imgdata;	
+	var regex = /^data:.+\/(.+);base64,(.*)$/;
+	var matches = base64Data.match(regex);
+	var ext = matches[1];
+	var data = matches[2];
+	var buffer = new Buffer(data, 'base64');
 	
-	
-	req.body.image.imgdata.replace(/^data:image\/png;base64,/,"")
-	
+	fs.writeFile(filename, buffer, function(err){
+		if (!err) {
+			console.log("Image " + filename + ' uploaded');
+		} else {
+			console.log("ERROR: Image " + filename + ' did not upload');
+			console.log(err);
+		}
+	});
 	
 	image = new ImageModel({
-		uri: req.body.image.uri,
-		// imgdata: req.body.image.imgdata
+		uri: req.body.image.uri
 	});
 
 	image.save(function (err) {
 		if (!err) {
-			return console.log("created");
+			console.log("Image saved in DB");
 		} else {
-			return console.log(err);
+			console.log(err);
 		}
 	});
 
