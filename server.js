@@ -105,7 +105,7 @@ app.get('/api/projects', function (req, res){
 app.post('/api/projects', function (req, res){
 	var uploadedFile = req.files.uploadingFile;	
 	// reusable function
-	var populateData = function(theFile) {	
+	var saveImgFile = function(theFile) {	
 		var concatFileName = theFile.name.replace(/ /g, '+');
 		var	dotPosition = concatFileName.lastIndexOf('.');
 		var	date = new Date().getTime();
@@ -118,7 +118,7 @@ app.post('/api/projects', function (req, res){
 			if(err) {
 				console.log(err)
 			} else {
-				console.log('Image renamed');
+				console.log('Image renamed & saved');
 			}
 		});	
 
@@ -141,7 +141,7 @@ app.post('/api/projects', function (req, res){
 		// push the new image _id to the project.image_ids property
 		project.image_ids.push(newImages);
 		
-	} // populateData
+	} // saveImgFile
 
 
 	// Save the project
@@ -170,11 +170,11 @@ app.post('/api/projects', function (req, res){
 		
 		if (uploadedFile.length === undefined) {
 			console.log('Only 1 image');
-			populateData(uploadedFile);
+			saveImgFile(uploadedFile);
 		} else if (uploadedFile.length > 1) {
 			console.log('More than 1 image');
 			for (var i in uploadedFile) {		
-				populateData(uploadedFile[i]);
+				saveImgFile(uploadedFile[i]);
 			}
 		}
 		saveProj();
@@ -192,10 +192,10 @@ app.get('/api/projects/:id', function (req, res){
 	return ProjectModel.findById(req.params.id, function (err, project) {
 		if (!err) {
 			console.log('No error reading a project');
-			return res.send({'project':project});
+			res.send({'project':project});
 		} else {
 			console.log('Error reading a project');
-			return console.log(err);
+			console.log(err);
 		}
 	});
 });
@@ -204,7 +204,7 @@ app.get('/api/projects/:id', function (req, res){
 // UPDATE a Single Project by ID
 app.put('/api/projects/:id', function (req, res){
 
-	return ProjectModel.findById(req.params.id, function (err, project) {
+	ProjectModel.findById(req.params.id, function (err, project) {
 		
 		var thisProject = req.body.project;
 		// project.title = (thisProject.title !== undefined) ? thisProject.title : project.title;
@@ -216,7 +216,7 @@ app.put('/api/projects/:id', function (req, res){
 		project.author = thisProject.author;
 		project.images = thisProject.images;
 		
-		return project.save(function (err) {
+		project.save(function (err) {
 			if (!err) {
 				console.log("Project updated");
 			} else {
@@ -274,7 +274,7 @@ app.get('/api/images', function (req, res){
 });
 
 
-// CREATE an image
+// Add an image to existing project
 app.post('/api/images', function (req, res){
 
 	console.log("POST: ");
@@ -289,17 +289,34 @@ app.post('/api/images', function (req, res){
 	var data = matches[2];
 	var buffer = new Buffer(data, 'base64');
 	
+	var concatFileName = filename.replace(/ /g, '+');
+	var	dotPosition = concatFileName.lastIndexOf('.');
+	var	date = new Date().getTime();
+	var	newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
+	var	targetPath = 'public/uploads/' + newFileName;
+
+	// write file to root
 	fs.writeFile(filename, buffer, function(err){
 		if (!err) {
-			console.log("Image " + filename + ' uploaded');
+			console.log("Image " + newFileName + ' uploaded');
+			// then move it into the uploads folder
+			fs.rename(filename, targetPath, function(err) {
+				if(err) {
+					console.log(err)
+				} else {
+					console.log('Image renamed & saved');
+				}
+			});
 		} else {
-			console.log("ERROR: Image " + filename + ' did not upload');
+			console.log("ERROR: Image " + newFileName + ' did not upload');
 			console.log(err);
 		}
 	});
 	
+	// Create image record
 	image = new ImageModel({
-		uri: req.body.image.uri
+		uri: 'uploads/' + newFileName,
+		proj: req.body.image.proj
 	});
 
 	image.save(function (err) {
@@ -309,8 +326,23 @@ app.post('/api/images', function (req, res){
 			console.log(err);
 		}
 	});
+	
+	ProjectModel.findById(req.body.image.proj, function (err, project) {
+		
+		// add new image id to project image_ids array
+		project.image_ids.push(image.id);
+		
+		project.save(function (err) {
+			if (!err) {
+				console.log("Project updated");
+			} else {
+				console.log("Error updating project");
+				console.log(err);
+			}
+		});
+	});
 
-	return res.send( {'image' : image} );
+	//return res.send( {'image' : image} );
 });
 
 
@@ -342,7 +374,7 @@ app.delete('/api/images/:id', function (req, res){
 			fs.remove('public/' + image.uri, function (err) {});
 			
 			ProjectModel.findById(image.proj, function (err, project) {
-				// remove ref in file
+				// remove ref in project
 				var imgs = project.image_ids;
 				var i = imgs.indexOf(req.params.id);
 				if (i !== -1) {
@@ -353,7 +385,7 @@ app.delete('/api/images/:id', function (req, res){
 				// Save project
 				project.save(function (err) {});
 				
-				return res.send({'status' : 'ok'});
+				// return res.send({'status' : 'ok'});
 			});
 		} else {
 			console.log('no image');

@@ -56,7 +56,10 @@
 	<div id="xxxoverlay" class="dark">
 	
 		<div class="project">
-			<form {{action save on="submit"}} enctype="multipart/form-data">	
+			<form {{action save on="submit"}} enctype="multipart/form-data">
+			
+				{{view App.InputField valueBinding="id" type="hidden" id="projid"}}
+				
 				{{#if isEditing}}
 					{{partial 'projectFields'}}
 					<button {{action 'doneEditing'}}>Done</button>
@@ -78,8 +81,7 @@
 					<li>No images</li>
 					{{/each}}
 				</ul>
-				
-			    <!-- <button type="submit">Save project</button>--><br/>
+
 				<button class="delete" {{action 'destroyRecord'}}>Delete project</button>
 			</form>	
 			<footer>
@@ -102,7 +104,7 @@
 		<div class="new-project-form">
 			{{#linkTo 'projects' classNames="close"}}Close{{/linkTo}}
 
-			<form method="post" action="api/projects" enctype="multipart/form-data" id="add-proj">
+			<form method="post" action="api/projects" enctype="multipart/form-data">
 				<input type="text" name="title" placeholder="Title">
 				<input type="text" name="author" placeholder="Author">
 				<input type="text" name="category" placeholder="Category">
@@ -121,8 +123,6 @@
 	{{view App.TextField id="author" valueBinding="author" placeholder="Author"}}<br />
 	{{view App.TextField id="category" valueBinding="category" placeholder="Category"}}<br />
 	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br/>
-	
-	<!-- {{view App.TextField valueBinding="imagess" id="imagess" name="imagess" }}<br/> -->
 </script>
 
 

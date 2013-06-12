@@ -10,7 +10,6 @@ App.ProjectController = Ember.ObjectController.extend({
 		// update the publish date now that we have finished editing
 		// this.set('publishedAt', new Date());
 		this.get('store').commit();
-		// this.get('target.router').transitionTo('projects.index');
 	},
 	
 	bindImgs: function(evt){
@@ -25,6 +24,7 @@ App.ProjectController = Ember.ObjectController.extend({
 
 		var self = this;
 		var input = evt.target;
+		var projid = $('#projid').val();
 		var imgName = input.files[0].name;
 		
 		if (input.files && input.files[0]) {
@@ -33,11 +33,16 @@ App.ProjectController = Ember.ObjectController.extend({
 
 			reader.onload = function(e) {
 				var fileToUpload = e.srcElement.result;
-				console.log(fileToUpload)
-				App.Image.createRecord({ uri:imgName, imgdata:fileToUpload});
-				self.get('store').commit();
+				App.Image.createRecord({ 	uri: imgName, 
+											imgdata: fileToUpload, 
+											proj: projid
+										});
+			//HERE?
+			//self.get('store').commit();
 			}
-			reader.readAsDataURL(input.files[0]);	
+			reader.readAsDataURL(input.files[0]);
+			//OR HERE?
+			this.get('store').commit();	
 		}
 	},
 
