@@ -62,7 +62,8 @@ var ProjectModel = mongoose.model('Project', ProjectSchema);
 // Create Image Schema
 var ImageSchema = new Schema({
 	uri: 		String,
-	proj: 		{ type: Schema.Types.ObjectId, ref: 'Project' }
+	proj: 		{ type: Schema.Types.ObjectId, ref: 'Project' },
+	imgdata: 	String
 });
 
 // Create Image record type
@@ -277,17 +278,16 @@ app.get('/api/images', function (req, res){
 app.post('/api/images', function (req, res){
 	var image;
 	
-	console.log(req.files);
-	
 	console.log("POST: ");
 	console.log(req.body);
 	
-	// image = new ImageModel({
-	// 	uri: req.body.image_ids.uri
-	// });
+	
+	req.body.image.imgdata.replace(/^data:image\/png;base64,/,"")
+	
 	
 	image = new ImageModel({
-		uri: req.body.image.uri
+		uri: req.body.image.uri,
+		// imgdata: req.body.image.imgdata
 	});
 
 	image.save(function (err) {

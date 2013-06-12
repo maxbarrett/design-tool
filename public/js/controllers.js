@@ -14,16 +14,30 @@ App.ProjectController = Ember.ObjectController.extend({
 	},
 	
 	bindImgs: function(evt){
-		var files = []
-		var len = evt.target.files.length; 		
+		// var files = []
+		// var len = evt.target.files.length; 		
+		// 
+		// if (len) {
+		// 	for (var i = 0; i < len; i++) {
+		// 		files.push(evt.target.files[i].name);
+		// 	}
+		// }
+
+		var self = this;
+		var input = evt.target;
+		var imgName = input.files[0].name;
 		
-		if (len) {
-			// for (var i = 0; i < len; i++) {
-			// 	files.push(evt.target.files[i].name);
-			// }
-			var imgName = evt.target.files[0].name;
-			App.Image.createRecord({ uri:imgName, proj:'C'});
-			this.get('store').commit();
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+			var that = this;
+
+			reader.onload = function(e) {
+				var fileToUpload = e.srcElement.result;
+				console.log(fileToUpload)
+				App.Image.createRecord({ uri:imgName, imgdata:fileToUpload});
+				self.get('store').commit();
+			}
+			reader.readAsDataURL(input.files[0]);	
 		}
 	},
 

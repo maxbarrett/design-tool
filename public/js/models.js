@@ -9,6 +9,7 @@ App.Project = DS.Model.extend({
 App.Image = DS.Model.extend({
 	uri:  DS.attr('string'),
 	proj: DS.attr('string'),
+	imgdata: DS.attr('string'),
 	project: DS.belongsTo('App.Project')
 });
 
