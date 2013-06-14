@@ -72,10 +72,11 @@
 				{{/if}}
 		
 				<ul>
+					
 					{{#each image in images}}
 					<li>
 						<img {{bindAttr src="image.uri" data-img="image.id"}}>
-						<a href="#" {{action 'deleteImg' image}}>Delete</a>
+						<a href="#" {{action 'deleteImg' image}}>Delete img</a>
 					</li>
 					{{else}}
 					<li>No images</li>

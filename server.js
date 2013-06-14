@@ -339,10 +339,10 @@ app.post('/api/images', function (req, res){
 				console.log("Error updating project");
 				console.log(err);
 			}
-		});
+		});	
 	});
 
-	//return res.send( {'image' : image} );
+	return res.send({'image':image}, 201);
 });
 
 
@@ -385,7 +385,7 @@ app.delete('/api/images/:id', function (req, res){
 				// Save project
 				project.save(function (err) {});
 				
-				// return res.send({'status' : 'ok'});
+				return res.send(204);
 			});
 		} else {
 			console.log('no image');

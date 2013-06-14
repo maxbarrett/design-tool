@@ -3,7 +3,10 @@ App.Project = DS.Model.extend({
 	publishedAt: DS.attr('date'),
 	category: DS.attr('string'),
 	author: DS.attr('string'),
-	images: DS.hasMany('App.Image')
+	images: DS.hasMany('App.Image'),
+	didDelete: function(){
+		console.log('deleted it');
+	}
 });
 
 App.Image = DS.Model.extend({

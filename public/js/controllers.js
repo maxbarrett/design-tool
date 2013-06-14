@@ -10,6 +10,7 @@ App.ProjectController = Ember.ObjectController.extend({
 		// update the publish date now that we have finished editing
 		// this.set('publishedAt', new Date());
 		this.get('store').commit();
+		
 	},
 	
 	bindImgs: function(evt){
@@ -37,12 +38,9 @@ App.ProjectController = Ember.ObjectController.extend({
 											imgdata: fileToUpload, 
 											proj: projid
 										});
-			//HERE?
-			//self.get('store').commit();
 			}
 			reader.readAsDataURL(input.files[0]);
-			//OR HERE?
-			this.get('store').commit();	
+			this.get('store').commit();
 		}
 	},
 
@@ -53,14 +51,22 @@ App.ProjectController = Ember.ObjectController.extend({
 
 	destroyRecord: function() {
 		if (window.confirm("Are you sure you want to delete this project?")) {
+			var that = this;
+			
 			this.get('content').deleteRecord();
 			this.get('store').commit();
-			// ERROR ON TRANSITION
-			this.get('target.router').transitionTo('projects.index');
+			
+			// This is hacky, I need to wait a bit before transitioning to the homepage
+			// or else the it will try to request the project
+			var transition = function(){
+				that.transitionToRoute('projects.index');
+			}
+			setTimeout(transition,100);			
 		}
 	},
 	
 	deleteImg: function(img) {
+		console.log(img)
         img.deleteRecord();
 		this.get('store').commit();
     }
