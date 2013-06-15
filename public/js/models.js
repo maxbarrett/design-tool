@@ -3,17 +3,20 @@ App.Project = DS.Model.extend({
 	publishedAt: DS.attr('date'),
 	category: DS.attr('string'),
 	author: DS.attr('string'),
-	images: DS.hasMany('App.Image'),
-	didDelete: function(){
-		console.log('deleted it');
-	}
+	images: DS.hasMany('App.Image')
 });
 
 App.Image = DS.Model.extend({
 	uri:  DS.attr('string'),
 	proj: DS.attr('string'),
 	imgdata: DS.attr('string'),
-	project: DS.belongsTo('App.Project')
+	project: DS.belongsTo('App.Project'),
+	didDelete: function(){
+		console.log('deleted image');
+	},
+	didCreate: function(){
+		console.log('created image');
+	}
 });
 
 
@@ -21,40 +24,20 @@ App.Image = DS.Model.extend({
 
 
 
-
-// DUMMY DATA
+// // DUMMY DATA
 // App.Project.FIXTURES = [{
 // 	id: 1,
-// 	title: "Dealio",
-// 	author: "Sam King",
-// 	publishedAt: new Date('12-27-2012'),
-// 	images: [401, 400, 402]
-// }, {
+// 	title: "Project title",
+// 	images: [400]
+// },{
 // 	id: 2,
-// 	title: "Partner Reporting",
-// 	author: "Tim Davey",
-// 	publishedAt: new Date('12-30-2011'),
-// 	images: [401, 400, 402]
-// }, {
-// 	id: 3,
-// 	title: "Another project",
-// 	author: "Humberto De Souza",
-// 	publishedAt: new Date('01-15-2013'),
-// 	images: [401, 400, 402]
+// 	title: "2nd title",
+// 	images: [400, 500]
 // }];
-// 
-// 
 // App.Image.FIXTURES = [{
 // 	id:400,
-// 	uri: 'http://lorempixel.com/200/200/'
-// }, {
-// 	id:401,
-// 	uri: 'http://lorempixel.com/200/210/'
-// }, {
-// 	id:402,
-// 	uri: 'http://lorempixel.com/200/220/'	
-// }]
-
-
-
-
+// 	uri: 'http://lorempixel.com/100/100/'
+// },{
+// 	id:500,
+// 	uri: 'http://lorempixel.com/100/110/'
+// }];

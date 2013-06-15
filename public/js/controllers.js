@@ -10,7 +10,6 @@ App.ProjectController = Ember.ObjectController.extend({
 		// update the publish date now that we have finished editing
 		// this.set('publishedAt', new Date());
 		this.get('store').commit();
-		
 	},
 	
 	bindImgs: function(evt){
@@ -23,30 +22,29 @@ App.ProjectController = Ember.ObjectController.extend({
 		// 	}
 		// }
 
-		var self = this;
-		var input = evt.target;
-		var projid = $('#projid').val();
-		var imgName = input.files[0].name;
-		
+		var project = this.get('model'),
+			images = project.get('images'),
+			input = evt.target,
+			imgName = input.files[0].name,
+			projId = $('#projid').val();
+
+		var concatFileName = imgName.replace(/ /g, '+'),
+			dotPosition = concatFileName.lastIndexOf('.'),
+			date = new Date().getTime(),
+			newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
+
 		if (input.files && input.files[0]) {
 			var reader = new FileReader();
-			var that = this;
 
 			reader.onload = function(e) {
 				var fileToUpload = e.srcElement.result;
-				App.Image.createRecord({ 	uri: imgName, 
-											imgdata: fileToUpload, 
-											proj: projid
-										});
+				images.createRecord({ 	uri: newFileName, 
+										imgdata: fileToUpload,
+										proj: projId
+				});
 			}
 			reader.readAsDataURL(input.files[0]);
-			this.get('store').commit();
 		}
-	},
-
-	save: function() {
-		this.get('store').commit();
-		this.get('target.router').transitionTo('projects.index');
 	},
 
 	destroyRecord: function() {
@@ -66,7 +64,6 @@ App.ProjectController = Ember.ObjectController.extend({
 	},
 	
 	deleteImg: function(img) {
-		console.log(img)
         img.deleteRecord();
 		this.get('store').commit();
     }
@@ -74,7 +71,6 @@ App.ProjectController = Ember.ObjectController.extend({
 
 
 App.ProjectsNewController = Ember.ObjectController.extend({
-	
 	newRecord: function() {
 		console.log('new record');	
 		this.set('content', App.Project.createRecord({title: ''}));

@@ -1,4 +1,6 @@
-App = Ember.Application.create({ LOG_TRANSITIONS:true});
+App = Ember.Application.create({ 
+	LOG_TRANSITIONS:true
+});
 
 App.RESTAdapter = DS.RESTAdapter.extend({
     url: 'http://192.168.33.10:3000/api',
@@ -14,7 +16,7 @@ App.RESTAdapter = DS.RESTAdapter.extend({
 App.Store = DS.Store.extend({
     revision: 12,
     adapter: App.RESTAdapter
-	// adapter: 'DS.FixtureAdapter'
+	//adapter: 'DS.FixtureAdapter'
 });
 
 
@@ -44,3 +46,7 @@ App.FileField = Ember.TextField.extend({
 App.InputField = Ember.TextField.extend({
     type: 'hidden'
 });
+
+
+
+

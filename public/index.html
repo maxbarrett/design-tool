@@ -61,7 +61,7 @@
 				{{view App.InputField valueBinding="id" type="hidden" id="projid"}}
 				
 				{{#if isEditing}}
-					{{partial 'projectFields'}}
+					{{partial 'projectFields'}}			
 					<button {{action 'doneEditing'}}>Done</button>
 				{{else}}
 					<h1>{{title}}</h1>
@@ -72,7 +72,6 @@
 				{{/if}}
 		
 				<ul>
-					
 					{{#each image in images}}
 					<li>
 						<img {{bindAttr src="image.uri" data-img="image.id"}}>
@@ -119,19 +118,17 @@
 
 
 <script type="text/x-handlebars" data-template-name="_projectFields">
-
 	{{view App.TextField id="title" valueBinding="title" placeholder="Title" data-valideater="required" required="required"}}<br />
 	{{view App.TextField id="author" valueBinding="author" placeholder="Author"}}<br />
 	{{view App.TextField id="category" valueBinding="category" placeholder="Category"}}<br />
-	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br/>
+	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br /><br />	
 </script>
 
 
 <script src="js/libs/jquery-1.9.1.js"></script>
 <script src="js/libs/handlebars-1.0.0-rc.4.js"></script>
-<script src="js/libs/ember2.js"></script>
-<script src="js/libs/ember-data.js"></script>
-<script src="js/libs/showdown.js"></script>
+<script src="http://builds.emberjs.com/ember-latest.js"></script>
+<script src="http://builds.emberjs.com/ember-data.prod.js"></script>
 <script src="js/libs/moment.js"></script>
 <script src="js/plugins/jquery.valideater.js"></script>
 <script src="js/app.js"></script>
@@ -154,7 +151,6 @@ $( document ).ready(function() {
 	// 		// if(window.console) console.log('Initialising Valideater ... for ' + form.attr('id'));
 	// 	}
 	// });
-	
 });
 </script>
 
