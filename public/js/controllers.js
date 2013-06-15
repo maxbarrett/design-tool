@@ -13,21 +13,11 @@ App.ProjectController = Ember.ObjectController.extend({
 	},
 	
 	bindImgs: function(evt){
-		// var files = []
-		// var len = evt.target.files.length; 		
-		// 
-		// if (len) {
-		// 	for (var i = 0; i < len; i++) {
-		// 		files.push(evt.target.files[i].name);
-		// 	}
-		// }
-
 		var project = this.get('model'),
 			images = project.get('images'),
 			input = evt.target,
 			len = input.files,
 			projId = $('#projid').val();
-
 
 		if (input.files && input.files[0]) {
 			
@@ -36,9 +26,7 @@ App.ProjectController = Ember.ObjectController.extend({
 					dotPosition = concatFileName.lastIndexOf('.'),
 					date = new Date().getTime(),
 					newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
-					
-					console.log(newFileName);
-					
+
 				var reader = new FileReader();
 
 				reader.onload = function(e) {

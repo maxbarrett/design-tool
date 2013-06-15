@@ -20,10 +20,6 @@
 				</nav>
 			</div>
 			<div class="sixcol">
-				<form id="header-search">
-					<input type="search">
-					<input type="submit" value="Search">
-				</form>
 				{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
 			</div>
 		</div>
@@ -39,9 +35,7 @@
 		{{#each model}}
 			<li class="project-thumb">
 				{{#linkTo 'project' this}}
-					{{#each image in images}}
-					<img {{bindAttr src="image.uri"}}>
-					{{/each}}
+					<img {{bindAttr src="images.firstObject.uri"}}>
 					<h3 class="project-title">{{title}}</h3>
 				{{/linkTo}}
 			</li>
