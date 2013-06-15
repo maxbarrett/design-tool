@@ -33,7 +33,7 @@ App.TextField = Ember.TextField.extend({
 // Create html5 file input element
 App.FileField = Ember.TextField.extend({
     type: 'file',
-	attributeBindings: ['name'],
+	attributeBindings: ['name', 'multiple'],
     multiple : true,
     change: function(evt) {
         evt.preventDefault();

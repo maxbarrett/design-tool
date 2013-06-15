@@ -25,25 +25,32 @@ App.ProjectController = Ember.ObjectController.extend({
 		var project = this.get('model'),
 			images = project.get('images'),
 			input = evt.target,
-			imgName = input.files[0].name,
+			len = input.files,
 			projId = $('#projid').val();
 
-		var concatFileName = imgName.replace(/ /g, '+'),
-			dotPosition = concatFileName.lastIndexOf('.'),
-			date = new Date().getTime(),
-			newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
 
 		if (input.files && input.files[0]) {
-			var reader = new FileReader();
+			
+			$.each(len,function(i) {
+				var concatFileName = len[i].name.replace(/ /g, '+'),
+					dotPosition = concatFileName.lastIndexOf('.'),
+					date = new Date().getTime(),
+					newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
+					
+					console.log(newFileName);
+					
+				var reader = new FileReader();
 
-			reader.onload = function(e) {
-				var fileToUpload = e.srcElement.result;
-				images.createRecord({ 	uri: newFileName, 
-										imgdata: fileToUpload,
-										proj: projId
-				});
-			}
-			reader.readAsDataURL(input.files[0]);
+				reader.onload = function(e) {
+					var fileToUpload = e.srcElement.result;
+					images.createRecord({ 	uri: newFileName, 
+											imgdata: fileToUpload,
+											proj: projId
+					});
+				}
+				reader.readAsDataURL(len[i]);
+			});
+			
 		}
 	},
 
