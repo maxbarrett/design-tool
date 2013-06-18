@@ -3,7 +3,7 @@
 <head>
 <meta charset=utf-8 />
 <title>Design Tool</title>
-	<link rel="stylesheet" href="css/scaffolding.css">
+	<!-- <link rel="stylesheet" href="css/scaffolding.css"> -->
 	<link rel="stylesheet" href="css/normalize.css">  
 	<link rel="stylesheet" href="css/style.css">
 
@@ -12,28 +12,23 @@
 
 <script type="text/x-handlebars" data-template-name="application">
 	<header>
-		<div class="row">
-			<div class="sixcol">
-				<a class="brand" href="#">Design tool</a>
-				<nav>
-					{{#linkTo 'projects'}}Projects{{/linkTo}}
-				</nav>
-			</div>
-			<div class="sixcol">
-				{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
-			</div>
-		</div>
+		<a class="brand" href="#">Design tool</a>
+		<nav>
+			{{#linkTo 'projects'}}Projects{{/linkTo}}
+		</nav>
+
+		{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
 	</header>
 
     {{outlet}}
 </script>
 
 <script type="text/x-handlebars" data-template-name="projects">
-	<div class="row projects-list">
-		<h2>Projects</h2>
+	<div class="projects-list">
 		<ul>
 		{{#each model}}
 			<li class="project-thumb">
+				<a class="delete" {{action 'destroyRecord' this}}>x</a>
 				{{#linkTo 'project' this}}
 					<img {{bindAttr src="images.firstObject.uri"}}>
 					<h3 class="project-title">{{title}}</h3>

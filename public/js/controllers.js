@@ -75,5 +75,16 @@ App.ProjectsNewController = Ember.ObjectController.extend({
 		this.get('store').commit();
 		console.log('save');
 		this.get('target.router').transitionTo('projects.index');	
-	}	
+	}
+});
+
+
+
+App.ProjectsController = Ember.ObjectController.extend({
+	destroyRecord: function(project) {
+		if (window.confirm("Are you sure you want to delete this project?")) {
+			project.deleteRecord();
+			this.get('store').commit();		
+		}
+	}
 });
