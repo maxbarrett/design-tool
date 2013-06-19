@@ -54,22 +54,23 @@
 					<button {{action 'doneEditing'}}>Done</button>
 				{{else}}
 					<h1>{{title}}</h1>
-					<h2>by {{author}}</h2>
-					<p>{{category}}</p>
-					<p>{{date publishedAt}}</p>
 					<button {{action 'edit'}}>Edit</button>
 				{{/if}}
 		
-				<ul>
-					{{#each image in images}}
-					<li>
-						<img {{bindAttr src="image.uri" data-img="image.id"}}>
-						<a href="#" {{action 'deleteImg' image}}>Delete img</a>
-					</li>
-					{{else}}
-					<li>No images</li>
-					{{/each}}
-				</ul>
+				<div id="vcslider-home">
+					<div class="vcslider-viewport">
+						<ul>
+							{{#each image in images}}
+							<li>
+								<img {{bindAttr src="image.uri" data-img="image.id"}}>
+								<a href="#" {{action 'deleteImg' image}}>Delete img</a>
+							</li>
+							{{else}}
+							<li>No images</li>
+							{{/each}}
+						</ul>
+					</div>
+				</div>
 
 				<button class="delete" {{action 'destroyRecord'}}>Delete project</button>
 			</form>	
@@ -120,6 +121,8 @@
 <script src="http://builds.emberjs.com/ember-data.prod.js"></script>
 <script src="js/libs/moment.js"></script>
 <script src="js/plugins/jquery.valideater.js"></script>
+<script src="js/plugins/VC-RequestAnimFrame.js"></script>
+<script src="js/plugins/jQuery.VC-Slider.js"></script>
 <script src="js/app.js"></script>
 <script src="js/routes.js"></script>
 <script src="js/models.js"></script>

@@ -1,8 +1,14 @@
 // views
 
-// App.DelImg = Ember.View.create({
-// 	tagName: 'div',
-// 	click: function(evt){
-// 		
-// 	}
-// });
+App.ProjectView = Ember.View.extend({
+	templateName: 'project',
+	didInsertElement: function() {	
+		
+		// New slider
+		if ($('#vcslider-home').length) {
+			var myplugin = new $.vcSlider($('#vcslider-home'), { 
+				
+			});
+		}
+	}
+});
