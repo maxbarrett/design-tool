@@ -8,8 +8,8 @@
 		var defaults = {
 			'showStatus'	: true,				// Displays the slide counter and slide total. I.E.: 2/10
 			'navigation'	: true,				// Displays the next and previous buttons
-			'navPrevious'	: "previous",		// Text to be used in the previous button
-			'navNext'		: "next",			// Text to be used in the next button
+			'navPrevious'	: "Previous",		// Text to be used in the previous button
+			'navNext'		: "Next",			// Text to be used in the next button
 			'keyboardArrows': true,				// Enables keyboard input (left and right arrows)
 			'labelLinks'	: true,				// Displays container with individual text navigation
 			'auto'			: false,			// Automatically starts slider
@@ -75,8 +75,10 @@
 
 			// Creates previous & next markup
 			if (plugin.settings.navigation) {
-				$container.append("<a class='vcslider-previous'>" + plugin.settings.navPrevious + "</a>");
-				$container.append("<a class='vcslider-next'>" + plugin.settings.navNext + "</a>");
+				// $container.append("<a class='vcslider-previous'>" + plugin.settings.navPrevious + "</a>");
+				// $container.append("<a class='vcslider-next'>" + plugin.settings.navNext + "</a>");
+				$('.img-nav').append("<li><a class='vcslider-previous'>" + plugin.settings.navPrevious + "</a></li>");
+				$('.img-nav').append("<li><a class='vcslider-next'>" + plugin.settings.navNext + "</a></li>");
 			}
 
 			// Creates label navigation
@@ -152,14 +154,14 @@
 				MOUSE EVENTS
 			********************/
 			// Clicked next
-			$container.find(".vcslider-next").click(function() {
+			$('.img-nav').find(".vcslider-next").click(function() {
 				intervalStop()
 				moveSlider('next');
 				intervalStart();
 			});
 
 			// Clicked previous
-			$container.find(".vcslider-previous").click(function() {
+			$('.img-nav').find(".vcslider-previous").click(function() {
 				intervalStop()
 				moveSlider('previous');
 				intervalStart();
