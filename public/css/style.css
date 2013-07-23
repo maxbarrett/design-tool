@@ -37,7 +37,11 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 #overlay.dark { background:#252525; }
 
 .project { width:100%; margin:0 auto; background:#252525; }
+.project h1 { display:none; }
 .project .delete { width:50%; }
+.project .editor { position:absolute; top:10px; width:300px; right:0; z-index:1; }
+.project .editing { padding:20px; background:white; border:1px solid #cfcfcf; border-width:1px 0 1px 1px; }
+.project .edit { cursor:pointer; color: #bfbfbf; font-size: 14px; display: block; padding: 12px 0 18px 0; margin-right:20px; font-weight: bold; text-align:right; }
 .project footer { border-top:1px #e8e8e8; position:fixed; bottom:0; height:50px; background:#f2f2f2; width:100%; left:0; }
 .project footer .img-nav { text-align:center; margin:-30px auto 0; }
 .project footer .img-nav li { display:inline; }

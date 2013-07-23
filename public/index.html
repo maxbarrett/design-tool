@@ -51,14 +51,19 @@
 			
 				{{view App.InputField valueBinding="id" type="hidden" id="projid"}}
 				
-				{{#if isEditing}}
-					{{partial 'projectFields'}}			
-					<button {{action 'doneEditing'}}>Done</button>
-				{{else}}
-					<h1>{{title}}</h1>
-					<button {{action 'edit'}}>Edit</button>
-				{{/if}}
-		
+				
+				<div class="editor">
+					{{#if isEditing}}
+						<div class="editing">
+							{{partial 'projectFields'}}			
+							<button {{action 'doneEditing'}}>Done</button>
+						</div>
+					{{else}}
+						<h1>{{title}}</h1>
+						<span class="edit" {{action 'edit'}}>Edit project</span>
+					{{/if}}
+				</div>
+				
 				<div id="vcslider-home">
 					<div class="vcslider-viewport">
 						<ul>
@@ -111,7 +116,7 @@
 	{{view App.TextField id="title" valueBinding="title" placeholder="Title" data-valideater="required" required="required"}}<br />
 	{{view App.TextField id="author" valueBinding="author" placeholder="Author"}}<br />
 	{{view App.TextField id="category" valueBinding="category" placeholder="Category"}}<br />
-	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br /><br />	
+	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br /><br />
 </script>
 
 
