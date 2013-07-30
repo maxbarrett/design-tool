@@ -18,9 +18,15 @@
 		</nav>
 
 		{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
-		
-		{{#linkTo 'email'}}Email{{/linkTo}}
 	</header>
+	
+	<ul class="sub-nav">
+		<li>{{#linkTo 'email'}}Email{{/linkTo}}</li>
+		<li><a href="#">Marcom</a></li>
+		<li><a href="#">Partnerships</a></li>
+		<li><a href="#">Marketing</a></li>
+		<li><a href="#">Mobile app</a></li>
+	</ul>
 
     {{outlet}}
 </script>
@@ -69,7 +75,7 @@
 						{{#each image in images}}
 						<li>
 							<img {{bindAttr src="image.uri" data-img="image.id"}}>
-							<a href="#" {{action 'deleteImg' image}}>Delete img</a>
+							<a href="#" class="deleteImg" {{action 'deleteImg' image}}>Delete img</a>
 						</li>
 						{{else}}
 						<li>No images</li>

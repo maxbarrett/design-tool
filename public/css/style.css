@@ -21,7 +21,14 @@ header #header-search { margin-top:14px; float:right; }
 header #header-search input[type="search"] { border:1px solid #424951; height:27px; padding:2px 5px; width:160px;}
 header #header-search input[type="submit"] { border:none; background:url('/img/search-button.png') #fff no-repeat 50% 50%; text-indent:-9999px; height:31px; width:31px; margin-left:-5px; }
 
-.projects-list { width:1190px; margin:50px auto; overflow:hidden; }
+.sub-nav { background:#f2f2f2; overflow:hidden; border-bottom:1px solid #e8e8e8; padding:30px; }
+.sub-nav li { float:left; list-style:none; padding:0 10px 3px 0; border-bottom:1px solid #e2e2e2; }
+.sub-nav li a { color:#4f5862; text-decoration:none; font-weight:bold; padding-bottom:3px; }	
+.sub-nav li a.active,
+.sub-nav li a:hover { border-bottom:3px solid #95d814; }
+.sub-nav {}
+
+.projects-list { width:1190px; margin:30px auto; overflow:hidden; }
 .projects-list .month-title { color:#cfcfcf; font-size:14px; border-bottom:1px solid #e8e8e8; padding:50px 0 10px; margin-bottom:20px; }
 .projects-list ul { padding:0; }
 .project-thumb { float:left; list-style:none; margin:0 60px 20px 0; position:relative; }
@@ -53,6 +60,8 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 #vcslider-home .vcslider-viewport ul { list-style: none; width: 2000%; margin: 0; overflow: hidden; }
 #vcslider-home .vcslider-viewport li { float: left; width: 100%; max-width: 1190px; position: relative;}
 #vcslider-home .vcslider-viewport li img { max-width: 1190px; display:block; margin:0 auto; }
+#vcslider-home .vcslider-viewport .deleteImg { color:#fff; position:absolute; top:10px; right:0; }
+
 
 .vcslider-previous { display:inline-block; margin-right: 10px; }
 
