@@ -11,3 +11,31 @@ App.ProjectView = Ember.View.extend({
 		}
 	}
 });
+
+
+
+App.ProjectsView = Ember.View.extend({
+	templateName: 'projects',
+	didInsertElement: function() {	
+	
+		var monthSplitter = function(){
+			var projects = $('.project-thumb');
+			
+			for (var i = 0; i < projects.length; i++) {
+				
+				var thisProj = $(projects[i]),
+					nextProj = $(projects[i+1]),
+					thisProjMonth = thisProj.data('month'),
+					nextProjMonth = nextProj.data('month');
+				
+				if ( (thisProjMonth !== nextProjMonth) && (nextProjMonth !== null) ) {
+					thisProj.after('<h2 class="month-title" style="clear:both;">' + nextProjMonth + '</h2>');
+				}
+			}
+		}
+		
+		// I'm sorry to anyone that's reading this
+		setTimeout(monthSplitter,100);
+		
+	}
+});

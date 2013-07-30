@@ -50,6 +50,7 @@ var Schema   = mongoose.Schema;
 var ProjectSchema = new Schema({ 
 	title: 			String,
 	publishedAt: 	{ type: Date, default: Date.now },
+	month: 			String,
     category: 		String,
 	author: 		String,
 	image_ids: 		[{ type: Schema.Types.ObjectId, ref: 'Image' }]
@@ -158,9 +159,13 @@ app.post('/api/projects', function (req, res){
 	
 	// if there's 1 or more image files to upload and a project title
 	if (((req.files.uploadingFile.size > 0) || (req.files.uploadingFile.length > 1 )) && (req.body.title !== '')) {
+
+		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+		var monthNow = new Date().getMonth();
 		
 		var project = new ProjectModel({
 			title: req.body.title,
+			month: months[monthNow],
 			// publishedAt: req.body.project.publishedAt,
 			category: req.body.category,
 			author: req.body.author
@@ -235,6 +240,8 @@ app.put('/api/projects/:id', function (req, res){
 		project.title = thisProject.title;
 		project.category = thisProject.category;
 		project.author = thisProject.author;
+		// TEMPORARY - remove after
+		project.month = thisProject.month;
 		project.publishedAt = new Date();
 		project.images = thisProject.images;
 		

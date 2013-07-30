@@ -29,7 +29,7 @@
 	<div class="projects-list">
 		<ul>
 		{{#each model}}
-			<li class="project-thumb">
+			<li class="project-thumb" {{bindAttr data-month="month"}}>
 				<a class="delete" {{action 'destroyRecord' this}}>x</a>
 				{{#linkTo 'project' this classNames="thumb"}}
 					<img {{bindAttr src="images.firstObject.uri"}}>
@@ -138,8 +138,6 @@
 </script>
 
 
-
-
 <script src="js/libs/jquery-1.9.1.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
 <script src="http://builds.emberjs.com/ember-latest.js"></script>
@@ -153,7 +151,6 @@
 <script src="js/models.js"></script>
 <script src="js/views.js"></script>
 <script src="js/controllers.js"></script>
-
 
 
 <script>
