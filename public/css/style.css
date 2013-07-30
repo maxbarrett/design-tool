@@ -23,7 +23,7 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 
 .projects-list { width:1190px; margin:50px auto; overflow:hidden; }
 .projects-list ul { padding:0; }
-.project-thumb { float:left; list-style:none; margin-right:60px; position:relative; }
+.project-thumb { float:left; list-style:none; margin:0 60px 20px 0; position:relative; }
 .project-thumb:nth-of-type(5) { margin-right:0; }
 .project-thumb a { text-decoration:none; display:block; }
 .project-thumb .project-title { font-size:12px; color:#505050; font-weight:normal; }
@@ -62,6 +62,7 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 .vcslider-next { margin-left:10px; }
 
 .new-project-form { width:330px; background:#fff; margin:90px auto 0; padding:30px; border:1px solid #3a3a3a; border-radius:2px; }
+.new-project-form button { margin-top:10px; }
 .new-project-form .close { text-align:right; margin-bottom:20px; display:block; }
 
 

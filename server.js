@@ -91,10 +91,22 @@ app.get('/api', function (req, res) {
 
 // READ a List of Projects
 app.get('/api/projects', function (req, res){
-	ProjectModel.find(function (err, projects) {
-		if (err) return errorHandler(err);
-		return res.send( {'projects' : projects} );
-	});
+	
+	var query = req.query.category;
+	
+	if (query) {
+		ProjectModel.where('category', query).find({}).sort({publishedAt: -1}).execFind(function(err,projects){
+			if (err) return errorHandler(err);
+			return res.send( {'projects' : projects} );
+		});	
+	} else {
+		
+		// sort projects in chronological order
+		ProjectModel.find({}).sort({publishedAt: -1}).execFind(function(err,projects){
+			return res.send( {'projects' : projects} );
+		});
+		
+	}
 });
 
 
@@ -223,6 +235,7 @@ app.put('/api/projects/:id', function (req, res){
 		project.title = thisProject.title;
 		project.category = thisProject.category;
 		project.author = thisProject.author;
+		project.publishedAt = new Date();
 		project.images = thisProject.images;
 		
 		project.save(function (err) {

@@ -4,6 +4,7 @@ App.Router.map(function() {
 	});
 	
 	this.resource('project', { path: ':project_id' });
+	this.resource('email');
 });
 
 
@@ -28,3 +29,15 @@ App.IndexRoute = Ember.Route.extend({
 		this.transitionTo('projects');
 	}
 });
+
+
+/////////////////////////////////////////////////////////
+// Categories
+/////////////////////////////////////////////////////////
+
+App.EmailRoute = Ember.Route.extend({
+	model: function() {
+		return App.Project.find({category: 'Email'});
+	}
+});
+

@@ -1,5 +1,4 @@
 // views
-
 App.ProjectView = Ember.View.extend({
 	templateName: 'project',
 	didInsertElement: function() {	

@@ -79,7 +79,6 @@ App.ProjectsNewController = Ember.ObjectController.extend({
 });
 
 
-
 App.ProjectsController = Ember.ObjectController.extend({
 	destroyRecord: function(project) {
 		if (window.confirm("Are you sure you want to delete this project?")) {
@@ -88,3 +87,4 @@ App.ProjectsController = Ember.ObjectController.extend({
 		}
 	}
 });
+
