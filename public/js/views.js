@@ -6,7 +6,7 @@ App.ProjectView = Ember.View.extend({
 		// New slider
 		if ($('#vcslider-home').length) {
 			var myplugin = new $.vcSlider($('#vcslider-home'), { 
-				labelLinks : false
+				// labelLinks : false
 			});
 		}
 	}

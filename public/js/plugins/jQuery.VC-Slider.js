@@ -68,8 +68,8 @@
 			
 			// Creates status bar
 			if(plugin.settings.showStatus){
-				$container.append("<span class='vcslider-status'></span>");
-				slidesStatus = $container.children(".vcslider-status");
+				$('.img-nav').append("<span class='vcslider-status'></span>");
+				slidesStatus = $('.img-nav').children(".vcslider-status");
 				updateStatus();
 			}
 
@@ -77,8 +77,8 @@
 			if (plugin.settings.navigation) {
 				// $container.append("<a class='vcslider-previous'>" + plugin.settings.navPrevious + "</a>");
 				// $container.append("<a class='vcslider-next'>" + plugin.settings.navNext + "</a>");
-				$('.img-nav').append("<li><a class='vcslider-previous'>" + plugin.settings.navPrevious + "</a></li>");
-				$('.img-nav').append("<li><a class='vcslider-next'>" + plugin.settings.navNext + "</a></li>");
+				$('.img-nav').prepend("<a class='vcslider-previous'>" + plugin.settings.navPrevious + "</a>");
+				$('.img-nav').append("<a class='vcslider-next'>" + plugin.settings.navNext + "</a>");
 			}
 
 			// Creates label navigation
@@ -473,7 +473,7 @@
 		****************************/
 		// Updates value of status bar
 		var updateStatus = function(){
-			slidesStatus.html((currentSlide+1) + "/" + slidesCounter);
+			slidesStatus.html((currentSlide+1) + " of " + slidesCounter);
 		};
 
 
