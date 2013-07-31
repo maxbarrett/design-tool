@@ -34,8 +34,8 @@ App.ProjectsView = Ember.View.extend({
 			}
 		}
 		
-		// I'm sorry to anyone that's reading this
-		setTimeout(monthSplitter,100);
+		monthSplitter();
+		// setTimeout(monthSplitter,100);
 		
 	}
 });

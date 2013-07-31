@@ -21,34 +21,20 @@
 	</header>
 	
 	<ul class="sub-nav">
+		<li>{{#linkTo 'branding'}}Branding{{/linkTo}}</li>
+		<li>{{#linkTo 'deals'}}Deals{{/linkTo}}</li>
 		<li>{{#linkTo 'email'}}Email{{/linkTo}}</li>
-		<li><a href="#">Marcom</a></li>
-		<li><a href="#">Partnerships</a></li>
-		<li><a href="#">Marketing</a></li>
-		<li><a href="#">Mobile app</a></li>
+		<li>{{#linkTo 'marcom'}}MarCom{{/linkTo}}</li>
+		<li>{{#linkTo 'most-wanted'}}Most Wanted{{/linkTo}}</li>
+		<li>{{#linkTo 'reporting'}}Reporting{{/linkTo}}</li>
+		<li>{{#linkTo 'app'}}App{{/linkTo}}</li>
+		<li>{{#linkTo 'communications'}}Communications{{/linkTo}}</li>
+		<li>{{#linkTo 'guidelines'}}Guidelines{{/linkTo}}</li>
+		<li>{{#linkTo 'layout'}}Layout{{/linkTo}}</li>
+		<li>{{#linkTo 'mobile'}}Mobile{{/linkTo}}</li>
 	</ul>
 
     {{outlet}}
-</script>
-
-<script type="text/x-handlebars" data-template-name="projects">
-	<div class="projects-list">
-		<ul>
-		{{#each model}}
-			<li class="project-thumb" {{bindAttr data-month="month"}}>
-				<a class="delete" {{action 'destroyRecord' this}}>x</a>
-				{{#linkTo 'project' this classNames="thumb"}}
-					<img {{bindAttr src="images.firstObject.uri"}}>
-				{{/linkTo}}
-				{{#linkTo 'project' this}}
-					<h3 class="project-title">{{title}}</h3>
-				{{/linkTo}}
-			</li>
-		{{/each}}
-		</ul>
-	</div>
-
-	{{outlet}}
 </script>
 
 <script type="text/x-handlebars" data-template-name="project">
@@ -114,6 +100,61 @@
 	</div>
 </script>
 
+<!-- Need a better way of doing this -->
+<script type="text/x-handlebars" data-template-name="projects">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="branding">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="deals">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="email">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="marcom">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="most-wanted">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="reporting">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="app">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="communications">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="guidelines">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="guidelines">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="layout">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+<script type="text/x-handlebars" data-template-name="mobile">
+	{{partial 'projectsList'}}	
+	{{outlet}}
+</script>
+
+
 
 <script type="text/x-handlebars" data-template-name="_projectFields">
 	{{view App.TextField id="title" valueBinding="title" placeholder="Title" data-valideater="required" required="required"}}<br />
@@ -122,25 +163,22 @@
 	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br /><br />
 </script>
 
-
-<script type="text/x-handlebars" data-template-name="email">
-	<div class="projects-list">
-		<ul>
-		{{#each model}}
-			<li class="project-thumb">
-				<a class="delete" {{action 'destroyRecord' this}}>x</a>
-				{{#linkTo 'project' this classNames="thumb"}}
-					<img {{bindAttr src="images.firstObject.uri"}}>
-				{{/linkTo}}
-				{{#linkTo 'project' this}}
-					<h3 class="project-title">{{title}}</h3>
-				{{/linkTo}}
-			</li>
-		{{/each}}
-		</ul>
-	</div>
-	
-	{{outlet}}
+<script type="text/x-handlebars" data-template-name="_projectsList">
+<div class="projects-list">
+	<ul>
+	{{#each model}}
+		<li class="project-thumb" {{bindAttr data-month="month"}}>
+			<a class="delete" {{action 'destroyRecord' this}}>x</a>
+			{{#linkTo 'project' this classNames="thumb"}}
+				<img {{bindAttr src="images.firstObject.uri"}}>
+			{{/linkTo}}
+			{{#linkTo 'project' this}}
+				<h3 class="project-title">{{title}}</h3>
+			{{/linkTo}}
+		</li>
+	{{/each}}
+	</ul>
+</div>
 </script>
 
 
