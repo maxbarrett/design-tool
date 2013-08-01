@@ -42,18 +42,6 @@
 		<form {{action save on="submit"}} enctype="multipart/form-data">
 	
 			{{view App.InputField valueBinding="id" type="hidden" id="projid"}}
-
-			<div class="editor">
-				{{#if isEditing}}
-					<div class="editing">
-						{{partial 'projectFields'}}			
-						<button {{action 'doneEditing'}}>Done</button>
-					</div>
-				{{else}}
-					<h1>{{title}}</h1>
-					<span class="edit" {{action 'edit'}}>Edit project</span>
-				{{/if}}
-			</div>
 		
 			<div id="vcslider-home">
 				<div class="vcslider-viewport">
@@ -69,15 +57,26 @@
 					</ul>
 				</div>
 			</div>
+			
+			{{#if isEditing}}
+				<div id="overlay">
+					<div class="overlay-module">
+					{{partial 'projectFields'}}			
+					<button {{action 'doneEditing'}}>Done</button>
+					</div>
+				</div>
+			{{else}}
+				<span class="edit" {{action 'edit'}}>Edit</span>
+			{{/if}}
 
-			<button class="delete" {{action 'destroyRecord'}}>Delete project</button>
+			<!--<button class="delete" {{action 'destroyRecord'}}>Delete project</button>-->
 		</form>	
 		<footer>
 			{{#linkTo 'projects' classNames="back"}}Back{{/linkTo}}
 		
 			<div class="img-nav">
 			</div>
-		
+				
 		</footer>
 	</div>
 </script>
@@ -85,7 +84,7 @@
 
 <script type="text/x-handlebars" data-template-name="projects/new">
 	<div id="overlay">
-		<div class="new-project-form">
+		<div class="overlay-module">
 			{{#linkTo 'projects' classNames="close"}}Close{{/linkTo}}
 
 			<form method="post" action="api/projects" enctype="multipart/form-data">
