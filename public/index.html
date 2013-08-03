@@ -3,10 +3,8 @@
 <head>
 <meta charset=utf-8 />
 <title>Design Tool</title>
-	<!-- <link rel="stylesheet" href="css/scaffolding.css"> -->
 	<link rel="stylesheet" href="css/normalize.css">  
 	<link rel="stylesheet" href="css/style.css">
-
 </head>
 <body>
 
@@ -20,7 +18,7 @@
 					{{#each image in images}}
 					<li>
 						<img {{bindAttr src="image.uri" data-img="image.id"}}>
-						<a href="#" class="deleteImg" {{action 'deleteImg' image}}>Delete img</a>
+						<a title="Delete this image" href="#" class="deleteImg" {{action 'deleteImg' image}}>Delete img</a>
 					</li>
 					{{else}}
 					<li>No images</li>
@@ -87,7 +85,7 @@
 <script type="text/x-handlebars" data-template-name="_projectFields">
 	{{view App.TextField id="title" valueBinding="title" placeholder="Title" data-valideater="required" required="required"}}<br />
 	{{view App.TextField id="author" valueBinding="author" placeholder="Author"}}<br />
-	{{view Ember.Select id="category" contentBinding="App.categories"}}<br />
+	{{view Ember.Select id="category" valueBinding="categories"}}<br />
 	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br /><br />
 </script>
 

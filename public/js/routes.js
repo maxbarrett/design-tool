@@ -48,25 +48,25 @@ App.IndexRoute = Ember.Route.extend({
 /////////////////////////////////////////////////////////
 App.BrandingRoute = Ember.Route.extend({
 	model: function() {
-		return App.Project.find({category: 'Branding'});
+		return App.Project.find({category: 'branding'});
 	}
 });
 
 App.DealsRoute = Ember.Route.extend({
 	model: function() {
-		return App.Project.find({category: 'Deals'});
+		return App.Project.find({category: 'deals'});
 	}
 });
 
 App.EmailRoute = Ember.Route.extend({
 	model: function() {
-		return App.Project.find({category: 'Email'});
+		return App.Project.find({category: 'email'});
 	}
 });
 
 App.MarcomRoute = Ember.Route.extend({
 	model: function() {
-		return App.Project.find({category: 'Marcom'});
+		return App.Project.find({category: 'marcom'});
 	}
 });
 
@@ -78,36 +78,36 @@ App.MostWantedRoute = Ember.Route.extend({
 
 App.ReportingRoute = Ember.Route.extend({
 	model: function() {
-		return App.Project.find({category: 'Reporting'});
+		return App.Project.find({category: 'reporting'});
 	}
 });
 
 App.AppRoute = Ember.Route.extend({
 	model: function() {
-		return App.Project.find({category: 'App'});
+		return App.Project.find({category: 'app'});
 	}
 });
 
 App.CommunicationsRoute = Ember.Route.extend({
 	model: function() {
-		return App.Project.find({category: 'Communications'});
+		return App.Project.find({category: 'communications'});
 	}
 });
 
 App.GuidelinesRoute = Ember.Route.extend({
 	model: function() {
-		return App.Project.find({category: 'Guidelines'});
+		return App.Project.find({category: 'guidelines'});
 	}
 });
 
 App.LayoutRoute = Ember.Route.extend({
 	model: function() {
-		return App.Project.find({category: 'Layout'});
+		return App.Project.find({category: 'layout'});
 	}
 });
 
 App.MobileRoute = Ember.Route.extend({
 	model: function() {
-		return App.Project.find({category: 'Mobile'});
+		return App.Project.find({category: 'mobile'});
 	}
 });

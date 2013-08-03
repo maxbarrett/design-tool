@@ -52,9 +52,8 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 
 #vcslider-home { position:relative; overflow:hidden; max-width: 1190px; margin: 0 auto;  }
 #vcslider-home .vcslider-viewport ul { list-style: none; width: 2000%; margin: 0; overflow: hidden; }
-#vcslider-home .vcslider-viewport li { float: left; width: 100%; max-width: 1190px; position: relative;}
+#vcslider-home .vcslider-viewport li { float: left; width: 100%; max-width: 1190px; position: relative; color:#fff; }
 #vcslider-home .vcslider-viewport li img { max-width: 1190px; display:block; margin:0 auto; }
-#vcslider-home .vcslider-viewport .deleteImg { color:#fff; position:absolute; top:10px; right:0; }
 
 .project footer { font-size:13px; border-top:1px #e8e8e8; position:fixed; bottom:0; height:50px; background:#f2f2f2; width:100%; left:0; text-align:center; }
 .project footer .back { position:absolute; background:url('/img/back-grid.png') 0 55% no-repeat; padding:18px 25px 17px; display:block; left:0; margin:0 0 0 20px; text-decoration:none; border-right:1px solid #dedede; box-shadow: 1px 0px 0px 0px #fff;}
@@ -73,6 +72,9 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 .overlay-module { width:270px; background:#fff; margin:90px auto 0; padding:50px 30px 30px; border:1px solid #3a3a3a; border-radius:2px; position:relative; }
 .overlay-module form { font-size:12px; }
 .overlay-module button { margin-top:10px; }
-.overlay-module .close { text-indent:-9999px; position:absolute; top:10px; right:20px; display:block; background:url('/img/close-grey.png') no-repeat 50% 50%; width:12px; height:12px; padding:10px; }
+
+
+.deleteImg,
+.close { text-indent:-9999px; position:absolute; top:10px; right:20px; display:block; background:url('/img/close-grey.png') no-repeat 50% 50%; width:12px; height:12px; padding:10px; }
 
 
