@@ -12,27 +12,31 @@
 
 <script type="text/x-handlebars" data-template-name="application">
 	<header>
-		<a class="brand" href="#">Design tool</a>
-		<nav>
-			{{#linkTo 'projects'}}Projects{{/linkTo}}
-		</nav>
+		<div class="wrapper">
+			<a class="brand" href="#">Design tool</a>
+			<nav>
+				{{#linkTo 'projects'}}Projects{{/linkTo}}
+			</nav>
 
-		{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
+			{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
+		</div>
 	</header>
 	
-	<ul class="sub-nav">
-		<li>{{#linkTo 'branding'}}Branding{{/linkTo}}</li>
-		<li>{{#linkTo 'deals'}}Deals{{/linkTo}}</li>
-		<li>{{#linkTo 'email'}}Email{{/linkTo}}</li>
-		<li>{{#linkTo 'marcom'}}MarCom{{/linkTo}}</li>
-		<li>{{#linkTo 'most-wanted'}}Most Wanted{{/linkTo}}</li>
-		<li>{{#linkTo 'reporting'}}Reporting{{/linkTo}}</li>
-		<li>{{#linkTo 'app'}}App{{/linkTo}}</li>
-		<li>{{#linkTo 'communications'}}Communications{{/linkTo}}</li>
-		<li>{{#linkTo 'guidelines'}}Guidelines{{/linkTo}}</li>
-		<li>{{#linkTo 'layout'}}Layout{{/linkTo}}</li>
-		<li>{{#linkTo 'mobile'}}Mobile{{/linkTo}}</li>
-	</ul>
+	<div class="sub-nav">
+		<ul class="wrapper">
+			<li>{{#linkTo 'branding'}}Branding{{/linkTo}}</li>
+			<li>{{#linkTo 'deals'}}Deals{{/linkTo}}</li>
+			<li>{{#linkTo 'email'}}Email{{/linkTo}}</li>
+			<li>{{#linkTo 'marcom'}}MarCom{{/linkTo}}</li>
+			<li>{{#linkTo 'most-wanted'}}Most Wanted{{/linkTo}}</li>
+			<li>{{#linkTo 'reporting'}}Reporting{{/linkTo}}</li>
+			<li>{{#linkTo 'app'}}App{{/linkTo}}</li>
+			<li>{{#linkTo 'communications'}}Communications{{/linkTo}}</li>
+			<li>{{#linkTo 'guidelines'}}Guidelines{{/linkTo}}</li>
+			<li>{{#linkTo 'layout'}}Layout{{/linkTo}}</li>
+			<li>{{#linkTo 'mobile'}}Mobile{{/linkTo}}</li>
+		</ul>
+	</div>
 
     {{outlet}}
 </script>
@@ -161,7 +165,7 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="_projectsList">
-<div class="projects-list">
+<div class="wrapper projects-list">
 	<ul>
 	{{#each model}}
 		<li class="project-thumb" {{bindAttr data-month="month"}}>
