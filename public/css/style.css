@@ -26,7 +26,6 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 .sub-nav li a { color:#4f5862; text-decoration:none; font-weight:bold; padding-bottom:3px; }	
 .sub-nav li a.active,
 .sub-nav li a:hover { border-bottom:3px solid #95d814; }
-.sub-nav {}
 
 .projects-list { width:1190px; margin:30px auto; overflow:hidden; }
 .projects-list .month-title { color:#cfcfcf; font-size:14px; border-bottom:1px solid #e8e8e8; padding:50px 0 10px; margin-bottom:20px; }
@@ -48,19 +47,19 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 .project form { background:#252525; }
 .project h1 { display:none; }
 .project .delete { width:50%; }
-.project .edit { cursor:pointer; display: block; padding:17px 20px; position: fixed; bottom:0; z-index:1; font-size:13px; border-left:1px solid #fbfbfb; box-shadow: -1px 0px 0px 0px #dedede; right:0; }
 
 
-.project footer { font-size:13px; border-top:1px #e8e8e8; position:fixed; bottom:0; height:50px; background:#f2f2f2; width:100%; left:0; }
-.project footer .img-nav { text-align:center; margin:0 auto; border-top:1px solid #dedede; }
+.project footer { font-size:13px; border-top:1px #e8e8e8; position:fixed; bottom:0; height:50px; background:#f2f2f2; width:100%; left:0; text-align:center; }
+.project footer .back { position:absolute; background:url('/img/back-grid.png') 0 55% no-repeat; padding:20px 25px 15px; display:block; left:0; margin:0 0 0 20px; text-decoration:none; border-right:1px solid #dedede; box-shadow: 1px 0px 0px 0px rgba(255, 255, 255, 1);}
+.project footer .edit { cursor:pointer; display:inline-block; position:absolute; right:0; padding:17px 20px; font-size:13px; border-left:1px solid #fbfbfb; box-shadow: -1px 0px 0px 0px #dedede; }
+
+.project footer .img-nav { text-align:center; margin:0 auto; border-top:1px solid #dedede; width:50%; display:inline-block; }
 .project footer .img-nav .vcslider-status { color:#b6bbbd; display:inline-block; padding:18px 30px; border-right:1px solid #dedede; border-left:1px solid #fbfbfb; box-shadow: -1px 0px 0px 0px #dedede; }
-.project footer .back { float:left; background:url('/img/back-grid.png') 0 55% no-repeat; padding:20px 25px 15px; display:inline-block; margin:0 0 0 20px; text-decoration:none; border-right:1px solid #dedede; box-shadow: 1px 0px 0px 0px rgba(255, 255, 255, 1);}
-.project footer .vcslider-previous, 
-.project footer .vcslider-next { text-decoration:none; cursor:pointer; display:inline-block; padding-top:18px; padding-bottom:18px; }
-.project footer .vcslider-previous { border-left:1px solid #fbfbfb; padding-left:35px; padding-right:20px; box-shadow: -1px 0px 0px 0px #dedede; }
-.project footer .vcslider-next { border-right:1px solid #dedede; border-left:1px solid #fbfbfb; padding-right:35px; padding-left:20px; box-shadow: 1px 0px 0px 0px rgba(255, 255, 255, 1);}
-.project footer .vcslider-previous:hover, 
-.project footer .vcslider-next:hover { text-decoration:underline; }
+.project footer .img-nav a { text-decoration:none; cursor:pointer; display:inline-block; padding-top:18px; padding-bottom:18px; }
+.project footer .img-nav a:hover { text-decoration:underline; }
+.project footer .vcslider-previous { border-left:1px solid #fbfbfb; padding-left:35px; padding-right:20px; box-shadow: -1px 0px 0px 0px #dedede; background:url('/img/arrow-left.png') no-repeat 20px 50%; }
+.project footer .vcslider-next { border-right:1px solid #dedede; border-left:1px solid #fbfbfb; padding-right:35px; padding-left:20px; box-shadow: 1px 0px 0px 0px rgba(255, 255, 255, 1); background:url('/img/arrow-right.png') no-repeat 55px 50%; }
+
 
 #vcslider-home { position:relative; overflow:hidden; max-width: 1190px; margin: 0 auto;  }
 #vcslider-home .vcslider-viewport ul { list-style: none; width: 2000%; margin: 0; overflow: hidden; }
