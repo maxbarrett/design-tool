@@ -92,7 +92,21 @@
 			<form method="post" action="api/projects" enctype="multipart/form-data">
 				<input type="text" name="title" placeholder="Title">
 				<input type="text" name="author" placeholder="Author">
-				<input type="text" name="category" placeholder="Category">
+				<select name="category">
+					<option>Choose one</option>
+					<option value="branding">Branding</option>
+					<option value="deals">Deals</option>
+					<option value="email">MarCom</option>
+					<option value="most-wanted">Most Wanted</option>
+					<option value="reporting">Reporting</option>
+					<option value="app">App</option>
+					<option value="communications">Communications</option>
+					<option value="guidelines">Guidelines</option>
+					<option value="layout">Layout</option>
+					<option value="mobile">Mobile</option>
+				</select>
+					
+				
 				<input type="file" name="uploadingFile" multiple="multiple">
 				<button type="submit">Save project</button>
 			</form>
@@ -142,10 +156,6 @@
 	{{partial 'projectsList'}}	
 	{{outlet}}
 </script>
-<script type="text/x-handlebars" data-template-name="guidelines">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
 <script type="text/x-handlebars" data-template-name="layout">
 	{{partial 'projectsList'}}	
 	{{outlet}}
@@ -160,7 +170,7 @@
 <script type="text/x-handlebars" data-template-name="_projectFields">
 	{{view App.TextField id="title" valueBinding="title" placeholder="Title" data-valideater="required" required="required"}}<br />
 	{{view App.TextField id="author" valueBinding="author" placeholder="Author"}}<br />
-	{{view App.TextField id="category" valueBinding="category" placeholder="Category"}}<br />
+	{{view Ember.Select id="category" valueBinding="category"}}<br />
 	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br /><br />
 </script>
 
@@ -184,9 +194,13 @@
 
 
 <script src="js/libs/jquery-1.9.1.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
-<script src="http://builds.emberjs.com/ember-latest.js"></script>
-<script src="http://builds.emberjs.com/ember-data.prod.js"></script>
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script> -->
+<!-- <script src="http://builds.emberjs.com/ember-latest.js"></script> -->
+<!-- <script src="http://builds.emberjs.com/ember-data.prod.js"></script> -->
+<script src="js/libs/handlebars.min.js"></script>
+<script src="js/libs/ember-latest.js"></script>
+<script src="js/libs/ember-data.prod.js"></script>
+
 <script src="js/libs/moment.js"></script>
 <script src="js/plugins/jquery.valideater.js"></script>
 <script src="js/plugins/VC-RequestAnimFrame.js"></script>

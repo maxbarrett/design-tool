@@ -72,7 +72,7 @@ App.MarcomRoute = Ember.Route.extend({
 
 App.MostWantedRoute = Ember.Route.extend({
 	model: function() {
-		return App.Project.find({category: 'MostWanted'});
+		return App.Project.find({category: 'most-wanted'});
 	}
 });
 
