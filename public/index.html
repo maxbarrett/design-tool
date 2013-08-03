@@ -10,75 +10,43 @@
 </head>
 <body>
 
-<script type="text/x-handlebars" data-template-name="application">
-	<header>
-		<div class="wrapper">
-			<a class="brand" href="#">Design tool</a>
-			<nav>
-				{{#linkTo 'projects'}}Projects{{/linkTo}}
-			</nav>
-
-			{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
-		</div>
-	</header>
-	
-	<div class="sub-nav">
-		<ul class="wrapper">
-			<li>{{#linkTo 'branding'}}Branding{{/linkTo}}</li>
-			<li>{{#linkTo 'deals'}}Deals{{/linkTo}}</li>
-			<li>{{#linkTo 'email'}}Email{{/linkTo}}</li>
-			<li>{{#linkTo 'marcom'}}MarCom{{/linkTo}}</li>
-			<li>{{#linkTo 'most-wanted'}}Most Wanted{{/linkTo}}</li>
-			<li>{{#linkTo 'reporting'}}Reporting{{/linkTo}}</li>
-			<li>{{#linkTo 'app'}}App{{/linkTo}}</li>
-			<li>{{#linkTo 'communications'}}Communications{{/linkTo}}</li>
-			<li>{{#linkTo 'guidelines'}}Guidelines{{/linkTo}}</li>
-			<li>{{#linkTo 'layout'}}Layout{{/linkTo}}</li>
-			<li>{{#linkTo 'mobile'}}Mobile{{/linkTo}}</li>
-		</ul>
-	</div>
-
-    {{outlet}}
-</script>
 
 <script type="text/x-handlebars" data-template-name="project">
 	<div class="project">
-		<form {{action save on="submit"}} enctype="multipart/form-data">
 	
-			{{view App.InputField valueBinding="id" type="hidden" id="projid"}}
-		
-			<div id="vcslider-home">
-				<div class="vcslider-viewport">
-					<ul>
-						{{#each image in images}}
-						<li>
-							<img {{bindAttr src="image.uri" data-img="image.id"}}>
-							<a href="#" class="deleteImg" {{action 'deleteImg' image}}>Delete img</a>
-						</li>
-						{{else}}
-						<li>No images</li>
-						{{/each}}
-					</ul>
+		<div id="vcslider-home">
+			<div class="vcslider-viewport">
+				<ul>
+					{{#each image in images}}
+					<li>
+						<img {{bindAttr src="image.uri" data-img="image.id"}}>
+						<a href="#" class="deleteImg" {{action 'deleteImg' image}}>Delete img</a>
+					</li>
+					{{else}}
+					<li>No images</li>
+					{{/each}}
+				</ul>
+			</div>
+		</div>
+				
+		{{#if isEditing}}		
+			<div id="overlay">
+				<div class="overlay-module">
+					<form {{action save on="submit"}} enctype="multipart/form-data">
+						{{view App.InputField valueBinding="id" type="hidden" id="projid"}}
+						{{partial 'projectFields'}}			
+						<button {{action 'doneEditing'}}>Done</button>
+					</form>
 				</div>
 			</div>
-			
-			{{#if isEditing}}
-				<div id="overlay">
-					<div class="overlay-module">
-					{{partial 'projectFields'}}			
-					<button {{action 'doneEditing'}}>Done</button>
-					</div>
-				</div>
-			{{/if}}
+		{{/if}}
 
-			<!--<button class="delete" {{action 'destroyRecord'}}>Delete project</button>-->
-		</form>	
+		<!--<button class="delete" {{action 'destroyRecord'}}>Delete project</button>-->
+		
 		<footer>
 			{{#linkTo 'projects' classNames="back"}}Back{{/linkTo}}
-		
-			<div class="img-nav">
-			</div>
-				<span class="edit" {{action 'edit'}}>Edit</span>
+			<div class="img-nav"></div>
+			<span class="edit" {{action 'edit'}}>Edit</span>
 		</footer>
 	</div>
 </script>
@@ -93,7 +61,7 @@
 				<input type="text" name="title" placeholder="Title">
 				<input type="text" name="author" placeholder="Author">
 				<select name="category">
-					<option>Choose one</option>
+					<option>Choose a category</option>
 					<option value="branding">Branding</option>
 					<option value="deals">Deals</option>
 					<option value="email">MarCom</option>
@@ -114,6 +82,60 @@
 		</div>
 	</div>
 </script>
+
+
+<script type="text/x-handlebars" data-template-name="_projectFields">
+	{{view App.TextField id="title" valueBinding="title" placeholder="Title" data-valideater="required" required="required"}}<br />
+	{{view App.TextField id="author" valueBinding="author" placeholder="Author"}}<br />
+	{{view Ember.Select id="category" contentBinding="App.categories"}}<br />
+	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br /><br />
+</script>
+
+<script type="text/x-handlebars" data-template-name="_projectsList">
+<header>
+	<div class="wrapper">
+		<a class="brand" href="#">Design tool</a>
+		<nav>
+			{{#linkTo 'projects'}}Projects{{/linkTo}}
+		</nav>
+
+		{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
+	</div>
+</header>
+
+<div class="sub-nav">
+	<ul class="wrapper">
+		<li>{{#linkTo 'branding'}}Branding{{/linkTo}}</li>
+		<li>{{#linkTo 'deals'}}Deals{{/linkTo}}</li>
+		<li>{{#linkTo 'email'}}Email{{/linkTo}}</li>
+		<li>{{#linkTo 'marcom'}}MarCom{{/linkTo}}</li>
+		<li>{{#linkTo 'most-wanted'}}Most Wanted{{/linkTo}}</li>
+		<li>{{#linkTo 'reporting'}}Reporting{{/linkTo}}</li>
+		<li>{{#linkTo 'app'}}App{{/linkTo}}</li>
+		<li>{{#linkTo 'communications'}}Communications{{/linkTo}}</li>
+		<li>{{#linkTo 'guidelines'}}Guidelines{{/linkTo}}</li>
+		<li>{{#linkTo 'layout'}}Layout{{/linkTo}}</li>
+		<li>{{#linkTo 'mobile'}}Mobile{{/linkTo}}</li>
+	</ul>
+</div>
+
+<div class="wrapper projects-list">
+	<ul>
+	{{#each model}}
+		<li class="project-thumb" {{bindAttr data-month="month"}}>
+			<a class="delete" {{action 'destroyRecord' this}}>x</a>
+			{{#linkTo 'project' this classNames="thumb"}}
+				<img {{bindAttr src="images.firstObject.uri"}}>
+			{{/linkTo}}
+			{{#linkTo 'project' this}}
+				<h3 class="project-title">{{title}}</h3>
+			{{/linkTo}}
+		</li>
+	{{/each}}
+	</ul>
+</div>
+</script>
+
 
 <!-- Need a better way of doing this -->
 <script type="text/x-handlebars" data-template-name="projects">
@@ -164,34 +186,6 @@
 	{{partial 'projectsList'}}	
 	{{outlet}}
 </script>
-
-
-
-<script type="text/x-handlebars" data-template-name="_projectFields">
-	{{view App.TextField id="title" valueBinding="title" placeholder="Title" data-valideater="required" required="required"}}<br />
-	{{view App.TextField id="author" valueBinding="author" placeholder="Author"}}<br />
-	{{view Ember.Select id="category" valueBinding="category"}}<br />
-	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br /><br />
-</script>
-
-<script type="text/x-handlebars" data-template-name="_projectsList">
-<div class="wrapper projects-list">
-	<ul>
-	{{#each model}}
-		<li class="project-thumb" {{bindAttr data-month="month"}}>
-			<a class="delete" {{action 'destroyRecord' this}}>x</a>
-			{{#linkTo 'project' this classNames="thumb"}}
-				<img {{bindAttr src="images.firstObject.uri"}}>
-			{{/linkTo}}
-			{{#linkTo 'project' this}}
-				<h3 class="project-title">{{title}}</h3>
-			{{/linkTo}}
-		</li>
-	{{/each}}
-	</ul>
-</div>
-</script>
-
 
 <script src="js/libs/jquery-1.9.1.js"></script>
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script> -->

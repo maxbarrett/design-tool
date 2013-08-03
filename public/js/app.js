@@ -47,6 +47,6 @@ App.InputField = Ember.TextField.extend({
     type: 'hidden'
 });
 
-
+App.categories = ["Yehuda", "Tom"];
 
 
