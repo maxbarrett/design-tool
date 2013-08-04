@@ -16,6 +16,8 @@ App.ProjectController = Ember.ObjectController.extend({
 	},
 	
 	bindImgs: function(evt){
+		App.uploader.FileSelectHandler(evt);
+		
 		var project = this.get('model'),
 			images = project.get('images'),
 			input = evt.target,
@@ -83,6 +85,8 @@ App.ProjectsNewController = Ember.ObjectController.extend({
 	},
 	
 	bindImgs: function(evt){
+		App.uploader.FileSelectHandler(evt);
+		
 		var project = this.get('model'),
 			images = project.get('images'),
 			input = evt.target,
@@ -110,7 +114,6 @@ App.ProjectsNewController = Ember.ObjectController.extend({
 			});
 			
 		}
-		App.uploader.FileSelectHandler(evt);
 	}
 });
 

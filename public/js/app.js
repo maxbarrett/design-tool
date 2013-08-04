@@ -39,8 +39,6 @@ App.FileField = Ember.TextField.extend({
     change: function(evt) {
         evt.preventDefault();
         evt.stopPropagation();
-
-		App.uploader.FileSelectHandler(evt);
 		this.get('controller').bindImgs(evt);
     }
 });
@@ -53,6 +51,7 @@ App.InputField = Ember.TextField.extend({
 
 
 App.categories = [
+	Ember.Object.create({cat: 'Choose a category', 	val: null }),
 	Ember.Object.create({cat: 'Branding', 		val: 'branding' }),
 	Ember.Object.create({cat: 'Deals',   	 	val: 'deals'}),
 	Ember.Object.create({cat: 'Email',			val: 'email'}),

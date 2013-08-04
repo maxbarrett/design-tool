@@ -70,7 +70,7 @@ var ImageSchema = new Schema({
 // Create Image record type
 var ImageModel = mongoose.model('Image', ImageSchema);
 
-
+// 
 // // Delete all projects
 // var tt = ProjectModel.find(function(err,doc){
 //   console.log(doc);

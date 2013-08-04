@@ -42,11 +42,7 @@ App.ProjectsView = Ember.View.extend({
 App.ProjectsNewView = Ember.View.extend({
 	
 	didInsertElement: function() {
-		App.uploader.DragDrop();
-		// $('#filedrag').on("dragover", App.uploader.FileDragHover);
-		// $('#filedrag').on("dragleave", App.uploader.FileDragHover);
-		// $('#filedrag').on("drop", App.uploader.FileSelectHandler);
-		// // $('#fileselect').on("change", App.uploader.FileSelectHandler);	
+		App.uploader.DragDrop();	
 	}
 	
 });
