@@ -193,29 +193,18 @@ app.post('/api/projects', function (req, res){
 // READ a Single Project by ID
 app.get('/api/projects/:id', function (req, res){
 
-	var findImgs = function(imgIds, project, next) {
-		var len = imgIds.length,
-			imgsArr = [];
-		
-		for (var i = 0; i < len; i++) {
-			ImageModel.findById(project.image_ids[i], function (err, image) {
-				if (err) return errorHandler(err);
-				if (image){
-					imgsArr.push(image);
-					len--;
-					if (len <= 0) {
-						next(imgsArr, project);
-					}
-				} else { console.log('No images'); }
-			});
-		}
-	}
-
 	var findProj = function(projId, next){
 		ProjectModel.findById(projId, function (err, project) {
 			if (err) return errorHandler(err);
 			if (project.image_ids.length){
-				findImgs(project.image_ids, project, next);
+			
+				ImageModel.find( {proj: projId}, {},  {sort: {uri:1}}, function (err, images) {
+					if (err) return errorHandler(err);
+					if (images){
+						next(images, project);
+					} else { console.log('No images'); }
+				});
+			
 			} else {
 				return res.send({'project':project});
 			}
