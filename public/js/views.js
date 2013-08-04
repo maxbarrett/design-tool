@@ -2,14 +2,12 @@
 App.ProjectView = Ember.View.extend({
 	templateName: 'project',
 	didInsertElement: function() {	
-		
-		// New slider
+		// Image gallery
 		if ($('#vcslider-home').length) {
 			var myplugin = new $.vcSlider($('#vcslider-home'), { 
 				labelLinks : false
 			});
-		}
-
+		}		
 	}
 });
 
@@ -22,8 +20,7 @@ App.ProjectsView = Ember.View.extend({
 		var monthSplitter = function(){
 			var projects = $('.project-thumb');
 			
-			for (var i = 0; i < projects.length; i++) {
-				
+			for (var i = 0; i < projects.length; i++) {	
 				var thisProj = $(projects[i]),
 					nextProj = $(projects[i+1]),
 					thisProjMonth = thisProj.data('month'),
@@ -40,3 +37,17 @@ App.ProjectsView = Ember.View.extend({
 		
 	}
 });
+
+
+App.ProjectsNewView = Ember.View.extend({
+	
+	didInsertElement: function() {
+		App.uploader.DragDrop();
+		// $('#filedrag').on("dragover", App.uploader.FileDragHover);
+		// $('#filedrag').on("dragleave", App.uploader.FileDragHover);
+		// $('#filedrag').on("drop", App.uploader.FileSelectHandler);
+		// // $('#fileselect').on("change", App.uploader.FileSelectHandler);	
+	}
+	
+});
+

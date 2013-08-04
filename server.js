@@ -113,7 +113,7 @@ app.get('/api/projects', function (req, res){
 
 // CREATE a project
 app.post('/api/projects', function (req, res){
-	var uploadedFile = req.files.uploadingFile;	
+	var uploadedFile = req.files.fileselect;	
 	// reusable function
 	var saveImgFile = function(theFile) {	
 		var concatFileName = theFile.name.replace(/ /g, '+');
@@ -158,7 +158,7 @@ app.post('/api/projects', function (req, res){
 
 	
 	// if there's 1 or more image files to upload and a project title
-	if (((req.files.uploadingFile.size > 0) || (req.files.uploadingFile.length > 1 )) && (req.body.title !== '')) {
+	if (((req.files.fileselect.size > 0) || (req.files.fileselect.length > 1 )) && (req.body.title !== '')) {
 
 		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 		var monthNow = new Date().getMonth();

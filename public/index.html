@@ -34,6 +34,7 @@
 						{{view App.InputField valueBinding="id" type="hidden" id="projid"}}
 						{{partial 'projectFields'}}			
 						<button {{action 'doneEditing'}}>Done</button>
+						<div id="messages"></div>
 					</form>
 				</div>
 			</div>
@@ -56,24 +57,9 @@
 			{{#linkTo 'projects' classNames="close"}}Close{{/linkTo}}
 
 			<form method="post" action="api/projects" enctype="multipart/form-data">
-				<input type="text" name="title" placeholder="New project title">
-				<!--<input type="text" name="author" placeholder="Author">-->
-				<select name="category">
-					<option>Choose a category</option>
-					<option value="branding">Branding</option>
-					<option value="deals">Deals</option>
-					<option value="email">MarCom</option>
-					<option value="most-wanted">Most Wanted</option>
-					<option value="reporting">Reporting</option>
-					<option value="app">App</option>
-					<option value="communications">Communications</option>
-					<option value="guidelines">Guidelines</option>
-					<option value="layout">Layout</option>
-					<option value="mobile">Mobile</option>
-				</select>
-
-				<input type="file" name="uploadingFile" multiple="multiple">
+				{{partial 'projectFields'}}	
 				<button type="submit">Save project</button>
+				<div id="messages"></div>
 			</form>
 
 		</div>
@@ -82,10 +68,11 @@
 
 
 <script type="text/x-handlebars" data-template-name="_projectFields">
-	{{view App.TextField id="title" valueBinding="title" placeholder="Title" data-valideater="required" required="required"}}<br />
+	{{view App.TextField id="title" valueBinding="title" placeholder="New project title" name="title"}}<br />
 	{{!view App.TextField id="author" valueBinding="author" placeholder="Author"}}
-	{{view Ember.Select id="category" contentBinding="App.categories" optionValuePath="content.val" optionLabelPath="content.cat"  valueBinding="category" }}<br />
-	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br />
+	{{view Ember.Select id="category" contentBinding="App.categories" optionValuePath="content.val" optionLabelPath="content.cat"  valueBinding="category" name="category"}}<br />
+	{{view App.FileField id="fileselect" name="fileselect"}}<br />
+	<div id="filedrag"></div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="_projectsList">

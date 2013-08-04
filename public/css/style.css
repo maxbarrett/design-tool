@@ -51,6 +51,10 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 .project h1 { display:none; }
 .project .delete { width:50%; }
 
+#filedrag { width:100%; height:140px; border:2px dashed #cfcfcf; margin-top:15px; box-sizing:border-box; background:url('/img/drag-here.png') 50% 50% no-repeat;  }
+#messages { color:#cfcfcf;}
+#messages p { margin:20px 0 0 0; }
+
 #vcslider-home { position:relative; overflow:hidden; max-width: 1190px; margin: 0 auto;  }
 #vcslider-home .vcslider-viewport ul { list-style: none; width: 2000%; margin: 0; overflow: hidden; }
 #vcslider-home .vcslider-viewport li { float: left; width: 100%; max-width: 1190px; position: relative; color:#fff; }

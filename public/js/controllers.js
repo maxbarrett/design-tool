@@ -1,11 +1,11 @@
 App.ProjectController = Ember.ObjectController.extend({
 	isEditing: false,
 	
-	sortProperties: ['images.uri'],
-	sortAscending: true,
-
 	edit: function() {
 		this.set('isEditing', true);
+		
+		// curses
+		setTimeout(App.uploader.DragDrop, 100);			
 	},
 
 	doneEditing: function (){
@@ -21,7 +21,7 @@ App.ProjectController = Ember.ObjectController.extend({
 			input = evt.target,
 			len = input.files,
 			projId = $('#projid').val();
-
+		
 		if (input.files && input.files[0]) {
 			
 			$.each(len,function(i) {
@@ -29,9 +29,9 @@ App.ProjectController = Ember.ObjectController.extend({
 					dotPosition = concatFileName.lastIndexOf('.'),
 					date = new Date().getTime(),
 					newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
-
+		
 				var reader = new FileReader();
-
+		
 				reader.onload = function(e) {
 					var fileToUpload = e.srcElement.result;
 					images.createRecord({ 	uri: newFileName, 
@@ -44,7 +44,7 @@ App.ProjectController = Ember.ObjectController.extend({
 			
 		}
 	},
-
+	
 	destroyRecord: function() {
 		if (window.confirm("Are you sure you want to delete this project?")) {
 			var that = this;
@@ -80,6 +80,37 @@ App.ProjectsNewController = Ember.ObjectController.extend({
 		this.get('store').commit();
 		console.log('save');
 		this.get('target.router').transitionTo('projects.index');	
+	},
+	
+	bindImgs: function(evt){
+		var project = this.get('model'),
+			images = project.get('images'),
+			input = evt.target,
+			len = input.files,
+			projId = $('#projid').val();
+		
+		if (input.files && input.files[0]) {
+			
+			$.each(len,function(i) {
+				var concatFileName = len[i].name.replace(/ /g, '+'),
+					dotPosition = concatFileName.lastIndexOf('.'),
+					date = new Date().getTime(),
+					newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
+		
+				var reader = new FileReader();
+		
+				reader.onload = function(e) {
+					var fileToUpload = e.srcElement.result;
+					images.createRecord({ 	uri: newFileName, 
+											imgdata: fileToUpload,
+											proj: projId
+					});
+				}
+				reader.readAsDataURL(len[i]);
+			});
+			
+		}
+		App.uploader.FileSelectHandler(evt);
 	}
 });
 
