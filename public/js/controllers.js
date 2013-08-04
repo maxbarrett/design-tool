@@ -1,5 +1,8 @@
 App.ProjectController = Ember.ObjectController.extend({
 	isEditing: false,
+	
+	sortProperties: ['images.uri'],
+	sortAscending: true,
 
 	edit: function() {
 		this.set('isEditing', true);

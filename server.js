@@ -305,10 +305,13 @@ app.post('/api/images', function (req, res){
 	console.log("POST new image ");
 	var filename = req.body.image.uri;
 	var base64Data = req.body.image.imgdata;	
-	var regex = /^data:.+\/(.+);base64,(.*)$/;
-	var matches = base64Data.match(regex);
-	var ext = matches[1];
-	var data = matches[2];
+	// var regex = /^data:.+\/(.+);base64,(.*)$/;
+	// var matches = base64Data.match(regex);
+	// var ext = matches[1];
+	// var data = matches[2];
+	var matches = base64Data.split('base64,');
+	var data = matches[1];
+	
 	var buffer = new Buffer(data, 'base64');
 	var	targetPath = 'public/uploads/' + filename;
 
