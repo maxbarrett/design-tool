@@ -62,8 +62,10 @@ App.ProjectController = Ember.ObjectController.extend({
 	},
 	
 	deleteImg: function(img) {
-        img.deleteRecord();
-		this.get('store').commit();
+		if (window.confirm("Are you sure you want to delete this image?")) {
+        	img.deleteRecord();
+			this.get('store').commit();
+		}
     }
 });
 

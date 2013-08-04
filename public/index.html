@@ -57,7 +57,7 @@
 
 			<form method="post" action="api/projects" enctype="multipart/form-data">
 				<input type="text" name="title" placeholder="Title">
-				<input type="text" name="author" placeholder="Author">
+				<!--<input type="text" name="author" placeholder="Author">-->
 				<select name="category">
 					<option>Choose a category</option>
 					<option value="branding">Branding</option>
@@ -84,9 +84,9 @@
 
 <script type="text/x-handlebars" data-template-name="_projectFields">
 	{{view App.TextField id="title" valueBinding="title" placeholder="Title" data-valideater="required" required="required"}}<br />
-	{{view App.TextField id="author" valueBinding="author" placeholder="Author"}}<br />
+	{{!view App.TextField id="author" valueBinding="author" placeholder="Author"}}
 	{{view Ember.Select id="category" valueBinding="categories"}}<br />
-	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br /><br />
+	{{view App.FileField id="uploadingFile" name="uploadingFile"}}<br />
 </script>
 
 <script type="text/x-handlebars" data-template-name="_projectsList">
@@ -95,9 +95,9 @@
 		<a class="brand" href="#">Design tool</a>
 		<nav>
 			{{#linkTo 'projects'}}Projects{{/linkTo}}
+			{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
 		</nav>
 
-		{{#linkTo 'projects.new'}}Add a project{{/linkTo}}
 	</div>
 </header>
 

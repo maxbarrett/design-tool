@@ -49,6 +49,7 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 .project { width:100%; margin:0 auto; background:#252525; }
 .project h1 { display:none; }
 .project .delete { width:50%; }
+.project #uploadingFile { padding-top:1px; }
 
 #vcslider-home { position:relative; overflow:hidden; max-width: 1190px; margin: 0 auto;  }
 #vcslider-home .vcslider-viewport ul { list-style: none; width: 2000%; margin: 0; overflow: hidden; }
@@ -71,10 +72,10 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 
 .overlay-module { width:270px; background:#fff; margin:90px auto 0; padding:50px 30px 30px; border:1px solid #3a3a3a; border-radius:2px; position:relative; }
 .overlay-module form { font-size:12px; }
-.overlay-module button { margin-top:10px; }
+.overlay-module button { margin-top:15px; }
 
 
 .deleteImg,
-.close { text-indent:-9999px; position:absolute; top:10px; right:20px; display:block; background:url('/img/close-grey.png') no-repeat 50% 50%; width:12px; height:12px; padding:10px; }
+.close { text-indent:-9999px; position:absolute; overflow:hidden; top:10px; right:20px; display:block; background:url('/img/close-grey.png') no-repeat 50% 50%; width:12px; height:12px; padding:10px; }
 
 
