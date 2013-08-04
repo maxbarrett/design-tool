@@ -47,6 +47,17 @@ App.InputField = Ember.TextField.extend({
     type: 'hidden'
 });
 
-App.categories = ["Yehuda", "Tom"];
 
+App.categories = [
+	Ember.Object.create({cat: 'Branding', 		val: 'branding' }),
+	Ember.Object.create({cat: 'Deals',   	 	val: 'deals'}),
+	Ember.Object.create({cat: 'Email',			val: 'email'}),
+	Ember.Object.create({cat: 'Most Wanted',  	val: 'most-wanted'}),
+	Ember.Object.create({cat: 'Reporting',    	val: 'reporting'}),
+	Ember.Object.create({cat: 'App',    		val: 'app'}),
+	Ember.Object.create({cat: 'Communications',	val: 'communications'}),
+	Ember.Object.create({cat: 'Guidelines',    	val: 'guidelines'}),
+	Ember.Object.create({cat: 'Layout',    		val: 'layout'}),
+	Ember.Object.create({cat: 'Mobile',    		val: 'mobile'})
+];
 
