@@ -44,7 +44,7 @@ mongoose.connect('mongodb://192.168.33.10:27017/test', function(err){
 
 
 // Define Schema
-var Schema   = mongoose.Schema;
+var Schema = mongoose.Schema;
 
 // Create Project Schema
 var ProjectSchema = new Schema({ 
@@ -70,7 +70,7 @@ var ImageSchema = new Schema({
 // Create Image record type
 var ImageModel = mongoose.model('Image', ImageSchema);
 
-// 
+
 // // Delete all projects
 // var tt = ProjectModel.find(function(err,doc){
 //   console.log(doc);
@@ -121,8 +121,8 @@ app.post('/api/projects', function (req, res){
 		var	date = new Date().getTime();
 		var	newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
 		var	tmpPath = theFile.path;
-		var	targetPath = 'public/uploads/' + newFileName;
-		
+		var	targetPath = 'public/uploads/' + project._id + '/' + newFileName;
+
 		// Rename image
 		fs.rename(tmpPath, targetPath, function(err) {
 			if (err) return errorHandler(err);
@@ -131,7 +131,7 @@ app.post('/api/projects', function (req, res){
 
 		// Create image record
 		var newImages = new ImageModel({
-			uri: 'uploads/' + newFileName,
+			uri: 'uploads/' + project._id + '/' + newFileName,
 			proj: project._id
 		});
 
@@ -166,22 +166,26 @@ app.post('/api/projects', function (req, res){
 		var project = new ProjectModel({
 			title: req.body.title,
 			month: months[monthNow],
-			// publishedAt: req.body.project.publishedAt,
 			category: req.body.category,
 			author: req.body.author
 		});
-		
-		if (uploadedFile.length === undefined) {
-			console.log('Only 1 image');
-			saveImgFile(uploadedFile);
-		} else if (uploadedFile.length > 1) {
-			console.log('More than 1 image');
-			for (var i in uploadedFile) {		
-				saveImgFile(uploadedFile[i]);
+
+		var mkdirCallback = function(){
+			if (uploadedFile.length === undefined) {
+				console.log('Only 1 image');
+				saveImgFile(uploadedFile);
+			} else if (uploadedFile.length > 1) {
+				console.log('More than 1 image');
+				for (var i in uploadedFile) {		
+					saveImgFile(uploadedFile[i]);
+				}
 			}
+			saveProj();
+			res.redirect('/');
 		}
-		saveProj();
-		res.redirect('/');
+	
+		fs.mkdir('public/uploads/' + project._id, mkdirCallback);
+
 	} else {
 		console.log('Project not saved : Image and title required');
 		res.redirect('/');
@@ -223,20 +227,19 @@ app.get('/api/projects/:id', function (req, res){
 app.put('/api/projects/:id', function (req, res){
 
 	ProjectModel.findById(req.params.id, function (err, project) {
-		
+		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+		var monthNow = new Date().getMonth();
 		var thisProject = req.body.project;
 		
-		project.title = thisProject.title;
-		project.category = thisProject.category;
-		project.author = thisProject.author;
-		// TEMPORARY - remove after
-		project.month = thisProject.month;
+		project.title 		= thisProject.title;
+		project.category 	= thisProject.category;
+		project.author 		= thisProject.author;
+		project.month 		= months[monthNow];
 		project.publishedAt = new Date();
-		project.images = thisProject.images;
+		project.images 		= thisProject.images;
 		
 		project.save(function (err) {
 			if (err) return errorHandler(err);
-			console.log(project);
 			return res.send({'project' : project});
 		});
 		
@@ -249,26 +252,16 @@ app.delete('/api/projects/:id', function (req, res){
 	ProjectModel.findById(req.params.id, function (err, project) {
 
 		if (project) {
-			var len = project.image_ids.length; 
-			if (len) {
-				for (var i = 0; i < len; i++) {			
-					ImageModel.findById(project.image_ids[i], function (err, image) {
-						if (err) return errorHandler(err);
-						if (image) {
-							image.remove(function (err) {});
-							fs.remove('public/' + image.uri, function (err) {
-								if (err) return errorHandler(err);
-							});
-						} else { console.log('No image'); }
-					});
-				}
-			}
+			fs.delete('public/uploads/' + project._id);
+			ImageModel.where('proj').equals(project._id).remove();
+			
 			project.remove(function (err) {
 				if (err) return errorHandler(err);
 			});
+			
 			console.log('Project deleted');
 			res.json(200);
-		}// if proj
+		}
 		
 	});
 });
@@ -302,11 +295,11 @@ app.post('/api/images', function (req, res){
 	var data = matches[1];
 	
 	var buffer = new Buffer(data, 'base64');
-	var	targetPath = 'public/uploads/' + filename;
+	var	targetPath = 'public/uploads/' + req.body.image.proj + '/' + filename;
 
 	// Create image record
 	var image = new ImageModel({
-		uri: 'uploads/' + filename,
+		uri: 'uploads/' + req.body.image.proj + '/' + filename,
 		proj: req.body.image.proj
 	});
 	
