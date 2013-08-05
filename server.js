@@ -92,21 +92,17 @@ app.get('/api', function (req, res) {
 
 // READ a List of Projects
 app.get('/api/projects', function (req, res){
-	
 	var query = req.query.category;
-	
 	if (query) {
 		ProjectModel.where('category', query).find({}).sort({publishedAt: -1}).execFind(function(err,projects){
 			if (err) return errorHandler(err);
 			return res.send( {'projects' : projects} );
 		});	
 	} else {
-		
 		// sort projects in chronological order
 		ProjectModel.find({}).sort({publishedAt: -1}).execFind(function(err,projects){
 			return res.send( {'projects' : projects} );
 		});
-		
 	}
 });
 
@@ -116,12 +112,12 @@ app.post('/api/projects', function (req, res){
 	var uploadedFile = req.files.fileselect;	
 	// reusable function
 	var saveImgFile = function(theFile) {	
-		var concatFileName = theFile.name.replace(/ /g, '+');
-		var	dotPosition = concatFileName.lastIndexOf('.');
-		var	date = new Date().getTime();
-		var	newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
-		var	tmpPath = theFile.path;
-		var	targetPath = 'public/uploads/' + project._id + '/' + newFileName;
+		var concatFileName = theFile.name.replace(/ /g, '+'),
+			dotPosition = concatFileName.lastIndexOf('.'),
+			date = new Date().getTime(),
+			newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join(''),
+			tmpPath = theFile.path,
+			targetPath = 'public/uploads/' + project._id + '/' + newFileName;
 
 		// Rename image
 		fs.rename(tmpPath, targetPath, function(err) {
@@ -146,22 +142,12 @@ app.post('/api/projects', function (req, res){
 		
 	} // saveImgFile
 
-
-	// Save the project
-	var saveProj = function() { 
-		project.save(function (err) {
-			if (err) return errorHandler(err);
-			project.save();
-			return console.log("Project created");
-		});
-	}
-
 	
 	// if there's 1 or more image files to upload and a project title
 	if (((req.files.fileselect.size > 0) || (req.files.fileselect.length > 1 )) && (req.body.title !== '')) {
 
-		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-		var monthNow = new Date().getMonth();
+		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			monthNow = new Date().getMonth();
 		
 		var project = new ProjectModel({
 			title: req.body.title,
@@ -180,7 +166,13 @@ app.post('/api/projects', function (req, res){
 					saveImgFile(uploadedFile[i]);
 				}
 			}
-			saveProj();
+			
+			project.save(function (err) {
+				if (err) return errorHandler(err);
+				project.save();
+				return console.log("Project created");
+			});
+			
 			res.redirect('/');
 		}
 	
@@ -188,7 +180,7 @@ app.post('/api/projects', function (req, res){
 
 	} else {
 		console.log('Project not saved : Image and title required');
-		res.redirect('/');
+		res.redirect('/#/projects');
 	}
 	
 });
@@ -227,9 +219,9 @@ app.get('/api/projects/:id', function (req, res){
 app.put('/api/projects/:id', function (req, res){
 
 	ProjectModel.findById(req.params.id, function (err, project) {
-		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-		var monthNow = new Date().getMonth();
-		var thisProject = req.body.project;
+		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			monthNow = new Date().getMonth(),
+			thisProject = req.body.project;
 		
 		project.title 		= thisProject.title;
 		project.category 	= thisProject.category;
@@ -285,17 +277,12 @@ app.get('/api/images', function (req, res){
 app.post('/api/images', function (req, res){
 
 	console.log("POST new image ");
-	var filename = req.body.image.uri;
-	var base64Data = req.body.image.imgdata;	
-	// var regex = /^data:.+\/(.+);base64,(.*)$/;
-	// var matches = base64Data.match(regex);
-	// var ext = matches[1];
-	// var data = matches[2];
-	var matches = base64Data.split('base64,');
-	var data = matches[1];
-	
-	var buffer = new Buffer(data, 'base64');
-	var	targetPath = 'public/uploads/' + req.body.image.proj + '/' + filename;
+	var filename = req.body.image.uri,
+		base64Data = req.body.image.imgdata,	
+		matches = base64Data.split('base64,'),
+		data = matches[1],
+		buffer = new Buffer(data, 'base64'),
+		targetPath = 'public/uploads/' + req.body.image.proj + '/' + filename;
 
 	// Create image record
 	var image = new ImageModel({
