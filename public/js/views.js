@@ -12,7 +12,6 @@ App.ProjectView = Ember.View.extend({
 });
 
 
-
 App.ProjectsView = Ember.View.extend({
 	templateName: 'projects',
 	didInsertElement: function() {	
@@ -26,7 +25,7 @@ App.ProjectsView = Ember.View.extend({
 					thisProjMonth = thisProj.data('month'),
 					nextProjMonth = nextProj.data('month');
 				
-				if ( (thisProjMonth !== nextProjMonth) && (nextProjMonth !== null) ) {
+				if ( (thisProjMonth !== nextProjMonth) && (nextProjMonth !== null) && (nextProjMonth !== undefined) ) {
 					thisProj.after('<h2 class="month-title" style="clear:both;">' + nextProjMonth + '</h2>');
 				}
 			}
