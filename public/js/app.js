@@ -40,8 +40,37 @@ App.FileField = Ember.TextField.extend({
         evt.preventDefault();
         evt.stopPropagation();
 		this.get('controller').bindImgs(evt);
+		return false;
     }
 });
+
+
+DragNDrop = Ember.Namespace.create();
+
+DragNDrop.cancel = function(e) {
+	e.stopPropagation();
+	e.preventDefault();
+	// var target = $(e.target);
+	// console.log(e.type)
+
+	//	e.target.className = (e.type == "dragover" ? "hover" : "");
+    return false;
+};
+
+DragNDrop.Droppable = Ember.Mixin.create({
+    dragEnter: DragNDrop.cancel,
+    dragOver: DragNDrop.cancel,
+    drop: function(evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+     	this.get('controller').bindImgs(evt);
+        return false;
+    }
+});
+
+// App.Box = Ember.View.extend(DragNDrop.Dragable);
+App.DropTarget = Ember.View.extend(DragNDrop.Droppable);
+
 
 
 // Create hidden input
@@ -68,9 +97,9 @@ App.categories = [
 App.uploader = {
 	
 	DragDrop: function(){
-		$('#filedrag').on("dragover", App.uploader.FileDragHover);
-		$('#filedrag').on("dragleave", App.uploader.FileDragHover);
-		$('#filedrag').on("drop", App.uploader.FileSelectHandler);
+		// $('#filedrag').on("dragover", App.uploader.FileDragHover);
+		// $('#filedrag').on("dragleave", App.uploader.FileDragHover);
+		// $('#filedrag').on("drop", App.uploader.FileSelectHandler);
 	},
 	
 	// output information
@@ -80,11 +109,11 @@ App.uploader = {
 	},
 	
 	// file drag hover
-	FileDragHover: function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		e.target.className = (e.type == "dragover" ? "hover" : "");
-	},
+	// FileDragHover: function(e) {
+	// 	e.stopPropagation();
+	// 	e.preventDefault();
+	// 	e.target.className = (e.type == "dragover" ? "hover" : "");
+	// },
 	
 	// output file information
 	ParseFile: function(file) {
@@ -92,9 +121,9 @@ App.uploader = {
 	},
 	
 	// file selection
-	FileSelectHandler: function(e) {
+	FileSelectHandler: function(e, images, projId) {
 		// cancel event and hover styling
-		App.uploader.FileDragHover(e);
+		// App.uploader.FileDragHover(e);
 
 		// fetch FileList object
 		var files = e.target.files || e.dataTransfer.files;
@@ -102,6 +131,28 @@ App.uploader = {
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
 			App.uploader.ParseFile(f);
+			App.uploader.FileUploader(f, images, projId);
 		}
+	},
+	
+	FileUploader: function(f, images, projId){
+
+		var concatFileName = f.name.replace(/ /g, '+'),
+			dotPosition = concatFileName.lastIndexOf('.'),
+			date = new Date().getTime(),
+			newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
+
+		var reader = new FileReader();
+
+		reader.onload = function(e) {
+			var fileToUpload = e.srcElement.result;
+			images.createRecord({ 	uri: newFileName, 
+									imgdata: fileToUpload,
+									proj: projId
+			});
+		}
+		reader.readAsDataURL(f);
 	}
+	
+	
 }

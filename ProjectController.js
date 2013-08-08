@@ -161,7 +161,11 @@ var ProjectController = function(ProjectModel, ImageModel, fs) {
 		});
 	};
 	
-	var privateFunc = function(){}
+	// Error handler
+	var errorHandler = function(err){
+		console.log('We have an error...');
+		console.log(err);
+	}
 	
 }
 

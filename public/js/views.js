@@ -9,6 +9,7 @@ App.ProjectView = Ember.View.extend({
 			});
 		}		
 	}
+		
 });
 
 
@@ -36,13 +37,3 @@ App.ProjectsView = Ember.View.extend({
 		
 	}
 });
-
-
-App.ProjectsNewView = Ember.View.extend({
-	
-	didInsertElement: function() {
-		App.uploader.DragDrop();	
-	}
-	
-});
-

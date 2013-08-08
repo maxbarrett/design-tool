@@ -72,7 +72,7 @@
 	{{!view App.TextField id="author" valueBinding="author" placeholder="Author"}}
 	{{view Ember.Select id="category" contentBinding="App.categories" optionValuePath="content.val" optionLabelPath="content.cat"  valueBinding="category" name="category"}}<br />
 	{{view App.FileField id="fileselect" name="fileselect"}}<br />
-	<div id="filedrag"></div>
+	{{view App.DropTarget id="filedrag"}}<br />
 </script>
 
 <script type="text/x-handlebars" data-template-name="_projectsList">

@@ -50,11 +50,6 @@ app.get('/', auth, function(req, res) {
  	res.sendfile('public/index.html');
 });
 
-// Error handler
-function errorHandler(err){
-	console.log('We have an error...');
-	console.log(err);
-}
 
 // Mongo Database
 mongoose.connect('mongodb://192.168.33.10:27017/test', function(err){

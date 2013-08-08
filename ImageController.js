@@ -97,6 +97,13 @@ var ImageController = function(ProjectModel, ImageModel, fs) {
 			}
 		});
 	};
+	
+	
+	// Error handler
+	var errorHandler = function(err){
+		console.log('We have an error...');
+		console.log(err);
+	}
 		
 }
 
