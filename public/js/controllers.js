@@ -5,7 +5,7 @@ App.ProjectController = Ember.ObjectController.extend({
 		this.set('isEditing', true);
 		
 		// curses
-		setTimeout(App.uploader.DragDrop, 100);			
+		//setTimeout(App.uploader.DragDrop, 100);			
 	},
 
 	doneEditing: function (){

@@ -96,11 +96,11 @@ App.categories = [
 
 App.uploader = {
 	
-	DragDrop: function(){
-		// $('#filedrag').on("dragover", App.uploader.FileDragHover);
-		// $('#filedrag').on("dragleave", App.uploader.FileDragHover);
-		// $('#filedrag').on("drop", App.uploader.FileSelectHandler);
-	},
+	// DragDrop: function(){
+	// 	$('#filedrag').on("dragover", App.uploader.FileDragHover);
+	// 	$('#filedrag').on("dragleave", App.uploader.FileDragHover);
+	// 	$('#filedrag').on("drop", App.uploader.FileSelectHandler);
+	// },
 	
 	// output information
 	Output: function(msg) {
@@ -127,7 +127,6 @@ App.uploader = {
 
 		// fetch FileList object
 		var files = e.target.files || e.dataTransfer.files;
-
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
 			App.uploader.ParseFile(f);

@@ -19,8 +19,8 @@ var ProjectController = function(ProjectModel, ImageModel, fs) {
 	
 	
 	instance.create = function(req, res) {
-		var uploadedFile = req.files.fileselect;	
-
+		var uploadedFile = req.files.fileselect;
+		
 		var saveImgFile = function(theFile) {	
 			var concatFileName = theFile.name.replace(/\s/g, '+'),
 				dotPosition = concatFileName.lastIndexOf('.'),
@@ -52,7 +52,7 @@ var ProjectController = function(ProjectModel, ImageModel, fs) {
 		} // saveImgFile
 
 		// if there's 1 or more image files to upload and a project title
-		if (((req.files.fileselect.size > 0) || (req.files.fileselect.length > 1 )) && (req.body.title !== '')) {
+		if (req.files && ((req.files.fileselect.size > 0) || (req.files.fileselect.length > 1 )) && (req.body.title !== '')) {
 
 			var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 				monthNow = new Date().getMonth();
