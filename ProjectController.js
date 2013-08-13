@@ -132,7 +132,8 @@ var ProjectController = function(ProjectModel, ImageModel, fs) {
 			project.author 		= thisProject.author;
 			project.month 		= months[monthNow];
 			project.publishedAt = new Date();
-			project.images 		= thisProject.images;
+			// this needed?
+			// project.images 	= thisProject.images;
 
 			project.save(function (err) {
 				if (err) return errorHandler(err);
