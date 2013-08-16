@@ -1,6 +1,7 @@
 var application_root = __dirname,
     express = require("express"),
 	fs = require('fs-extra'),
+	async = require('async'),
     path = require("path"),
     mongoose = require('mongoose'),
 	ProjectController = require('./ProjectController.js').ProjectController,
@@ -58,7 +59,7 @@ mongoose.connect('mongodb://192.168.33.10:27017/test', function(err){
 });
 
 var projectController = new ProjectController(ProjectModel, ImageModel, fs);
-var imageController = new ImageController(ProjectModel, ImageModel, fs);
+var imageController = new ImageController(ProjectModel, ImageModel, fs, async);
 
 // // Delete all projects
 // var tt = ProjectModel.find(function(err,doc){

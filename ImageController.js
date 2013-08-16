@@ -1,4 +1,4 @@
-var ImageController = function(ProjectModel, ImageModel, fs) {
+var ImageController = function(ProjectModel, ImageModel, fs, async) {
 	var instance = this;
 	
 	instance.readAll = function (req, res){
@@ -10,9 +10,7 @@ var ImageController = function(ProjectModel, ImageModel, fs) {
 	};
 	
 	
-	
 	instance.create = function (req, res) {
-
 		console.log("POST new image ");
 		var filename = req.body.image.uri,
 			base64Data = req.body.image.imgdata,	
@@ -20,46 +18,68 @@ var ImageController = function(ProjectModel, ImageModel, fs) {
 			data = matches[1],
 			buffer = new Buffer(data, 'base64'),
 			targetPath = 'public/uploads/' + req.body.image.proj + '/' + filename;
-
+		
 		// Create image record
 		var image = new ImageModel({
 			uri: 'uploads/' + req.body.image.proj + '/' + filename,
 			proj: req.body.image.proj
 		});
 
-		// write file to root
-		fs.writeFile(filename, buffer, function(err){
-			if (err) return errorHandler(err);
-			console.log("Image " + filename + ' uploaded');
+		async.waterfall(
+		    [
+		        // i. write file to root
+		        function(callback) {
+					fs.writeFile(filename, buffer, function(err){
+						if (err) return errorHandler(err);
+						console.log("Image " + filename + ' uploaded');
+						callback(null);
+					});
+		        },
 
-			// then move it into the uploads folder
-			fs.rename(filename, targetPath, function(err) {
-				if (err) return errorHandler(err);
-				console.log('Image renamed & saved');
+		        // ii. move it into the uploads folder
+		        function(callback) {
+		            fs.rename(filename, targetPath, function(err) {
+						if (err) return errorHandler(err);
+						console.log('Image renamed & saved');
+		                callback(null);
+		            });
+		        },
 
-				// Save to DB
-				image.save(function (err) {
-					if (err) return errorHandler(err);
-					console.log("Image saved in DB");
-
-					// find the project it's in
+		        // iii. save to DB
+		        function(callback) {
+					image.save(function (err) {
+						if (err) return errorHandler(err);
+						console.log("Image saved in DB");
+						callback(null);
+					});
+		        },
+				
+				// iv. find the project it's in
+				function(callback){
 					ProjectModel.findById(req.body.image.proj, function (err, project) {
 						if (err) return errorHandler(err);
+						
 						// add new image id to project image_ids array
 						project.image_ids.push(image.id);
 						project.publishedAt = new Date();
-
+		
+						callback(null, project)
 						// save the project
 						project.save(function (err) {
 							if (err) return errorHandler(err);
 							console.log("Project updated");
 							//send the response to client
 							return res.send({'image':image},200);
-						});//project.save
-					});//findById
-				});//image.save
-			});//rename
-		});//writeFile	
+						});
+					});
+				}
+		    ],
+
+		    // the bonus final callback function
+		    function(err, status) {
+		        console.log(status);
+		    }
+		);		
 	};
 	
 	
