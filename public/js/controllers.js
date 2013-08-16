@@ -52,7 +52,7 @@ App.ProjectsNewController = Ember.ObjectController.extend({
 	
 	newRecord: function() {
 		console.log('new record');
-		this.set('content', App.Project.createRecord({title: ''}));
+	//	this.set('content', App.Project.createRecord({title: ''}));
 		
 	},
 	
