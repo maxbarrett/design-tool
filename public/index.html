@@ -52,13 +52,13 @@
 </script>
 
 
-<script type="text/x-handlebars" data-template-name="projects/new">
+<script type="text/x-handlebars" data-template-name="new">
 	<div id="overlay">
 		<div class="overlay-module">
 			{{#linkTo 'projects' classNames="close"}}Close{{/linkTo}}
 
-			<!--<form method="post" action="api/projects" enctype="multipart/form-data">-->
-			<form {{action save on="submit"}} enctype="multipart/form-data">
+			<form method="post" action="api/projects" enctype="multipart/form-data">
+			<!--<form {{action save on="submit"}} enctype="multipart/form-data">-->
 				{{view App.InputField valueBinding="id" type="hidden" id="projid"}}
 				{{partial 'projectFields'}}	
 				<button type="submit">Save project</button>
@@ -83,7 +83,7 @@
 		<a class="brand" href="#">Design tool</a>
 		<nav>
 			{{#linkTo 'projects'}}Projects{{/linkTo}}
-			{{#linkTo 'projects.new'}}Create project{{/linkTo}}
+			{{#linkTo 'new'}}Create project{{/linkTo}}
 		</nav>
 
 	</div>
@@ -125,52 +125,8 @@
 
 <!-- Need a better way of doing this -->
 <script type="text/x-handlebars" data-template-name="projects">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
-<script type="text/x-handlebars" data-template-name="branding">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
-<script type="text/x-handlebars" data-template-name="deals">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
-<script type="text/x-handlebars" data-template-name="email">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
-<script type="text/x-handlebars" data-template-name="marcom">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
-<script type="text/x-handlebars" data-template-name="most-wanted">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
-<script type="text/x-handlebars" data-template-name="reporting">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
-<script type="text/x-handlebars" data-template-name="app">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
-<script type="text/x-handlebars" data-template-name="communications">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
-<script type="text/x-handlebars" data-template-name="guidelines">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
-<script type="text/x-handlebars" data-template-name="layout">
-	{{partial 'projectsList'}}	
-	{{outlet}}
-</script>
-<script type="text/x-handlebars" data-template-name="mobile">
-	{{partial 'projectsList'}}	
-	{{outlet}}
+	{{partial 'projectsList'}}
+	{{outlet projects}}
 </script>
 
 <script src="js/libs/jquery-1.9.1.js"></script>

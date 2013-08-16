@@ -48,18 +48,18 @@ App.ProjectController = Ember.ObjectController.extend({
 });
 
 
-App.ProjectsNewController = Ember.ObjectController.extend({
+App.NewController = Ember.ObjectController.extend({
 	
 	newRecord: function() {
 		console.log('new record');
-	//	this.set('content', App.Project.createRecord({title: ''}));
+		this.set('content', App.Project.createRecord({title: ''}));
 		
 	},
 	
 	save: function() {
 		this.get('store').commit();
 		console.log('save');
-		this.get('target.router').transitionTo('projects.index');	
+		this.get('target.router').transitionTo('index');	
 	},
 	
 	bindImgs: function(e){
