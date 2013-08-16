@@ -137,7 +137,7 @@ App.CommunicationsRoute = Ember.Route.extend({
 		return App.Project.find({category: 'communications'});
 	},
 	renderTemplate: function() {
-		var controller = this.controllerFor('app');
+		var controller = this.controllerFor('communications');
 		this.render('projects', {
 			controller: controller
 		});
