@@ -74,7 +74,7 @@ var imageController = new ImageController(ProjectModel, ImageModel, fs);
 
 
 // Setup the RESTful web service endpoint
-app.get('/api', function (req, res) {
+app.get('/api', auth, function (req, res) {
   res.send('API is running!');
 });
 
@@ -83,29 +83,19 @@ app.get('/api', function (req, res) {
 // REST API FOR PROJECTS
 
 // READ a List of Projects
-app.get('/api/projects', function(req, res){
-	projectController.readAll(req, res)
-});
+app.get('/api/projects', auth, projectController.readAll);
 
 // CREATE a project
-app.post('/api/projects', function(req, res){
-	projectController.create(req, res)
-});
+app.post('/api/projects', auth, projectController.create);
 
 // READ a Single Project by ID
-app.get('/api/projects/:id', function(req, res){
-	projectController.readOne(req, res)
-});
+app.get('/api/projects/:id', auth, projectController.readOne);
 
 // UPDATE a Single Project by ID
-app.put('/api/projects/:id', function(req, res){
-	projectController.update(req, res)
-});
+app.put('/api/projects/:id', auth, projectController.update);
 
 // DELETE a Single Project by ID
-app.delete('/api/projects/:id', function(req, res){
-	projectController.del(req, res)
-});
+app.delete('/api/projects/:id', auth, projectController.del);
 
 
 
@@ -113,24 +103,16 @@ app.delete('/api/projects/:id', function(req, res){
 // REST API FOR IMAGES
 
 // READ a List of Images
-app.get('/api/images', function(req, res){
-	imageController.readAll(req, res)
-});
+app.get('/api/images', auth, imageController.readAll);
 
 // Add an image to existing project
-app.post('/api/images', function(req, res){
-	imageController.create(req, res)
-});
+app.post('/api/images', auth, imageController.create);
 
 // READ a Single Image by ID
-app.get('/api/images/:id', function(req, res){
-imageController.readOne(req, res)
-});
+app.get('/api/images/:id', auth, imageController.readOne);
 
 // DELETE a Single Image by ID
-app.delete('/api/images/:id', function(req, res){
-	imageController.del(req, res)
-});
+app.delete('/api/images/:id', auth, imageController.del);
 
 
 
