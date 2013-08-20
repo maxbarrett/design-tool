@@ -42,19 +42,65 @@ App.ProjectsView = Ember.View.extend({
 App.NewView = Ember.View.extend({
 	templateName: 'new',
 	didInsertElement: function() {
-		var npf = this.$('#new-project-form');
+		var fileselect = $('#fileselect'),
+			npf = this.$('#new-project-form'),
+			imgData = {};
 
-		npf.submit(function(){
+
+// Use this:
+// http://html5doctor.com/drag-and-drop-to-server/
+		
+		// fileselect.on('change', function(e){
+		// 	// fetch FileList object
+		// 	var files = e.target.files || e.dataTransfer.files;
+		// 	
+		// 	// process all File objects
+		// 	for (var i = 0, f; f = files[i]; i++) {
+		// 		
+		// 		App.uploader.ParseFile(f);
+		// 		console.log(f)
+		// 
+		// 		var concatFileName = f.name.replace(/ /g, '+'),
+		// 			dotPosition = concatFileName.lastIndexOf('.'),
+		// 			date = new Date().getTime(),
+		// 			newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
+		// 
+		// 		var reader = new FileReader();
+		// 
+		// 		imgData[newFileName] = '';
+		// 
+		// 		reader.onload = function(e) {
+		// 			var fileToUpload = e.srcElement.result;
+		// 			imgData[newFileName] = fileToUpload;
+		// 		}
+		// 
+		// 		reader.readAsDataURL(f);
+		// 	}
+		// 
+		// });
+
+	
+		npf.on('submit', function(e){
+			e.stopPropagation();
+			e.preventDefault();
+			console.log(imgData);
 			
-			$.ajax({
-				url: '/api/projects',
-				type: 'post',
-				dataType: 'json',
-				data: npf.serialize(),
-				success: function(data){ 
-					console.log(data) 
-				}
-			});
+			// var theData = {title: $('#title').val(),
+			// 		category: $('#cats').val(),
+			// 		imgs: imgData}
+			// 
+			// $.ajax({
+			// 	url: '/api/projects',
+			// 	type: 'post',
+			// 	dataType: 'json',
+			// 	data: theData,
+			// 	success: function(data){ 
+			// 		console.log(data);
+			// 	}
+			// });
+			// 
+			// return false;
+			
 		});
 		
 	}

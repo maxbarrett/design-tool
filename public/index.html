@@ -56,14 +56,27 @@
 	<div id="overlay">
 		<div class="overlay-module">
 			{{#linkTo 'projects' classNames="close"}}Close{{/linkTo}}
-
-			<!--<form method="post" action="api/projects" enctype="multipart/form-data">-->
-			<form {{action save on="submit"}} enctype="multipart/form-data" id="new-project-form">
-				{{!view App.InputField valueBinding="id" type="hidden" id="projid"}}
-				{{partial 'projectFields'}}
+			
+			<form method="post" id="new-project-form" action="api/projects" enctype="multipart/form-data">
+				<input id="title" type="text" name="title">
+				<select id="cats">
+					<option>Select a category</option>
+					<option value="branding">Branding</option>
+					<option value="deals">Deals</option>
+					<option value="email">Email</option>
+					<option value="marcom">MarCom</option>
+					<option value="most-wanted">Most Wanted</option>
+					<option value="reporting">Reporting</option>
+					<option value="app">App</option>
+					<option value="communications">Communications</option>
+					<option value="guidelines">Guidelines</option>
+					<option value="layout">Layout</option>
+					<option value="mobile">Mobile</option>
+				</select>
+				<input id="fileselect" type="file" name="fileselect" multiple="multiple">
 				<button type="submit">Save project</button>
 				<div id="messages"></div>
-			</form>
+		</form>
 
 		</div>
 	</div>

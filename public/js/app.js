@@ -117,7 +117,7 @@ App.uploader = {
 	
 	// output file information
 	ParseFile: function(file) {
-		App.uploader.Output("<p>" + file.name + " size: " + Math.ceil(file.size / 1000) + "KB</p>");
+		App.uploader.Output("<p>" + file.name + " " + Math.ceil(file.size / 1000) + "KB</p>");
 	},
 	
 	// file selection

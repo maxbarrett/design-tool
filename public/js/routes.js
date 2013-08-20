@@ -21,7 +21,7 @@ App.Router.map(function() {
 
 App.NewRoute = Ember.Route.extend({
 	setupController: function(controller) {
-		controller.newRecord();
+	//	controller.newRecord();
 	}
 });
 
