@@ -50,23 +50,23 @@ App.ProjectController = Ember.ObjectController.extend({
 
 App.NewController = Ember.ObjectController.extend({
 	
-	newRecord: function() {
-		console.log('new record');
-		this.set('content', App.Project.createRecord({title: ''}));
-		
-	},
+	// newRecord: function() {
+	// 	console.log('new record');
+	// 	this.set('content', App.Project.createRecord({title: ''}));
+	// 	
+	// },
 	
 	save: function() {
-		this.get('store').commit();
+		// this.get('store').commit();
 		console.log('save');
-		this.get('target.router').transitionTo('index');	
+		// this.get('target.router').transitionTo('index');	
 	},
 	
-	bindImgs: function(e){
-		var project = this.get('model'),
-			images = project.get('images');
-		App.uploader.FileSelectHandler(e, images);		
-	}
+	// bindImgs: function(e){
+	// 	var project = this.get('model'),
+	// 		images = project.get('images');
+	// 	App.uploader.FileSelectHandler(e, images);		
+	// }
 	
 });
 

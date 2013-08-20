@@ -37,3 +37,25 @@ App.ProjectsView = Ember.View.extend({
 		
 	}
 });
+
+
+App.NewView = Ember.View.extend({
+	templateName: 'new',
+	didInsertElement: function() {
+		var npf = this.$('#new-project-form');
+
+		npf.submit(function(){
+			
+			$.ajax({
+				url: '/api/projects',
+				type: 'post',
+				dataType: 'json',
+				data: npf.serialize(),
+				success: function(data){ 
+					console.log(data) 
+				}
+			});
+		});
+		
+	}
+});
