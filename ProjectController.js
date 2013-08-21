@@ -1,4 +1,4 @@
-var ProjectController = function(ProjectModel, ImageModel, fs) {
+var ProjectController = function(ProjectModel, ImageModel, fs, async) {
 	var instance = this;
 
 	instance.readAll = function(req, res) {
@@ -19,8 +19,26 @@ var ProjectController = function(ProjectModel, ImageModel, fs) {
 	
 	
 	instance.create = function(req, res) {
-		var uploadedFile = req.files.fileselect;
+
+		var files = req.files.files ? req.files.files : null;
+		console.log(files);
+
+		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			monthNow = new Date().getMonth();
 		
+		var project = new ProjectModel({
+			title: req.body.title,
+			month: months[monthNow],
+			category: req.body.category,
+			author: req.body.author
+		});
+			
+		project.save(function (err) {
+			if (err) return errorHandler(err);
+			project.save();
+			return console.log("Project created");
+		});	
+			
 		var saveImgFile = function(theFile) {	
 			var concatFileName = theFile.name.replace(/\s/g, '+'),
 				dotPosition = concatFileName.lastIndexOf('.'),
@@ -28,68 +46,55 @@ var ProjectController = function(ProjectModel, ImageModel, fs) {
 				newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join(''),
 				tmpPath = theFile.path,
 				targetPath = 'public/uploads/' + project._id + '/' + newFileName;
-
+	
 			// Rename image
 			fs.rename(tmpPath, targetPath, function(err) {
 				if (err) return errorHandler(err);
 				console.log('Image renamed');
 			});	
-
+	
 			// Create image record
 			var newImages = new ImageModel({
 				uri: 'uploads/' + project._id + '/' + newFileName,
 				proj: project._id
 			});
-
+	
 			// Save image
 			newImages.save(function (err) {
 				if (err) return errorHandler(err);
 				console.log('Image saved');
 			});
-
+	
 			// push the new image _id to the project.image_ids property
 			project.image_ids.push(newImages);
 		} // saveImgFile
-
-		// if there's 1 or more image files to upload and a project title
-		if (req.files && ((req.files.fileselect.size > 0) || (req.files.fileselect.length > 1 )) && (req.body.title !== '')) {
-
-			var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-				monthNow = new Date().getMonth();
-
-			var project = new ProjectModel({
-				title: req.body.title,
-				month: months[monthNow],
-				category: req.body.category,
-				author: req.body.author
-			});
-
-			var mkdirCallback = function(){
-				if (uploadedFile.length === undefined) {
-					console.log('Only 1 image');
-					saveImgFile(uploadedFile);
-				} else if (uploadedFile.length > 1) {
-					console.log('More than 1 image');
-					for (var i in uploadedFile) {		
-						saveImgFile(uploadedFile[i]);
-					}
+		
+		
+		var mkdirCallback = function(){
+			if (files.length === undefined) {
+				console.log('Only 1 image');
+				saveImgFile(files);
+			} else if (files.length > 1) {
+				console.log('More than 1 image');
+				for (var i in files) {		
+					saveImgFile(files[i]);
 				}
-
-				project.save(function (err) {
-					if (err) return errorHandler(err);
-					project.save();
-					return console.log("Project created");
-				});
-
-				res.redirect('/#/projects');
 			}
 
-			fs.mkdir('public/uploads/' + project._id, mkdirCallback);
+			project.save(function (err) {
+				if (err) return errorHandler(err);
+				project.save();
+				return console.log("Project created");
+			});
 
-		} else {
-			console.log('Project not saved : Image and title required');
-			res.redirect('/#/projects');
+			// res.redirect('/#/projects');
+			res.send({status:'ok'})
 		}
+		
+		fs.mkdir('public/uploads/' + project._id, mkdirCallback);
+	
+		//	console.log('Project not saved : Image and title required');
+		//	res.redirect('/#/projects');
 
 	}; // create
 		

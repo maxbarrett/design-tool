@@ -58,7 +58,7 @@ mongoose.connect('mongodb://192.168.33.10:27017/test', function(err){
 	console.log('Connected to mongodb://192.168.33.10:27017/test successfully!');
 });
 
-var projectController = new ProjectController(ProjectModel, ImageModel, fs);
+var projectController = new ProjectController(ProjectModel, ImageModel, fs, async);
 var imageController = new ImageController(ProjectModel, ImageModel, fs, async);
 
 // // Delete all projects

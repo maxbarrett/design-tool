@@ -44,7 +44,7 @@ App.NewView = Ember.View.extend({
 	didInsertElement: function() {
 		var fileselect = $('#fileselect'),
 			npf = this.$('#new-project-form'),
-			imgData = {};
+			formData = new FormData();
 
 
 // Use this:
@@ -78,17 +78,33 @@ App.NewView = Ember.View.extend({
 		// 	}
 		// 
 		// });
+		
+		fileselect.on('change', function(){
+			readfiles(this.files);
+		});
 
-	
+		function readfiles(files) {
+			for (var i = 0; i < files.length; i++) {
+				formData.append('files', files[i]);
+			}
+		}
+		
 		npf.on('submit', function(e){
 			e.stopPropagation();
 			e.preventDefault();
-			console.log(imgData);
+
+			var title = $('#title').val(),
+				category = $('#cats').val();
 			
-			// var theData = {title: $('#title').val(),
-			// 		category: $('#cats').val(),
-			// 		imgs: imgData}
-			// 
+			formData.append('title', title);
+			formData.append('category', category);
+
+			// now post a new XHR request
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', '/api/projects/');
+			xhr.send(formData);
+			
+
 			// $.ajax({
 			// 	url: '/api/projects',
 			// 	type: 'post',

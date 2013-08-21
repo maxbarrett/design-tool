@@ -63,7 +63,7 @@ var ImageController = function(ProjectModel, ImageModel, fs, async) {
 						project.image_ids.push(image.id);
 						project.publishedAt = new Date();
 		
-						callback(null, project)
+						// callback(null, project)
 						// save the project
 						project.save(function (err) {
 							if (err) return errorHandler(err);
