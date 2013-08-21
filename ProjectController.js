@@ -71,7 +71,7 @@ var ProjectController = function(ProjectModel, ImageModel, fs, async) {
 		
 		
 		var mkdirCallback = function(){
-			if (files.length === undefined) {
+			if (files && files.length === undefined) {
 				console.log('Only 1 image');
 				saveImgFile(files);
 			} else if (files.length > 1) {
@@ -87,11 +87,15 @@ var ProjectController = function(ProjectModel, ImageModel, fs, async) {
 				return console.log("Project created");
 			});
 
-			// res.redirect('/#/projects');
-			res.send({status:'ok'})
+			res.redirect('/#/projects');
+			//res.send({status:'ok'})
 		}
 		
-		fs.mkdir('public/uploads/' + project._id, mkdirCallback);
+		if (files){
+			fs.mkdir('public/uploads/' + project._id, mkdirCallback);
+		} else {
+			console.log('no images to upload');
+		}
 	
 		//	console.log('Project not saved : Image and title required');
 		//	res.redirect('/#/projects');

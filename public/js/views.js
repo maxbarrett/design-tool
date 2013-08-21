@@ -103,19 +103,13 @@ App.NewView = Ember.View.extend({
 			var xhr = new XMLHttpRequest();
 			xhr.open('POST', '/api/projects/');
 			xhr.send(formData);
-			
 
-			// $.ajax({
-			// 	url: '/api/projects',
-			// 	type: 'post',
-			// 	dataType: 'json',
-			// 	data: theData,
-			// 	success: function(data){ 
-			// 		console.log(data);
-			// 	}
-			// });
-			// 
-			// return false;
+			if (xhr.readyState == 4) {
+				console.log(xhr.responseText);
+			}
+			
+			
+			return false;
 			
 		});
 		
