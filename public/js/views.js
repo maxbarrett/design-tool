@@ -46,38 +46,8 @@ App.NewView = Ember.View.extend({
 			npf = this.$('#new-project-form'),
 			formData = new FormData();
 
+		// http://html5doctor.com/drag-and-drop-to-server/
 
-// Use this:
-// http://html5doctor.com/drag-and-drop-to-server/
-		
-		// fileselect.on('change', function(e){
-		// 	// fetch FileList object
-		// 	var files = e.target.files || e.dataTransfer.files;
-		// 	
-		// 	// process all File objects
-		// 	for (var i = 0, f; f = files[i]; i++) {
-		// 		
-		// 		App.uploader.ParseFile(f);
-		// 		console.log(f)
-		// 
-		// 		var concatFileName = f.name.replace(/ /g, '+'),
-		// 			dotPosition = concatFileName.lastIndexOf('.'),
-		// 			date = new Date().getTime(),
-		// 			newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
-		// 
-		// 		var reader = new FileReader();
-		// 
-		// 		imgData[newFileName] = '';
-		// 
-		// 		reader.onload = function(e) {
-		// 			var fileToUpload = e.srcElement.result;
-		// 			imgData[newFileName] = fileToUpload;
-		// 		}
-		// 
-		// 		reader.readAsDataURL(f);
-		// 	}
-		// 
-		// });
 		
 		fileselect.on('change', function(){
 			readfiles(this.files);
@@ -99,18 +69,29 @@ App.NewView = Ember.View.extend({
 			formData.append('title', title);
 			formData.append('category', category);
 
-			// now post a new XHR request
-			var xhr = new XMLHttpRequest();
-			xhr.open('POST', '/api/projects/');
-			xhr.send(formData);
-
-			if (xhr.readyState == 4) {
-				console.log(xhr.responseText);
-			}
+			// jQuery runs anything that isn’t a string through 
+			// jQuery.param() to serialize the objects keys into 
+			// key1=a&key2=b etc; running FormData through doesn't work
+			// processData turns this off.
 			
+			// unless contentType is specified as an option to jQuery.ajax(), 
+			// jQuery reverts to the default of "application/x-www-form-urlencoded". 
+			// By setting contentType to false we prevent this option from being set, 
+			// and the browser implementation of XMLHttpRequest (which jQuery uses 
+			// behind the scenes of course) will set the correct Content-Type header for us
+			
+			$.ajax('/api/projects/', {
+			    processData: false,
+			    contentType: false,
+				type: 'post',
+			    data: formData,
+				success: function(data) {
+					console.log(data);
+					window.location.replace('/#/')
+				}
+			});
 			
 			return false;
-			
 		});
 		
 	}
