@@ -52,7 +52,7 @@
 </script>
 
 
-<script type="text/x-handlebars" data-template-name="new">
+<script type="text/x-handlebars" data-template-name="projects/new">
 	<div id="overlay">
 		<div class="overlay-module">
 			{{#linkTo 'projects' classNames="close"}}Close{{/linkTo}}
@@ -96,7 +96,7 @@
 		<a class="brand" href="#">Design tool</a>
 		<nav>
 			{{#linkTo 'projects'}}Projects{{/linkTo}}
-			{{#linkTo 'new'}}Create project{{/linkTo}}
+			{{#linkTo 'projects.new'}}Create project{{/linkTo}}
 		</nav>
 
 	</div>
@@ -139,7 +139,7 @@
 <!-- Need a better way of doing this -->
 <script type="text/x-handlebars" data-template-name="projects">
 	{{partial 'projectsList'}}
-	{{outlet projects}}
+	{{outlet}}
 </script>
 
 <script src="js/libs/jquery-1.9.1.js"></script>

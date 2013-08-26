@@ -87,7 +87,6 @@ var ProjectController = function(ProjectModel, ImageModel, fs, async) {
 				return console.log("Project created");
 			});
 
-			// res.redirect('/#/projects');
 			res.json(200);
 		}
 		

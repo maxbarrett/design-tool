@@ -8,8 +8,7 @@ App.ProjectView = Ember.View.extend({
 				labelLinks : false
 			});
 		}		
-	}
-		
+	}		
 });
 
 
@@ -31,23 +30,21 @@ App.ProjectsView = Ember.View.extend({
 				}
 			}
 		}
-		
 		monthSplitter();
-		// setTimeout(monthSplitter,100);
-		
+		// setTimeout(monthSplitter,100);	
 	}
 });
 
 
-App.NewView = Ember.View.extend({
-	templateName: 'new',
+App.ProjectsNewView = Ember.View.extend({
+	templateName: 'projects.new',
 	didInsertElement: function() {
 		var fileselect = $('#fileselect'),
 			npf = this.$('#new-project-form'),
-			formData = new FormData();
+			formData = new FormData(),
+			that = this;
 
 		// http://html5doctor.com/drag-and-drop-to-server/
-
 		
 		fileselect.on('change', function(){
 			readfiles(this.files);
@@ -69,17 +66,13 @@ App.NewView = Ember.View.extend({
 			formData.append('title', title);
 			formData.append('category', category);
 
-			// jQuery runs anything that isn’t a string through 
-			// jQuery.param() to serialize the objects keys into 
-			// key1=a&key2=b etc; running FormData through doesn't work
-			// processData turns this off.
+			// processData:false to prevent FromData
+			// being serialised through jQuery.param().
 			
-			// unless contentType is specified as an option to jQuery.ajax(), 
-			// jQuery reverts to the default of "application/x-www-form-urlencoded". 
-			// By setting contentType to false we prevent this option from being set, 
-			// and the browser implementation of XMLHttpRequest (which jQuery uses 
-			// behind the scenes of course) will set the correct Content-Type header for us
-			
+			// contentType:false stops jQuery using its
+			// default: "application/x-www-form-urlencoded"
+			// Uses default browser Content-Type header 
+			// implementation instead
 			$.ajax('/api/projects/', {
 			    processData: false,
 			    contentType: false,
@@ -87,11 +80,10 @@ App.NewView = Ember.View.extend({
 			    data: formData,
 				success: function(data) {
 					console.log(data);
-					window.location.replace('/#/')
+					// window.location.assign('/#/projects/');
+					that.transitionToRoute('projects.index');
 				}
 			});
-			
-			return false;
 		});
 		
 	}
