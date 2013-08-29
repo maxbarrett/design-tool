@@ -82,6 +82,7 @@ App.ProjectsNewView = Ember.View.extend({
 					console.log(data);
 					// window.location.assign('/#/projects/');
 					// that.transitionToRoute('projects.index');
+					that.get('store');
 					that.get('target.router').transitionTo('projects.index');
 				}
 			});

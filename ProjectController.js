@@ -21,85 +21,87 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 	};
 	
 	
-	instance.create = function(req, res) {
+	instance.create = function(req, res) {			
+		async.waterfall(
+		    [
+		        // i. Save project (to create id for image), create image directory
+		        function(callback) {
 
-		var files = req.files.files ? req.files.files : null;
-		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-			monthNow = new Date().getMonth();
-		
-		var project = new ProjectModel({
-			title: req.body.title,
-			month: months[monthNow],
-			category: req.body.category,
-			author: req.body.author
-		});
+					var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+						monthNow = new Date().getMonth(),
+						files = req.files.files ? req.files.files : null;
+
+					var project = new ProjectModel({
+						title: req.body.title,
+						month: months[monthNow],
+						category: req.body.category,
+						author: req.body.author
+					});
+					
+					DT.projectController.save(project);
+					
+					if (files){
+						fs.mkdir('public/uploads/' + project._id, callback(null, files, project));
+					} else {
+						console.log('No images, dir not created');
+					}
+		        },
+
+		        // ii. Iterate depending on number of images
+		        function(files, project, callback) {
+					if (files && files.length === undefined) {
+						console.log('Only 1 image');
+						callback(null, files, project);
+					} else if (files.length > 1) {
+						console.log('More than 1 image');
+						for (var i in files) {		
+							callback(null, files[i], project);
+						}
+					}
+		        },
+
+		        // iii. Rename/move/save image, push id to project
+		        function(theFile, project, callback) {
 			
-		project.save(function (err) {
-			if (err) return errorHandler(err);
-			project.save();
-			return console.log("Project created");
-		});	
-			
-		var saveImgFile = function(theFile) {	
-			
-			var fileName = DT.imageController.rename(theFile.name),
-				tmpPath = theFile.path,
-				targetPath = 'public/uploads/' + project._id + '/' + fileName;
+					var fileName = DT.imageController.rename(theFile.name),
+						tmpPath = theFile.path,
+						targetPath = 'public/uploads/' + project._id + '/' + fileName;
+
+					// Move image
+					DT.imageController.move(tmpPath, targetPath);
+
+					// Create image record
+					var newImage = new ImageModel({
+						uri: 'uploads/' + project._id + '/' + fileName,
+						proj: project._id
+					});
+
+					// Save image
+					newImage.save(function (err) {
+						if (err) return errorHandler(err);
+						console.log('Image saved');
+					});
+
+					// push the new image _id to the project.image_ids property
+					project.image_ids.push(newImage);
+					
+					callback(null, project);
+
+		        },
 				
-			// Move image
-			DT.imageController.move(tmpPath, targetPath);
-
-			// fs.rename(tmpPath, targetPath, function(err) {
-			// 	if (err) return errorHandler(err);
-			// 	console.log('Image moved');
-			// });	
-	
-			// Create image record
-			var newImages = new ImageModel({
-				uri: 'uploads/' + project._id + '/' + fileName,
-				proj: project._id
-			});
-	
-			// Save image
-			newImages.save(function (err) {
-				if (err) return errorHandler(err);
-				console.log('Image saved');
-			});
-	
-			// push the new image _id to the project.image_ids property
-			project.image_ids.push(newImages);
-		} // saveImgFile
-		
-		
-		var mkdirCallback = function(){
-			if (files && files.length === undefined) {
-				console.log('Only 1 image');
-				saveImgFile(files);
-			} else if (files.length > 1) {
-				console.log('More than 1 image');
-				for (var i in files) {		
-					saveImgFile(files[i]);
+				// iv. Save project again
+				function(project, callback){
+					DT.projectController.save(project);
+					// res.json(200);
+					return res.send({'project':project});
 				}
-			}
+		    ],
 
-			project.save(function (err) {
-				if (err) return errorHandler(err);
-				project.save();
-				return console.log("Project created");
-			});
-
-			res.json(200);
-		}
-		
-		if (files){
-			fs.mkdir('public/uploads/' + project._id, mkdirCallback);
-		} else {
-			console.log('no images to upload');
-		}
-	
-		//	console.log('Project not saved : Image and title required');
-		//	res.redirect('/#/projects');
-
+		    // the bonus final callback function
+		    function(err) {
+		        if (err) return errorHandler(err);
+		    }
+		);
 	}; // create
 		
 	
@@ -111,11 +113,8 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 				ImageModel.find( {proj: req.params.id}, {},  {sort: {uri:1}}, function (err, images) {
 					if (err) return errorHandler(err);
 					if (images){
-
 						var resData = { 'project':project, 'images':images };
 						res.send(resData);
-
-						//	next(images, project);
 					} else { 
 						console.log('No images');
 						res.send({status:'error'});
@@ -142,11 +141,7 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 			project.month 		= months[monthNow];
 			project.publishedAt = new Date();
 
-			project.save(function (err) {
-				if (err) return errorHandler(err);
-				return res.send({'project' : project});
-			});
-
+			DT.projectController.save(project);
 		});
 	};
 	
@@ -166,6 +161,14 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 				res.json(200);
 			}
 
+		});
+	};
+	
+	
+	instance.save = function(project){
+		project.save(function (err) {
+			if (err) return errorHandler(err);
+			console.log("Project saved");
 		});
 	};
 

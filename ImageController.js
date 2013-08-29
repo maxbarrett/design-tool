@@ -63,15 +63,10 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 						// add new image id to project image_ids array
 						project.image_ids.push(image.id);
 						project.publishedAt = new Date();
-		
-						// callback(null, project)
+
 						// save the project
-						project.save(function (err) {
-							if (err) return errorHandler(err);
-							console.log("Project updated");
-							//send the response to client
-							return res.send({'image':image},200);
-						});
+						DT.projectController.save(project);
+						return res.send({'project':project});
 					});
 				}
 		    ],
@@ -97,8 +92,15 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 	instance.del = function (req, res){
 		ImageModel.findById(req.params.id, function (err, image) {
 			if (image) {
-				image.remove(function (err) {});
-				fs.remove('public/' + image.uri, function (err) {});
+				image.remove(function (err) {
+					if (err) return errorHandler(err);
+					console.log('Image db record deleted');
+				});
+
+				fs.remove('public/' + image.uri, function (err) {
+					if (err) return errorHandler(err);
+					console.log('Image file deleted');
+				});
 
 				ProjectModel.findById(image.proj, function (err, project) {
 					// remove ref in project
@@ -108,13 +110,13 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 						imgs.splice(i, 1);
 					}
 					project.image_ids = imgs;
-
+					console.log('Image id removed from project');
 					// Save project
-					project.save(function (err) {});
+					DT.projectController.save(project);
 					return res.send(204);
 				});
 			} else {
-				console.log('no image');
+				console.log('No image to delete');
 			}
 		});
 	};

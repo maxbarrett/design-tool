@@ -13,6 +13,7 @@ App.ProjectController = Ember.ObjectController.extend({
 		// update the publish date now that we have finished editing
 		// this.set('publishedAt', new Date());
 		this.get('store').commit();
+		this.get('store');
 	},
 
 	
@@ -49,12 +50,7 @@ App.ProjectController = Ember.ObjectController.extend({
 
 
 App.ProjectsNewController = Ember.ObjectController.extend({
-	
-	// newRecord: function() {
-	// 	console.log('new record');
-	// 	this.set('content', App.Project.createRecord({title: ''}));
-	// },
-	
+
 	save: function() {
 		// this.get('store').commit();
 		console.log('save');
