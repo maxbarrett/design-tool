@@ -1,4 +1,7 @@
-var ImageController = function(ProjectModel, ImageModel, fs, async) {
+var	fs = require('fs-extra'),
+	async = require('async');
+
+var ImageController = function(ProjectModel, ImageModel, DT) {
 	var instance = this;
 	
 	instance.readAll = function (req, res){
@@ -12,16 +15,17 @@ var ImageController = function(ProjectModel, ImageModel, fs, async) {
 	
 	instance.create = function (req, res) {
 		console.log("POST new image ");
-		var filename = req.body.image.uri,
+
+		var fileName = DT.imageController.rename(req.body.image.uri),
 			base64Data = req.body.image.imgdata,	
 			matches = base64Data.split('base64,'),
 			data = matches[1],
 			buffer = new Buffer(data, 'base64'),
-			targetPath = 'public/uploads/' + req.body.image.proj + '/' + filename;
+			targetPath = 'public/uploads/' + req.body.image.proj + '/' + fileName;
 		
 		// Create image record
 		var image = new ImageModel({
-			uri: 'uploads/' + req.body.image.proj + '/' + filename,
+			uri: 'uploads/' + req.body.image.proj + '/' + fileName,
 			proj: req.body.image.proj
 		});
 
@@ -29,27 +33,24 @@ var ImageController = function(ProjectModel, ImageModel, fs, async) {
 		    [
 		        // i. write file to root
 		        function(callback) {
-					fs.writeFile(filename, buffer, function(err){
+					fs.writeFile(fileName, buffer, function(err){
 						if (err) return errorHandler(err);
-						console.log("Image " + filename + ' uploaded');
+						console.log("Image " + fileName + ' uploaded');
 						callback(null);
 					});
 		        },
 
 		        // ii. move it into the uploads folder
 		        function(callback) {
-		            fs.rename(filename, targetPath, function(err) {
-						if (err) return errorHandler(err);
-						console.log('Image renamed & saved');
-		                callback(null);
-		            });
+					DT.imageController.move(fileName, targetPath);
+					callback(null);
 		        },
 
 		        // iii. save to DB
 		        function(callback) {
 					image.save(function (err) {
 						if (err) return errorHandler(err);
-						console.log("Image saved in DB");
+						console.log("Image saved");
 						callback(null);
 					});
 		        },
@@ -115,6 +116,25 @@ var ImageController = function(ProjectModel, ImageModel, fs, async) {
 			} else {
 				console.log('no image');
 			}
+		});
+	};
+	
+	
+	instance.rename = function (name){
+		var concatFileName = name.replace(/\s/g, '+'),
+			dotPosition = concatFileName.lastIndexOf('.'),
+			date = new Date().getTime(),
+			newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
+			
+		console.log('Image renamed');
+		return newFileName;
+	};
+	
+	
+	instance.move = function (tmpPath, targetPath){
+		fs.rename(tmpPath, targetPath, function(err) {
+			if (err) return errorHandler(err);
+			console.log('Image moved');
 		});
 	};
 	

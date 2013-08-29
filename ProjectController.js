@@ -1,4 +1,7 @@
-var ProjectController = function(ProjectModel, ImageModel, fs, async) {
+var	fs = require('fs-extra'),
+	async = require('async');
+
+var ProjectController = function(ProjectModel, ImageModel, DT) {
 	var instance = this;
 
 	instance.readAll = function(req, res) {
@@ -21,8 +24,6 @@ var ProjectController = function(ProjectModel, ImageModel, fs, async) {
 	instance.create = function(req, res) {
 
 		var files = req.files.files ? req.files.files : null;
-		console.log(files);
-
 		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			monthNow = new Date().getMonth();
 		
@@ -40,22 +41,22 @@ var ProjectController = function(ProjectModel, ImageModel, fs, async) {
 		});	
 			
 		var saveImgFile = function(theFile) {	
-			var concatFileName = theFile.name.replace(/\s/g, '+'),
-				dotPosition = concatFileName.lastIndexOf('.'),
-				date = new Date().getTime(),
-				newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join(''),
+			
+			var fileName = DT.imageController.rename(theFile.name),
 				tmpPath = theFile.path,
-				targetPath = 'public/uploads/' + project._id + '/' + newFileName;
-	
-			// Rename image
-			fs.rename(tmpPath, targetPath, function(err) {
-				if (err) return errorHandler(err);
-				console.log('Image renamed');
-			});	
+				targetPath = 'public/uploads/' + project._id + '/' + fileName;
+				
+			// Move image
+			DT.imageController.move(tmpPath, targetPath);
+
+			// fs.rename(tmpPath, targetPath, function(err) {
+			// 	if (err) return errorHandler(err);
+			// 	console.log('Image moved');
+			// });	
 	
 			// Create image record
 			var newImages = new ImageModel({
-				uri: 'uploads/' + project._id + '/' + newFileName,
+				uri: 'uploads/' + project._id + '/' + fileName,
 				proj: project._id
 			});
 	
@@ -167,6 +168,7 @@ var ProjectController = function(ProjectModel, ImageModel, fs, async) {
 
 		});
 	};
+
 	
 	// Error handler
 	var errorHandler = function(err){

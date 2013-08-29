@@ -1,13 +1,15 @@
-var application_root = __dirname,
+var DT = {},
+	application_root = __dirname,
     express = require("express"),
 	fs = require('fs-extra'),
 	async = require('async'),
     path = require("path"),
     mongoose = require('mongoose'),
+	Schema = mongoose.Schema,
 	ProjectController = require('./ProjectController.js').ProjectController,
-	ImageController = require('./ImageController.js').ImageController;
-
-var app = express();
+	ImageController = require('./ImageController.js').ImageController,
+	auth = express.basicAuth('user', 'password'),
+	app = express();
 
 // Express Config
 app.configure(function () {
@@ -20,8 +22,6 @@ app.configure(function () {
 	app.use(express.static(path.join(application_root, "public")));
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
-
-Schema = mongoose.Schema;
 
 var ProjectSchema = new Schema({ 
 	title: 			String,
@@ -42,9 +42,6 @@ var ProjectModel = mongoose.model('Project', ProjectSchema);
 var ImageModel = mongoose.model('Image', ImageSchema);
 
 
-// Authenticator
-auth = express.basicAuth('user', 'password');
-
 // Homepage route
 app.get('/', auth, function(req, res) {
 	// console.log(auth);
@@ -58,8 +55,8 @@ mongoose.connect('mongodb://192.168.33.10:27017/test', function(err){
 	console.log('Connected to mongodb://192.168.33.10:27017/test successfully!');
 });
 
-var projectController = new ProjectController(ProjectModel, ImageModel, fs, async);
-var imageController = new ImageController(ProjectModel, ImageModel, fs, async);
+DT.projectController = new ProjectController(ProjectModel, ImageModel, DT);
+DT.imageController = new ImageController(ProjectModel, ImageModel, DT);
 
 // // Delete all projects
 // var tt = ProjectModel.find(function(err,doc){
@@ -84,19 +81,19 @@ app.get('/api', auth, function (req, res) {
 // REST API FOR PROJECTS
 
 // READ a List of Projects
-app.get('/api/projects', auth, projectController.readAll);
+app.get('/api/projects', auth, DT.projectController.readAll);
 
 // CREATE a project
-app.post('/api/projects', auth, projectController.create);
+app.post('/api/projects', auth, DT.projectController.create);
 
 // READ a Single Project by ID
-app.get('/api/projects/:id', auth, projectController.readOne);
+app.get('/api/projects/:id', auth, DT.projectController.readOne);
 
 // UPDATE a Single Project by ID
-app.put('/api/projects/:id', auth, projectController.update);
+app.put('/api/projects/:id', auth, DT.projectController.update);
 
 // DELETE a Single Project by ID
-app.delete('/api/projects/:id', auth, projectController.del);
+app.delete('/api/projects/:id', auth, DT.projectController.del);
 
 
 
@@ -104,16 +101,16 @@ app.delete('/api/projects/:id', auth, projectController.del);
 // REST API FOR IMAGES
 
 // READ a List of Images
-app.get('/api/images', auth, imageController.readAll);
+app.get('/api/images', auth, DT.imageController.readAll);
 
 // Add an image to existing project
-app.post('/api/images', auth, imageController.create);
+app.post('/api/images', auth, DT.imageController.create);
 
 // READ a Single Image by ID
-app.get('/api/images/:id', auth, imageController.readOne);
+app.get('/api/images/:id', auth, DT.imageController.readOne);
 
 // DELETE a Single Image by ID
-app.delete('/api/images/:id', auth, imageController.del);
+app.delete('/api/images/:id', auth, DT.imageController.del);
 
 
 

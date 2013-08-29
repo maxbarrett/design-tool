@@ -136,16 +136,16 @@ App.uploader = {
 	
 	FileUploader: function(f, images, projId){
 
-		var concatFileName = f.name.replace(/ /g, '+'),
-			dotPosition = concatFileName.lastIndexOf('.'),
-			date = new Date().getTime(),
-			newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
+		// var concatFileName = f.name.replace(/ /g, '+'),
+		// 	dotPosition = concatFileName.lastIndexOf('.'),
+		// 	date = new Date().getTime(),
+		// 	newFileName = [concatFileName.slice(0, dotPosition), '-' + date, concatFileName.slice(dotPosition)].join('');
 
 		var reader = new FileReader();
 
 		reader.onload = function(e) {
 			var fileToUpload = e.srcElement.result;
-			images.createRecord({ 	uri: newFileName, 
+			images.createRecord({ 	uri: f.name, 
 									imgdata: fileToUpload,
 									proj: projId
 			});
