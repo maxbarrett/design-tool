@@ -42,7 +42,7 @@ App.ProjectsNewView = Ember.View.extend({
 		var fileselect = $('#fileselect'),
 			npf = this.$('#new-project-form'),
 			formData = new FormData(),
-			that = this;
+			that = this.get('controller');
 
 		// http://html5doctor.com/drag-and-drop-to-server/
 		
@@ -81,8 +81,8 @@ App.ProjectsNewView = Ember.View.extend({
 				success: function(data) {
 					console.log(data);
 					// window.location.assign('/#/projects/');
-					// this.get('controller') ??
-					that.transitionToRoute('projects.index');
+					// that.transitionToRoute('projects.index');
+					that.get('target.router').transitionTo('projects.index');
 				}
 			});
 		});
