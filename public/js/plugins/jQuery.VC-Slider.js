@@ -68,13 +68,15 @@
 			
 			// Creates status bar
 			if(plugin.settings.showStatus){
-				$('.img-nav').append("<span class='vcslider-status'></span>");
+				if( !$('.vcslider-status').length ){
+					$('.img-nav').append("<span class='vcslider-status'></span>");
+				}
 				slidesStatus = $('.img-nav').children(".vcslider-status");
 				updateStatus();
 			}
 
 			// Creates previous & next markup
-			if (plugin.settings.navigation) {
+			if (plugin.settings.navigation && !$('.vcslider-previous').length) {
 				// $container.append("<a class='vcslider-previous'>" + plugin.settings.navPrevious + "</a>");
 				// $container.append("<a class='vcslider-next'>" + plugin.settings.navNext + "</a>");
 				$('.img-nav').prepend("<a class='vcslider-previous'>" + plugin.settings.navPrevious + "</a>");

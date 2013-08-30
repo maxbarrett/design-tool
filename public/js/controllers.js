@@ -13,7 +13,9 @@ App.ProjectController = Ember.ObjectController.extend({
 		// update the publish date now that we have finished editing
 		// this.set('publishedAt', new Date());
 		this.get('store').commit();
-		this.get('store');
+		var myplugin = new $.vcSlider($('#vcslider-home'), { 
+			labelLinks : false
+		});
 	},
 
 	
