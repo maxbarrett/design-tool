@@ -131,9 +131,10 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 	instance.update = function (req, res){
 
 		ProjectModel.findById(req.params.id, function (err, project) {
+			if (err) return errorHandler(err);
 			var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 				monthNow = new Date().getMonth(),
-				thisProject = req.body.project;
+				thisProject = req.body.project || req.body;
 
 			project.title 		= thisProject.title;
 			project.category 	= thisProject.category;
@@ -142,6 +143,7 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 			project.publishedAt = new Date();
 
 			DT.projectController.save(project);
+			return res.send({'project':project});
 		});
 	};
 	

@@ -2,10 +2,7 @@ App.ProjectController = Ember.ObjectController.extend({
 	isEditing: false,
 	
 	edit: function() {
-		this.set('isEditing', true);
-		
-		// curses
-		//setTimeout(App.uploader.DragDrop, 100);			
+		this.set('isEditing', true);			
 	},
 
 	doneEditing: function (){
@@ -48,23 +45,6 @@ App.ProjectController = Ember.ObjectController.extend({
 			this.get('store').commit();
 		}
     }
-});
-
-
-App.ProjectsNewController = Ember.ObjectController.extend({
-
-	save: function() {
-		// this.get('store').commit();
-		console.log('save');
-		// this.get('target.router').transitionTo('index');	
-	},
-	
-	// bindImgs: function(e){
-	// 	var project = this.get('model'),
-	// 		images = project.get('images');
-	// 	App.uploader.FileSelectHandler(e, images);		
-	// }
-	
 });
 
 

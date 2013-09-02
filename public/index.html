@@ -30,11 +30,10 @@
 		{{#if isEditing}}		
 			<div id="overlay">
 				<div class="overlay-module">
-					<form {{action save on="submit"}} enctype="multipart/form-data" id="existing-project-form">
+					<form enctype="multipart/form-data" id="existing-project-form">
 						{{view App.InputField valueBinding="id" type="hidden" id="projid"}}
-						{{partial 'projectFields'}}
-						{{view App.DropTarget id="filedrag"}}<br />		
-						<button {{action 'doneEditing'}}>Done</button>
+						{{partial 'projectFields'}}		
+						<button type="submit">Done</button>
 						<div id="messages"></div>
 					</form>
 				</div>
@@ -87,8 +86,9 @@
 <script type="text/x-handlebars" data-template-name="_projectFields">
 	{{view App.TextField id="title" valueBinding="title" placeholder="New project title" name="title"}}<br />
 	{{!view App.TextField id="author" valueBinding="author" placeholder="Author"}}
-	{{view Ember.Select id="category" contentBinding="App.categories" optionValuePath="content.val" optionLabelPath="content.cat"  valueBinding="category" name="category"}}<br />
+	{{view Ember.Select id="cats" contentBinding="App.categories" optionValuePath="content.val" optionLabelPath="content.cat"  valueBinding="category" name="category"}}<br />
 	{{view App.FileField id="fileselect" name="fileselect"}}<br />
+	{{view App.DropTarget id="filedrag"}}<br />
 </script>
 
 <script type="text/x-handlebars" data-template-name="_projectsList">
