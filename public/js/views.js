@@ -7,7 +7,7 @@ App.ProjectView = Ember.View.extend({
 			var myplugin = new $.vcSlider($('#vcslider-home'), { 
 				labelLinks : false
 			});
-		}		
+		}	
 	}		
 });
 
@@ -39,32 +39,49 @@ App.ProjectsView = Ember.View.extend({
 App.ProjectsNewView = Ember.View.extend({
 	templateName: 'projects.new',
 	didInsertElement: function() {
+	
 		var fileselect = $('#fileselect'),
+			dragArea = $('#filedrag'),
 			npf = this.$('#new-project-form'),
 			formData = new FormData(),
 			that = this.get('controller');
 
-		// http://html5doctor.com/drag-and-drop-to-server/
+		function processFiles (e){
+				e.stopPropagation();
+				e.preventDefault();
+				
+				var files = e.target.files || e.dataTransfer.files;
+				
+				App.uploader.FileSelectHandler(e);
+				readfiles(files);
+				return false;
+		}
 		
-		fileselect.on('change', function(){
-			readfiles(this.files);
-		});
-
 		function readfiles(files) {
 			for (var i = 0; i < files.length; i++) {
 				formData.append('files', files[i]);
 			}
 		}
+
+		// http://html5doctor.com/drag-and-drop-to-server/
+		fileselect.on('change', function(e){
+			App.uploader.FileSelectHandler(e);
+			readfiles(this.files);
+		});
+
+		dragArea.on("dragover", App.uploader.FileDragHover);
+		dragArea.on("dragleave", App.uploader.FileDragHover);
+		dragArea.on("drop", processFiles);
+
+
+
 		
 		npf.on('submit', function(e){
 			e.stopPropagation();
 			e.preventDefault();
 
-			var title = $('#title').val(),
-				category = $('#cats').val();
-			
-			formData.append('title', title);
-			formData.append('category', category);
+			formData.append('title', $('#title').val());
+			formData.append('category', $('#cats').val());
 
 			// processData:false to prevent FromData
 			// being serialised through jQuery.param().
@@ -79,11 +96,8 @@ App.ProjectsNewView = Ember.View.extend({
 				type: 'post',
 			    data: formData,
 				success: function(data) {
-					console.log(data);
-					// window.location.assign('/#/projects/');
-					// that.transitionToRoute('projects.index');
-					that.get('store');
 					that.get('target.router').transitionTo('projects.index');
+					App.Project.find();
 				}
 			});
 		});

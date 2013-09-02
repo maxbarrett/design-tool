@@ -57,8 +57,9 @@ DragNDrop.cancel = function(e) {
     return false;
 };
 
-DragNDrop.Droppable = Ember.Mixin.create({
-    dragEnter: DragNDrop.cancel,
+// App.Box = Ember.View.extend(DragNDrop.Dragable);
+App.DropTarget = Ember.View.extend({
+	dragEnter: DragNDrop.cancel,
     dragOver: DragNDrop.cancel,
     drop: function(evt) {
         evt.preventDefault();
@@ -67,9 +68,6 @@ DragNDrop.Droppable = Ember.Mixin.create({
         return false;
     }
 });
-
-// App.Box = Ember.View.extend(DragNDrop.Dragable);
-App.DropTarget = Ember.View.extend(DragNDrop.Droppable);
 
 
 // Create hidden input
@@ -102,34 +100,38 @@ App.uploader = {
 	// },
 	
 	// output information
-	Output: function(msg) {
-		var m = $("#messages");
-		m.append(msg);
-	},
-	
-	// file drag hover
-	// FileDragHover: function(e) {
-	// 	e.stopPropagation();
-	// 	e.preventDefault();
-	// 	e.target.className = (e.type == "dragover" ? "hover" : "");
+	// Output: function(msg) {
+	// 	var m = $("#messages");
+	// 	m.append(msg);
 	// },
 	
+	// file drag hover
+	FileDragHover: function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		// add hover class when necessary
+		e.target.className = (e.type == "dragover" ? "hover" : "");
+	},
+	
 	// output file information
-	ParseFile: function(file) {
-		App.uploader.Output("<p>" + file.name + " " + Math.ceil(file.size / 1000) + "KB</p>");
+	listFile: function(file) {
+		var list = $("#messages"),
+			msg = "<p>" + file.name + " " + Math.ceil(file.size / 1000) + "KB</p>";
+			
+		list.append(msg);
 	},
 	
 	// file selection
 	FileSelectHandler: function(e, images, projId) {
 		// cancel event and hover styling
-		// App.uploader.FileDragHover(e);
+		App.uploader.FileDragHover(e);
 
 		// fetch FileList object
 		var files = e.target.files || e.dataTransfer.files;
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
-			App.uploader.ParseFile(f);
-			App.uploader.FileUploader(f, images, projId);
+			App.uploader.listFile(f);
+			// App.uploader.FileUploader(f, images, projId);
 		}
 	},
 	

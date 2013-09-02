@@ -2,7 +2,6 @@ App.Router.map(function() {
 	this.resource('projects', function(){
 		this.route('new');
 	});
-	//  this.route('new');
 
 	this.resource('project', { path: ':project_id' });
 	
@@ -22,9 +21,7 @@ App.Router.map(function() {
 
 
 App.ProjectsNewRoute = Ember.Route.extend({
-	// setupController: function(controller) {
-	// 	controller.newRecord();
-	// }
+	// not needed
 });
 
 
