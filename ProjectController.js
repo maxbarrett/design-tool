@@ -129,7 +129,9 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 	
 	
 	instance.update = function (req, res){
-
+		
+		// TODO: Allow for new image uploads
+		// Like DT.imageController.create() 
 		ProjectModel.findById(req.params.id, function (err, project) {
 			if (err) return errorHandler(err);
 			var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],

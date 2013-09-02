@@ -182,9 +182,8 @@ App.existingProject = function(form, fileselect, dragArea, controller, id){
 			type: 'put',
 		    data: formData,
 			success: function(data) {
-				// Need to transition here somehow
-				// controller.get('target.router').transitionTo('projects.index');
-				// App.Project.find();
+				controller.get('target.router').transitionTo('projects.index');
+				App.Project.find();
 			}
 		});
 	});

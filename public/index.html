@@ -27,8 +27,8 @@
 			</div>
 		</div>
 				
-		{{#if isEditing}}		
-			<div id="overlay">
+			
+			<div id="overlay" style="display:none;">
 				<div class="overlay-module">
 					<form enctype="multipart/form-data" id="existing-project-form">
 						{{view App.InputField valueBinding="id" type="hidden" id="projid"}}
@@ -38,7 +38,7 @@
 					</form>
 				</div>
 			</div>
-		{{/if}}
+
 
 		<!--<button class="delete" {{action 'destroyRecord'}}>Delete project</button>-->
 		

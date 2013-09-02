@@ -2,7 +2,9 @@ App.ProjectController = Ember.ObjectController.extend({
 	isEditing: false,
 	
 	edit: function() {
-		this.set('isEditing', true);			
+		this.set('isEditing', true);
+		$('#overlay').show();
+		$('.overlay-module').css({margin:'90px auto 0 auto'});			
 	},
 
 	doneEditing: function (){

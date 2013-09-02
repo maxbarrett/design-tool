@@ -7,7 +7,16 @@ App.ProjectView = Ember.View.extend({
 			var myplugin = new $.vcSlider($('#vcslider-home'), { 
 				labelLinks : false
 			});
-		}	
+		}
+	
+		var form = this.$('#existing-project-form'),
+			fileselect = $('#fileselect'),
+			dragArea = $('#filedrag'),
+			controller = this.get('controller'),
+			id = $('#projid').val();
+	
+		App.existingProject(form, fileselect, dragArea, controller, id);
+		
 	}		
 });
 
