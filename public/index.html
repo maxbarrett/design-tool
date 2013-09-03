@@ -34,11 +34,10 @@
 					{{partial 'projectFields'}}		
 					<button type="submit">Done</button>
 					<div id="messages"></div>
+					<button class="delete" {{action 'destroyRecord'}}>Delete project</button>
 				</form>
 			</div>
 		</div>
-
-		<!--<button class="delete" {{action 'destroyRecord'}}>Delete project</button>-->
 		
 		<footer>
 			{{#linkTo 'projects' classNames="back"}}Back{{/linkTo}}
@@ -116,8 +115,6 @@
 </div>
 </script>
 
-
-<!-- Need a better way of doing this -->
 <script type="text/x-handlebars" data-template-name="projects">
 	{{partial 'projectsList'}}
 	{{outlet}}
