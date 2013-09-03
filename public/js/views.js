@@ -10,8 +10,8 @@ App.ProjectView = Ember.View.extend({
 		}
 	
 		var form = this.$('#existing-project-form'),
-			fileselect = $('#fileselect'),
-			dragArea = $('#filedrag'),
+			fileselect = this.$('#fileselect'),
+			dragArea = this.$('#filedrag'),
 			controller = this.get('controller'),
 			id = $('#projid').val();
 	
@@ -50,8 +50,8 @@ App.ProjectsNewView = Ember.View.extend({
 	didInsertElement: function() {
 	
 		var form = this.$('#new-project-form'),
-			fileselect = $('#fileselect'),
-			dragArea = $('#filedrag'),
+			fileselect = this.$('#fileselect'),
+			dragArea = this.$('#filedrag'),
 			controller = this.get('controller');
 	
 		App.newProject(form, fileselect, dragArea, controller);
