@@ -1,5 +1,5 @@
 body { font-family:"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; color:#2c2c2c; }
-.wrapper { width:1190px; margin:0 auto; overflow:hidden; padding:0; }
+.wrapper { max-width:1190px; margin:0 auto; overflow:hidden; padding:0; }
 h1, h2, h3, h4 { font-weight:normal; line-height:1.4em; margin:0; }
 ul { padding:0; margin:0; }
 h2 { font-size:20px; }

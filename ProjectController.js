@@ -21,87 +21,30 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 	};
 	
 	
-	instance.create = function(req, res) {			
-		async.waterfall(
-		    [
-		        // i. Save project (to create id for image), create image directory
-		        function(callback) {
+	instance.create = function(req, res) {
+		
+		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			monthNow = new Date().getMonth(),
+			files = req.files.files ? req.files.files : null;
 
-					var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-						monthNow = new Date().getMonth(),
-						files = req.files.files ? req.files.files : null;
-
-					var project = new ProjectModel({
-						title: req.body.title,
-						month: months[monthNow],
-						category: req.body.category,
-						author: req.body.author
-					});
-					
-					DT.projectController.save(project);
-					
-					if (files){
-						fs.mkdir('public/uploads/' + project._id, callback(null, files, project));
-					} else {
-						console.log('No images, dir not created');
-					}
-		        },
-
-		        // ii. Iterate depending on number of images
-		        function(files, project, callback) {
-					if (files && files.length === undefined) {
-						console.log('Only 1 image');
-						callback(null, files, project);
-					} else if (files.length > 1) {
-						console.log('More than 1 image');
-						for (var i in files) {		
-							callback(null, files[i], project);
-						}
-					}
-		        },
-
-		        // iii. Rename/move/save image, push id to project
-		        function(theFile, project, callback) {
-			
-					var fileName = DT.imageController.rename(theFile.name),
-						tmpPath = theFile.path,
-						targetPath = 'public/uploads/' + project._id + '/' + fileName;
-
-					// Move image
-					DT.imageController.move(tmpPath, targetPath);
-
-					// Create image record
-					var newImage = new ImageModel({
-						uri: 'uploads/' + project._id + '/' + fileName,
-						proj: project._id
-					});
-
-					// Save image
-					newImage.save(function (err) {
-						if (err) return errorHandler(err);
-						console.log('Image saved');
-					});
-
-					// push the new image _id to the project.image_ids property
-					project.image_ids.push(newImage);
-					
-					callback(null, project);
-
-		        },
-				
-				// iv. Save project again
-				function(project, callback){
-					DT.projectController.save(project);
-					// res.json(200);
-					return res.send({'project':project});
-				}
-		    ],
-
-		    // the bonus final callback function
-		    function(err) {
-		        if (err) return errorHandler(err);
-		    }
-		);
+		var project = new ProjectModel({
+			title: req.body.title,
+			month: months[monthNow],
+			category: req.body.category,
+			author: req.body.author
+		});
+		
+		// Save project
+		DT.projectController.save(project);
+		
+		// Create project images folder (whether there are or not)
+		fs.mkdir('public/uploads/' + project._id, function(){
+			if (files){
+				DT.projectController.processImages(files, project);
+			}
+			return res.send({'project':project});
+		});
+		
 	}; // create
 		
 	
@@ -130,19 +73,22 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 	
 	instance.update = function (req, res){
 		
-		// TODO: Allow for new image uploads
-		// Like DT.imageController.create() 
 		ProjectModel.findById(req.params.id, function (err, project) {
 			if (err) return errorHandler(err);
 			var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 				monthNow = new Date().getMonth(),
-				thisProject = req.body.project || req.body;
+				thisProject = req.body.project || req.body,
+				files = req.files.files ? req.files.files : null;
 
 			project.title 		= thisProject.title;
 			project.category 	= thisProject.category;
 			project.author 		= thisProject.author;
 			project.month 		= months[monthNow];
 			project.publishedAt = new Date();
+
+			if (files){
+				DT.projectController.processImages(files, project);
+			}
 
 			DT.projectController.save(project);
 			return res.send({'project':project});
@@ -176,6 +122,39 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 		});
 	};
 
+
+	instance.processImages = function(files, project){
+		function operateImgs(theFile, project){
+			// Rename image
+			var fileName = DT.imageController.rename(theFile.name),
+				tmpPath = theFile.path,
+				targetPath = 'public/uploads/' + project._id + '/' + fileName;
+
+			// Move image
+			DT.imageController.move(tmpPath, targetPath);
+
+			// Save image
+			DT.imageController.save(project, fileName);
+
+			// Save project
+			DT.projectController.save(project);
+		}
+
+		// Iterate depending on number of images
+		if (files && files.length === undefined) {
+			
+			console.log('Only 1 image');
+			operateImgs(files, project);
+			
+		} else if (files.length > 1) {
+			
+			console.log('More than 1 image');
+			for (var i in files) {		
+				operateImgs(files[i], project);
+			}
+			
+		}	
+	};
 	
 	// Error handler
 	var errorHandler = function(err){

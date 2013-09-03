@@ -104,7 +104,7 @@ app.delete('/api/projects/:id', auth, DT.projectController.del);
 app.get('/api/images', auth, DT.imageController.readAll);
 
 // Add an image to existing project
-app.post('/api/images', auth, DT.imageController.create);
+app.post('/api/images', auth, DT.imageController.create); // Not required/implemented
 
 // READ a Single Image by ID
 app.get('/api/images/:id', auth, DT.imageController.readOne);

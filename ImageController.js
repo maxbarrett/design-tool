@@ -14,68 +14,8 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 	
 	
 	instance.create = function (req, res) {
-		console.log("POST new image ");
-
-		var fileName = DT.imageController.rename(req.body.image.uri),
-			base64Data = req.body.image.imgdata,	
-			matches = base64Data.split('base64,'),
-			data = matches[1],
-			buffer = new Buffer(data, 'base64'),
-			targetPath = 'public/uploads/' + req.body.image.proj + '/' + fileName;
-		
-		// Create image record
-		var image = new ImageModel({
-			uri: 'uploads/' + req.body.image.proj + '/' + fileName,
-			proj: req.body.image.proj
-		});
-
-		async.waterfall(
-		    [
-		        // i. write file to root
-		        function(callback) {
-					fs.writeFile(fileName, buffer, function(err){
-						if (err) return errorHandler(err);
-						console.log("Image " + fileName + ' uploaded');
-						callback(null);
-					});
-		        },
-
-		        // ii. move it into the uploads folder
-		        function(callback) {
-					DT.imageController.move(fileName, targetPath);
-					callback(null);
-		        },
-
-		        // iii. save to DB
-		        function(callback) {
-					image.save(function (err) {
-						if (err) return errorHandler(err);
-						console.log("Image saved");
-						callback(null);
-					});
-		        },
-				
-				// iv. find the project it's in
-				function(callback){
-					ProjectModel.findById(req.body.image.proj, function (err, project) {
-						if (err) return errorHandler(err);
-						
-						// add new image id to project image_ids array
-						project.image_ids.push(image.id);
-						project.publishedAt = new Date();
-
-						// save the project
-						DT.projectController.save(project);
-						return res.send({'project':project});
-					});
-				}
-		    ],
-
-		    // the bonus final callback function
-		    function(err, status) {
-		        console.log(status);
-		    }
-		);		
+		// Not required, all images are added
+		// as part of a project 'POST' or 'PUT'.
 	};
 	
 	
@@ -138,6 +78,24 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 			if (err) return errorHandler(err);
 			console.log('Image moved');
 		});
+	};
+
+	
+	instance.save = function (project, fileName){
+		// Create image record
+		var image = new ImageModel({
+			uri: 'uploads/' + project._id + '/' + fileName,
+			proj: project._id
+		});
+		
+		// Save image
+		image.save(function (err) {
+			if (err) return errorHandler(err);
+			console.log('Image saved');
+		});
+		
+		// push the new image _id to the project.image_ids property
+		project.image_ids.push(image);
 	};
 	
 	
