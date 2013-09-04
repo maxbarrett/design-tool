@@ -1,5 +1,6 @@
 var	fs = require('fs-extra'),
-	async = require('async');
+	async = require('async'),
+	im = require('imagemagick');
 
 var ProjectController = function(ProjectModel, ImageModel, DT) {
 	var instance = this;
@@ -39,6 +40,17 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 		// Create project images folder (whether there are or not)
 		fs.mkdir('public/uploads/' + project._id, function(){
 			if (req.files){
+				
+				// console.log(req.files.files.path)
+				// im.resize({
+				//   srcPath: req.files.files.path,
+				//   dstPath: 'public/uploads/' + project._id + 'thumb.jpg',
+				//   width:   180
+				// }, function(err, stdout, stderr){
+				//   if (err) throw err;
+				//   console.log('resized first image to 180px wide');
+				// });
+				
 				DT.projectController.processImages(req.files.files, project);
 			}
 			return res.send({'project':project});
