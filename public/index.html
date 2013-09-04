@@ -21,7 +21,7 @@
 						<a title="Delete this image" href="#" class="deleteImg" {{action 'deleteImg' image}}>Delete img</a>
 					</li>
 					{{else}}
-					<li>No images</li>
+					<li class="no-imgs"><br><br><br><br><br><br>This project has no images<br><br><br><br><br><br></li>
 					{{/each}}
 				</ul>
 			</div>
@@ -34,7 +34,7 @@
 					{{partial 'projectFields'}}		
 					<button type="submit">Done</button>
 					<div id="messages"></div>
-					<button class="delete" {{action 'destroyRecord'}}>Delete project</button>
+					<p class="delete"><a {{action 'destroyRecord'}} href="#">Delete this project</a></p>
 				</form>
 			</div>
 		</div>

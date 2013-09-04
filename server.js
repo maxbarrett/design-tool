@@ -1,8 +1,6 @@
 var DT = {},
 	application_root = __dirname,
     express = require("express"),
-	fs = require('fs-extra'),
-	async = require('async'),
     path = require("path"),
     mongoose = require('mongoose'),
 	Schema = mongoose.Schema,

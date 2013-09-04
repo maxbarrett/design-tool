@@ -13,9 +13,63 @@ App.ProjectView = Ember.View.extend({
 			fileselect = this.$('#fileselect'),
 			dragArea = this.$('#filedrag'),
 			controller = this.get('controller'),
-			id = $('#projid').val();
-	
-		App.existingProject(form, fileselect, dragArea, controller, id);
+			id = $('#projid').val(),
+			formData = new FormData();
+			
+			function processFiles(e) {
+				e.stopPropagation();
+				e.preventDefault();
+
+				// fancy new native method :)	
+				e.target.classList.remove('hover');
+
+				// fetch FileList object
+				var files = e.target.files || e.dataTransfer.files,
+					list = $("#messages");
+
+				// process all File objects
+				for (var i = 0, f; f = files[i]; i++) {			
+					var msg = "<p>" + f.name + " " + Math.ceil(f.size / 1000) + "KB</p>";
+					list.append(msg);
+					formData.append('files', files[i]);
+				}
+				return false;
+			};
+
+			dragArea.on("dragover", App.fileDragHover);
+			dragArea.on("dragleave", App.fileDragHover);
+			dragArea.on("drop", processFiles);
+			fileselect.on('change', processFiles);
+
+			form.on('submit', function(e){
+				e.stopPropagation();
+				e.preventDefault();
+
+				formData.append('title', $('#title').val());
+				formData.append('category', $('#cats').val());
+
+				// processData:false to prevent FromData
+				// being serialised through jQuery.param().
+
+				// contentType:false stops jQuery using its
+				// default: "application/x-www-form-urlencoded"
+				// Uses default browser Content-Type header 
+				// implementation instead
+				$.ajax('/api/projects/' + id, {
+				    processData: false,
+				    contentType: false,
+					type: 'put',
+				    data: formData,
+					success: function(data) {
+						$('#overlay').hide();
+						// controller.get('content');
+						// controller.get('target.router').transitionTo('project', id);
+						// var myplugin = new $.vcSlider($('#vcslider-home'), { 
+						// 	labelLinks : false
+						// });
+					}
+				});
+			});
 		
 	}		
 });
@@ -52,8 +106,54 @@ App.ProjectsNewView = Ember.View.extend({
 		var form = this.$('#new-project-form'),
 			fileselect = this.$('#fileselect'),
 			dragArea = this.$('#filedrag'),
-			controller = this.get('controller');
-	
-		App.newProject(form, fileselect, dragArea, controller);
+			controller = this.get('controller'),
+			formData = new FormData();
+
+			function processFiles(e) {
+				e.stopPropagation();
+				e.preventDefault();
+
+				// fancy new native method :)	
+				e.target.classList.remove('hover');
+
+				// fetch FileList object
+				var files = e.target.files || e.dataTransfer.files,
+					list = $("#messages");
+
+				// process all File objects
+				for (var i = 0, f; f = files[i]; i++) {			
+					var msg = "<p>" + f.name + " " + Math.ceil(f.size / 1000) + "KB</p>";
+					list.append(msg);
+					formData.append('files', files[i]);
+				}
+				return false;
+			};
+
+			dragArea.on("dragover", App.fileDragHover);
+			dragArea.on("dragleave", App.fileDragHover);
+			dragArea.on("drop", processFiles);
+			fileselect.on('change', processFiles);
+
+			form.on('submit', function(e){
+				e.stopPropagation();
+				e.preventDefault();
+
+				formData.append('title', $('#title').val());
+				formData.append('category', $('#cats').val());
+
+				form.html('<img class="loading" src="img/loading.gif">');
+				$('.close').remove();
+				
+				$.ajax('/api/projects/', {
+				    processData: false,
+				    contentType: false,
+					type: 'post',
+				    data: formData,
+					success: function(data) {
+						controller.get('target.router').transitionTo('projects.index');
+						App.Project.find();
+					}
+				});
+			});
 	}
 });

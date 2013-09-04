@@ -24,8 +24,7 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 	instance.create = function(req, res) {
 		
 		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-			monthNow = new Date().getMonth(),
-			files = req.files.files ? req.files.files : null;
+			monthNow = new Date().getMonth();
 
 		var project = new ProjectModel({
 			title: req.body.title,
@@ -39,8 +38,8 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 		
 		// Create project images folder (whether there are or not)
 		fs.mkdir('public/uploads/' + project._id, function(){
-			if (files){
-				DT.projectController.processImages(files, project);
+			if (req.files){
+				DT.projectController.processImages(req.files.files, project);
 			}
 			return res.send({'project':project});
 		});
@@ -77,8 +76,7 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 			if (err) return errorHandler(err);
 			var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 				monthNow = new Date().getMonth(),
-				thisProject = req.body.project || req.body,
-				files = req.files.files ? req.files.files : null;
+				thisProject = req.body.project || req.body;
 
 			project.title 		= thisProject.title;
 			project.category 	= thisProject.category;
@@ -86,8 +84,8 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 			project.month 		= months[monthNow];
 			project.publishedAt = new Date();
 
-			if (files){
-				DT.projectController.processImages(files, project);
+			if(req.files){
+				DT.projectController.processImages(req.files.files, project);
 			}
 
 			DT.projectController.save(project);
