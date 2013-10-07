@@ -7,7 +7,7 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 	instance.readAll = function (req, res){
 		var images;
 		return ImageModel.find(function (err, images) {
-			if (err) return errorHandler(err);
+			if (err) return DT.errorHandler(err);
 			return res.send( {'images' : images} );
 		});
 	};
@@ -22,7 +22,7 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 	instance.readOne = function (req, res){
 		var image;
 		return ImageModel.findById(req.params.id, function (err, image) {
-			if (err) return errorHandler(err);
+			if (err) return DT.errorHandler(err);
 			console.log('No error reading image')
 			return res.send({'image':image});
 		});
@@ -33,12 +33,12 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 		ImageModel.findById(req.params.id, function (err, image) {
 			if (image) {
 				image.remove(function (err) {
-					if (err) return errorHandler(err);
+					if (err) return DT.errorHandler(err);
 					console.log('Image db record deleted');
 				});
 
 				fs.remove('public/' + image.uri, function (err) {
-					if (err) return errorHandler(err);
+					if (err) return DT.errorHandler(err);
 					console.log('Image file deleted');
 				});
 
@@ -75,7 +75,7 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 	
 	instance.move = function (tmpPath, targetPath){
 		fs.rename(tmpPath, targetPath, function(err) {
-			if (err) return errorHandler(err);
+			if (err) return DT.errorHandler(err);
 			console.log('Image moved');
 		});
 	};
@@ -90,7 +90,7 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 		
 		// Save image
 		image.save(function (err) {
-			if (err) return errorHandler(err);
+			if (err) return DT.errorHandler(err);
 			console.log('Image saved');
 		});
 		
