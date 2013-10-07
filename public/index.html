@@ -64,7 +64,6 @@
 
 <script type="text/x-handlebars" data-template-name="_projectFields">
 	{{view App.TextField id="title" valueBinding="title" placeholder="New project title" name="title"}}<br />
-	{{!view App.TextField id="author" valueBinding="author" placeholder="Author"}}
 	{{view Ember.Select id="cats" contentBinding="App.categories" optionValuePath="content.val" optionLabelPath="content.cat"  valueBinding="category" name="category"}}<br />
 	{{view App.FileField id="fileselect" name="fileselect"}}<br />
 	{{view App.DropTarget id="filedrag"}}<br />
