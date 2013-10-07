@@ -49,12 +49,19 @@ app.get('/', auth, function(req, res) {
 
 // Mongo Database
 mongoose.connect('mongodb://192.168.33.10:27017/test', function(err){
-  if (err) return errorHandler(err);
+  if (err) return DT.errorHandler(err);
 	console.log('Connected to mongodb://192.168.33.10:27017/test successfully!');
 });
 
 DT.projectController = new ProjectController(ProjectModel, ImageModel, DT);
 DT.imageController = new ImageController(ProjectModel, ImageModel, DT);
+
+
+// Error handler
+DT.errorHandler = function(err){
+	console.log('We have an error...');
+	console.log(err);
+}
 
 // // Delete all projects
 // var tt = ProjectModel.find(function(err,doc){
