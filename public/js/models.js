@@ -3,21 +3,12 @@ App.Project = DS.Model.extend({
 	publishedAt: DS.attr('date'),
 	month: DS.attr('string'),
 	category: DS.attr('string'),
-	author: DS.attr('string'),
 	images: DS.hasMany('App.Image')
 });
 
 App.Image = DS.Model.extend({
 	uri:  DS.attr('string'),
-	proj: DS.attr('string'),
-	imgdata: DS.attr('string'),
-	project: DS.belongsTo('App.Project'),
-	didDelete: function(){
-		console.log('deleted image');
-	},
-	didCreate: function(){
-		console.log('created image');
-	}
+	project: DS.belongsTo('App.Project')
 });
 
 
