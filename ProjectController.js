@@ -1,6 +1,5 @@
 var	fs = require('fs-extra'),
-	async = require('async'),
-	im = require('imagemagick');
+	async = require('async');
 
 var ProjectController = function(ProjectModel, ImageModel, DT) {
 	var instance = this;
@@ -30,8 +29,7 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 		var project = new ProjectModel({
 			title: req.body.title,
 			month: months[monthNow],
-			category: req.body.category,
-			author: req.body.author
+			category: req.body.category
 		});
 		
 		// Save project
@@ -92,11 +90,10 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 
 			project.title 		= thisProject.title;
 			project.category 	= thisProject.category;
-			project.author 		= thisProject.author;
 			project.month 		= months[monthNow];
 			project.publishedAt = new Date();
 
-			if(req.files){
+			if (req.files){
 				DT.projectController.processImages(req.files.files, project);
 			}
 
