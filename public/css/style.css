@@ -38,7 +38,7 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 .projects-list ul { padding:0; overflow:hidden; margin-left:30px; }
 .project-thumb { float:left; list-style:none; margin:0 60px 20px 0; position:relative; height:220px; }
 .project-thumb .thumb { height:180px; overflow:hidden; border:1px solid #e9e9e9; background-color:#f9f9f9; }
-/*.project-thumb:nth-of-type(5n) { margin-right:0; }*/
+.project-thumb:nth-of-type(5n) { margin-right:0; }
 .project-thumb a { text-decoration:none; display:block; }
 .project-thumb .project-title { font-size:12px; color:#505050; font-weight:normal; }
 .project-thumb img { width:180px; height:auto; overflow:hidden; }
