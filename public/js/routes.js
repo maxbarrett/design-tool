@@ -6,17 +6,17 @@ App.Router.map(function() {
 	this.resource('project', { path: ':project_id' });
 	
 	// Categories
-	this.route('branding');
-	this.route('deals');
-	this.route('email');
-	this.route('marcom');
-	this.route('most-wanted');
-	this.route('reporting');
-	this.route('app');
-	this.route('communications');
-	this.route('guidelines');
-	this.route('layout');
-	this.route('mobile');
+	this.resource('branding');
+	this.resource('deals');
+	this.resource('email');
+	this.resource('marcom');
+	this.resource('most-wanted');
+	this.resource('reporting');
+	this.resource('app');
+	this.resource('communications');
+	this.resource('guidelines');
+	this.resource('layout');
+	this.resource('mobile');
 });
 
 
