@@ -33,7 +33,7 @@ header #header-search input[type="submit"] { border:none; background:url('/img/s
 .sub-nav li a.active,
 .sub-nav li a:hover { border-bottom:4px solid #95d814; box-shadow: 0px 1px 0px 0px #d9d9d9;}
 
-.projects-list { margin-top:30px; margin-bottom:30px; }
+.projects-list { margin-top:30px; margin-bottom:30px; min-width:1190px; }
 .projects-list .month-title { color:#cfcfcf; font-size:14px; border-bottom:1px solid #e8e8e8; padding:50px 0 10px; margin-bottom:20px; }
 .projects-list ul { padding:0; overflow:hidden; margin-left:30px; }
 .project-thumb { float:left; list-style:none; margin:0 60px 20px 0; position:relative; height:220px; }
