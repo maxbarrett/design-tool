@@ -1,4 +1,4 @@
-App = Ember.Application.create({ 
+App = Ember.Application.create({
 	LOG_TRANSITIONS:true
 });
 
@@ -52,7 +52,7 @@ App.DropTarget = Ember.View.extend({
     drop: function(evt) {
         evt.preventDefault();
         evt.stopPropagation();
-     	this.get('controller').bindImgs(evt);
+        this.get('controller').bindImgs(evt);
         return false;
     }
 });
@@ -74,7 +74,7 @@ App.categories = [
 	Ember.Object.create({cat: 'Communications',	val: 'communications'}),
 	Ember.Object.create({cat: 'Guidelines',    	val: 'guidelines'}),
 	Ember.Object.create({cat: 'Layout',    		val: 'layout'}),
-	Ember.Object.create({cat: 'Mobile',    		val: 'mobile'})
+    Ember.Object.create({cat: 'Mobile',    		val: 'mobile'})
 ];
 
 

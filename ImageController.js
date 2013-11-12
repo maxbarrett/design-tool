@@ -23,7 +23,7 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 		var image;
 		return ImageModel.findById(req.params.id, function (err, image) {
 			if (err) return DT.errorHandler(err);
-			console.log('No error reading image')
+			console.log('No error reading image');
 			return res.send({'image':image});
 		});
 	};
@@ -103,8 +103,8 @@ var ImageController = function(ProjectModel, ImageModel, DT) {
 	var errorHandler = function(err){
 		console.log('We have an error...');
 		console.log(err);
-	}
+	};
 		
-}
+};
 
 exports.ImageController = ImageController;

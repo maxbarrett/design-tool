@@ -10,7 +10,7 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 			ProjectModel.where('category', query).find({}).sort({publishedAt: -1}).execFind(function(err,projects){
 				if (err) return errorHandler(err);
 				return res.send( {'projects' : projects} );
-			});	
+			});
 		} else {
 			// sort projects in chronological order
 			ProjectModel.find({}).sort({publishedAt: -1}).execFind(function(err,projects){
@@ -67,7 +67,7 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 					if (images){
 						var resData = { 'project':project, 'images':images };
 						res.send(resData);
-					} else { 
+					} else {
 						console.log('No images');
 						res.send({status:'error'});
 					}
@@ -156,19 +156,19 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 		} else if (files.length > 1) {
 			
 			console.log('More than 1 image');
-			for (var i in files) {		
+			for (var i in files) {
 				operateImgs(files[i], project);
 			}
 			
-		}	
+		}
 	};
 	
 	// Error handler
 	var errorHandler = function(err){
 		console.log('We have an error...');
 		console.log(err);
-	}
+	};
 	
-}
+};
 
 exports.ProjectController = ProjectController;

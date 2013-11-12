@@ -1,10 +1,10 @@
 // views
 App.ProjectView = Ember.View.extend({
 	templateName: 'project',
-	didInsertElement: function() {	
+	didInsertElement: function() {
 		// Image gallery
 		if ($('#vcslider-home').length) {
-			var myplugin = new $.vcSlider($('#vcslider-home'), { 
+			var myplugin = new $.vcSlider($('#vcslider-home'), {
 				labelLinks : false
 			});
 		}
@@ -28,13 +28,13 @@ App.ProjectView = Ember.View.extend({
 					list = $("#messages");
 
 				// process all File objects
-				for (var i = 0, f; f = files[i]; i++) {			
+				for (var i = 0, f; f = files[i]; i++) {
 					var msg = "<p>" + f.name + " " + Math.ceil(f.size / 1000) + "KB</p>";
 					list.append(msg);
 					formData.append('files', files[i]);
 				}
 				return false;
-			};
+			}
 
 			dragArea.on("dragover", App.fileDragHover);
 			dragArea.on("dragleave", App.fileDragHover);
@@ -56,33 +56,33 @@ App.ProjectView = Ember.View.extend({
 				// Uses default browser Content-Type header 
 				// implementation instead
 				$.ajax('/api/projects/' + id, {
-				    processData: false,
-				    contentType: false,
+					processData: false,
+					contentType: false,
 					type: 'put',
-				    data: formData,
+					data: formData,
 					success: function(data) {
 						$('#overlay').hide();
 						// controller.get('content');
 						// controller.get('target.router').transitionTo('project', id);
 						// var myplugin = new $.vcSlider($('#vcslider-home'), { 
-						// 	labelLinks : false
+						// labelLinks : false
 						// });
 					}
 				});
 			});
 		
-	}		
+	}
 });
 
 
 App.ProjectsView = Ember.View.extend({
 	templateName: 'projects',
-	didInsertElement: function() {	
+	didInsertElement: function() {
 	
 		var monthSplitter = function(){
 			var projects = $('.project-thumb');
 			
-			for (var i = 0; i < projects.length; i++) {	
+			for (var i = 0; i < projects.length; i++) {
 				var thisProj = $(projects[i]),
 					nextProj = $(projects[i+1]),
 					thisProjMonth = thisProj.data('month'),
@@ -92,7 +92,7 @@ App.ProjectsView = Ember.View.extend({
 					thisProj.after('<h2 class="month-title" style="clear:both;">' + nextProjMonth + '</h2>');
 				}
 			}
-		}
+		};
 		monthSplitter();
 		// setTimeout(monthSplitter,100);	
 	}
@@ -121,13 +121,13 @@ App.ProjectsNewView = Ember.View.extend({
 					list = $("#messages");
 
 				// process all File objects
-				for (var i = 0, f; f = files[i]; i++) {			
+				for (var i = 0, f; f = files[i]; i++) {
 					var msg = "<p>" + f.name + " " + Math.ceil(f.size / 1000) + "KB</p>";
 					list.append(msg);
 					formData.append('files', files[i]);
 				}
 				return false;
-			};
+			}
 
 			dragArea.on("dragover", App.fileDragHover);
 			dragArea.on("dragleave", App.fileDragHover);
@@ -145,10 +145,10 @@ App.ProjectsNewView = Ember.View.extend({
 				$('.close').remove();
 				
 				$.ajax('/api/projects/', {
-				    processData: false,
-				    contentType: false,
+					processData: false,
+					contentType: false,
 					type: 'post',
-				    data: formData,
+					data: formData,
 					success: function(data) {
 						controller.get('target.router').transitionTo('projects.index');
 						App.Project.find();
