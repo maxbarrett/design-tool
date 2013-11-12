@@ -1,6 +1,11 @@
 var	fs = require('fs-extra'),
 	async = require('async');
 
+
+	var one = 'tits';
+
+	exports.two = one;
+
 var ProjectController = function(ProjectModel, ImageModel, DT) {
 	var instance = this;
 
@@ -148,18 +153,20 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 		}
 
 		// Iterate depending on number of images
-		if (files && files.length === undefined) {
+		if(files){
+			if (files.length === undefined) {
 			
-			console.log('Only 1 image');
-			operateImgs(files, project);
+				console.log('Only 1 image');
+				operateImgs(files, project);
 			
-		} else if (files.length > 1) {
+			} else if (files.length > 1) {
+
+				console.log('More than 1 image');
+				for (var i in files) {
+					operateImgs(files[i], project);
+				}
 			
-			console.log('More than 1 image');
-			for (var i in files) {
-				operateImgs(files[i], project);
 			}
-			
 		}
 	};
 	
