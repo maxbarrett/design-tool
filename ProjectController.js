@@ -93,8 +93,8 @@ var ProjectController = function(ProjectModel, ImageModel, DT) {
 				monthNow = new Date().getMonth(),
 				thisProject = req.body.project || req.body;
 
-			project.title 		= thisProject.title;
-			project.category 	= thisProject.category;
+			project.title		= thisProject.title;
+			project.category	= thisProject.category;
 			project.month 		= months[monthNow];
 			project.publishedAt = new Date();
 

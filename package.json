@@ -17,7 +17,8 @@
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.7.1",
-    "grunt-contrib-uglify": "~0.2.7"
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-mqfilter": "git+https://github.com/RMN-UK/grunt-mqfilter.git"
   },
   "scripts": {
     "start": "node server.js"
